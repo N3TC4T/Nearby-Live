@@ -5,7 +5,7 @@
 import moment from "moment";
 
 import React, {Component, PropTypes} from "react";
-import {StyleSheet, Image, View, TouchableOpacity, findNodeHandle} from "react-native";
+import {StyleSheet, Image, View, TouchableOpacity} from "react-native";
 import {Icon} from "react-native-elements";
 import Animation from "lottie-react-native";
 
@@ -36,11 +36,6 @@ class PostCard extends Component {
     };
 
 
-    componentDidMount = () => {
-        console.log('REFS', findNodeHandle(this.refs._activeShit));
-        this._actionSheetRef = this.refs._actionSheetRef
-    }
-
     _onPressLike = async() => {
         const { post , onPressLike} = this.props
 
@@ -54,22 +49,7 @@ class PostCard extends Component {
 
 
     _onPressOption = () => {
-        const options = ['Delete', 'Cancel'];
-        const cancelButtonIndex = options.length - 1;
-        console.log(this.refs._actionSheetRef)
-        console.log(this._actionSheetRef)
-        this._actionSheetRef.showActionSheetWithOptions({
-                options,
-                cancelButtonIndex,
-            },
-            (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
-                        console.log('sdsad')
-                        break;
-                    default:
-                }
-            });
+        console.log('options pressed!')
     }
 
     render = () => {
