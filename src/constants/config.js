@@ -20,7 +20,8 @@ export default {
   // URLs
   urls: {
     acceptableUse: 'https://www.wnmlive.com/legal/acceptable-use',
-    imageCDN: 'https://nearby-images.azureedge.net/image/'
+    imageCDN: 'https://nearby-images.azureedge.net/image/',
+    baseURL:'https://www.wnmlive.com/'
   },
 
   // Navbar Props
