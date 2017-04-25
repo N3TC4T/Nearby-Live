@@ -23,6 +23,9 @@ export default function streamReducer(state = initialState, action) {
                 selectedSectionIndex,
             };
         }
+
+        /* Posts ==================================================================== */
+
         case 'POSTS_UPDATE': {
             const session = schema.session(state);
             const { Post } = session;
@@ -43,6 +46,7 @@ export default function streamReducer(state = initialState, action) {
 
             return session.state;
         }
+
         case 'POST_LIKE': {
             const session = schema.session(state);
             const { Post } = session;
@@ -54,6 +58,68 @@ export default function streamReducer(state = initialState, action) {
 
             return session.state;
         }
+
+        case 'POST_FEATURE': {
+            const session = schema.session(state);
+            const { Post } = session;
+
+            if (action.id && typeof action.id === 'number') {
+                const post = Post.withId(action.id)
+                post.update({featured:true})
+            }
+
+            return session.state;
+        }
+
+        case 'POST_WATCH': {
+            const session = schema.session(state);
+            const { Post } = session;
+
+            if (action.id && typeof action.id === 'number') {
+                const post = Post.withId(action.id)
+                post.update({w:true})
+            }
+
+            return session.state;
+        }
+
+
+        case 'POST_UNWATCH': {
+            const session = schema.session(state);
+            const { Post } = session;
+
+            if (action.id && typeof action.id === 'number') {
+                const post = Post.withId(action.id)
+                post.update({w:false})
+            }
+
+            return session.state;
+        }
+
+        case 'POST_DELETE': {
+            const session = schema.session(state);
+            const { Post } = session;
+
+            if (action.id && typeof action.id === 'number') {
+                Post.withId(action.id).delete()
+            }
+
+            return session.state;
+        }
+
+        case 'POST_REPORT': {
+            const session = schema.session(state);
+            const { Post } = session;
+
+            if (action.id && typeof action.id === 'number') {
+                const post = Post.withId(action.id)
+                post.update({reported:true})
+            }
+
+            return session.state;
+        }
+
+        /* Comments ==================================================================== */
 
         case 'COMMENTS_UPDATE': {
             const session = schema.session(state);

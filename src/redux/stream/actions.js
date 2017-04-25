@@ -14,21 +14,22 @@ export function updateSectionIndex(sectionIndex) {
     };
 }
 
+/* Posts ==================================================================== */
 
 export function getPosts(sectionIndex , startFrom) {
     return (dispatch) => {
 
-        let section = 'Recent'
+        let section = 'Recent';
 
         switch (sectionIndex) {
             case 0 :
-                section='Recent'
-                break
+                section='Recent';
+                break;
             case 1 :
-                section = 'Following'
-                break
+                section = 'Following';
+                break;
             case 2 :
-                section = 'Hot'
+                section = 'Hot';
                 break
         }
 
@@ -54,6 +55,61 @@ export function likePost(postID, ownerId) {
     };
 }
 
+
+export function featurePost(postID) {
+    return (dispatch) => {
+        return AppAPI.livestream.post({ pid:postID , section: 'feature'})
+            .then((res) => {
+                dispatch({
+                    type: 'POST_FEATURE',
+                    id:postID
+                });
+            })
+    };
+}
+
+export function watchPost(postID) {
+    return (dispatch) => {
+        dispatch({
+            type: 'POST_WATCH',
+            id:postID
+        });
+        return AppAPI.livestream.get({ pid:postID , section: 'watch'})
+    };
+}
+
+export function unwatchPost(postID) {
+    return (dispatch) => {
+        dispatch({
+            type: 'POST_UNWATCH',
+            id:postID
+        });
+        return AppAPI.livestream.get({ pid:postID , section: 'unwatch'})
+    };
+}
+
+export function deletePost(postID) {
+    return (dispatch) => {
+        dispatch({
+            type: 'POST_DELETE',
+            id:postID
+        });
+        return AppAPI.livestream.post({ pid:postID , section: 'delete'})
+    };
+}
+
+export function reportPost(postID) {
+    return (dispatch) => {
+        dispatch({
+            type: 'POST_REPORT',
+            id:postID
+        });
+        return AppAPI.livestream.get({ pid:postID , section: 'report'})
+    };
+}
+
+
+/* Comments ==================================================================== */
 
 export function getComments(postID) {
     return (dispatch) => {

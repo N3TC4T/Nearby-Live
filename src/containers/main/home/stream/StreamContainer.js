@@ -14,6 +14,7 @@ import PostsListingRender from './StreamView';
 
 /* Redux ==================================================================== */
 const mapStateToProps = state => ({
+    user: state.user,
     postsListing: streamSelector(state),
 });
 
@@ -21,6 +22,11 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
     getPosts: StreamActions.getPosts,
     likePost: StreamActions.likePost,
+    watchPost: StreamActions.watchPost,
+    unwatchPost: StreamActions.unwatchPost,
+    featurePost: StreamActions.featurePost,
+    deletePost: StreamActions.deletePost,
+    reportPost: StreamActions.reportPost,
     updateSectionIndex:StreamActions.updateSectionIndex,
 }
 

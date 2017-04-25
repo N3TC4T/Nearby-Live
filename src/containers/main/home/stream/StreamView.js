@@ -6,11 +6,9 @@ import {
     InteractionManager,
 } from 'react-native';
 
+import ActionSheet from '@expo/react-native-action-sheet';
 import { ButtonGroup }  from 'react-native-elements'
 
-
-// Actions
-import { Actions } from 'react-native-router-flux';
 
 // Consts and Libs
 import { AppColors, AppStyles, AppSizes } from '@theme/';
@@ -34,6 +32,11 @@ class PostsListing extends Component {
         likePost: PropTypes.func,
         updateSectionIndex: PropTypes.func,
     };
+
+    static childContextTypes = {
+        actionSheet: PropTypes.func,
+    }
+
     constructor(props) {
         super(props);
 
@@ -69,6 +72,12 @@ class PostsListing extends Component {
         return this.state.dataSource.cloneWithRows(props.postsListing);
     }
 
+    getChildContext() {
+        return {
+            actionSheet: () => this._actionSheetRef,
+        };
+    }
+
     fetchPosts = async (reFetch = false, firstInit = false) => {
 
         let { sectionIndex } = this.state
@@ -98,21 +107,6 @@ class PostsListing extends Component {
         }
     }
 
-
-    onPressWatch = () => {
-        console.log('watch pressed')
-    };
-
-    onPressAvatar = () => {
-        console.log('avatar pressed')
-    };
-
-    onPressComments = (post) => {
-        Actions.commentsView({
-            postID: post.id,
-        });
-
-    };
 
     updateIndex = (selectedIndex) => {
         this.setState({ sectionIndex:selectedIndex })
@@ -151,7 +145,7 @@ class PostsListing extends Component {
 
 
     render = () => {
-        const { postsListing, likePost } = this.props;
+        const { postsListing, user ,likePost, watchPost , unwatchPost, featurePost, deletePost, reportPost } = this.props;
         const { isRefreshing, dataSource, sectionIndex } = this.state;
 
         const sections = ['Recent', 'Following', 'Trending']
@@ -179,6 +173,7 @@ class PostsListing extends Component {
 
 
         return (
+            <ActionSheet ref={component => this._actionSheetRef = component}>
                 <View style={[AppStyles.container]}>
                     <ButtonGroup
                         onPress={this.updateIndex}
@@ -194,10 +189,15 @@ class PostsListing extends Component {
                             renderScrollComponent={props => <ListInfinite  {...props} />}
                             renderRow={post => <PostCard
                             post={post}
+                            reportable={ post.pid !== user.profile.id }
+                            deletable={ post.pid == user.profile.id }
+                            featureAble={ user.points.AvailablePoints > 0 }
                             onPressLike={likePost}
-                            onPressComments={() => {this.onPressComments(post)}}
-                            onPressWatch={this.onPressWatch}
-                            onPressAvatar={this.onPressAvatar}
+                            onPressDelete={deletePost}
+                            onPressFeature={featurePost}
+                            onPressReport={reportPost}
+                            onPressWatch={watchPost}
+                            onPressUnWatch={unwatchPost}
                          />
                         }
                             dataSource={dataSource}
@@ -213,6 +213,7 @@ class PostsListing extends Component {
                         />
                     </List>
                 </View>
+            </ActionSheet>
         );
     }
 }
