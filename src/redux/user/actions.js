@@ -27,7 +27,7 @@ export function login(credentials, freshLogin) {
                 lat:0,
                 long:0,
             }).then(async(res) => {
-                if (!res) {
+                if (res.length < 1 || !res.length) {
                     return reject('Invalid Email and/or Password!');
                 }
 
