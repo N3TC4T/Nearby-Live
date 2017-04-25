@@ -117,12 +117,6 @@ export default class ImageViewer extends Component {
             loading: false,
             progress: 0,
             thresholdReached: !props.threshold,
-            DownloadAlert:{
-                alertShow:false,
-                alertText:'',
-                alertType:'',
-                alertHide:false
-            }
         };
 
         this.panResponder = null;
@@ -255,30 +249,15 @@ export default class ImageViewer extends Component {
         if (Platform.OS === 'ios'){
             let promise = CameraRoll.saveToCameraRoll(uri, 'photo');
             promise.then(res => (
-                this.setState({DownloadAlert:{
-                    alertShow:true,
-                    alertText:'Photo saved successfully!',
-                    alertType:'success',
-                    alertHide:true
-                }})
+                this.refs.alert.show('Photo saved successfully!','success' )
             ))
         }else {
             const ret = RNFetchBlob.config({ fileCache : true,}).fetch('GET', uri)
-            this.setState({DownloadAlert:{
-                alertShow:true,
-                alertText:'Downloading ...',
-                alertType:'info',
-                alertHide:false
-            }});
+            this.refs.alert.show('Downloading ...','info',false )
             ret.then(res => {
                 let promise = CameraRoll.saveToCameraRoll(res.path(), 'photo');
                 promise.then(res => {
-                    this.setState({DownloadAlert:{
-                        alertShow:true,
-                        alertText:'Photo saved successfully!',
-                        alertType:'success',
-                        alertHide:true
-                    }})
+                    this.refs.alert.show('Photo saved successfully!','success' )
                 })
             });
         }
@@ -554,14 +533,7 @@ export default class ImageViewer extends Component {
                         />
                     </Animated.View>
 
-                    {this.state.DownloadAlert.alertShow &&
-                    <BottomAlert
-                        visible={this.state.DownloadAlert.alertShow}
-                        message={this.state.DownloadAlert.alertText}
-                        alertType={this.state.DownloadAlert.alertType}
-                        hideAfter={this.state.DownloadAlert.alertHide}
-                    />
-                    }
+                    <BottomAlert ref="alert" />
                 </Modal>
             </Animated.View>
         );

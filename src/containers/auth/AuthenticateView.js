@@ -126,12 +126,6 @@ class Authenticate extends Component {
 
         this.state = {
             isLoading: false,
-            LoginAlert:{
-                alertShow:false,
-                alertText:'',
-                alertType:'',
-                alertHide:false
-            },
             email:'Email',
             password:'Password'
         };
@@ -190,12 +184,9 @@ class Authenticate extends Component {
                 this.buttonAnimated.setValue(0);
                 this.setState({
                     isLoading:false,
-                    LoginAlert:{
-                        alertShow:true,
-                        alertText:error,
-                        alertType:'error',
-                    }
                 })
+
+                this.refs.alert.show(error, 'error')
             });
 
         }
@@ -354,15 +345,7 @@ class Authenticate extends Component {
                         {/*</View>*/}
                     {/*</View>*/}
 
-                    {this.state.LoginAlert.alertShow &&
-                    <BottomAlert
-                        visible={this.state.LoginAlert.alertShow}
-                        message={this.state.LoginAlert.alertText}
-                        alertType={this.state.LoginAlert.alertType}
-                        hideAfter={this.state.LoginAlert.alertHide}
-                    />
-                    }
-
+                <BottomAlert ref="alert" />
                 </Image>
             </ScrollView>
         )

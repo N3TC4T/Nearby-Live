@@ -10,7 +10,16 @@ import {
     View
 } from 'react-native'
 
-class BottomAlert extends Component {
+let BAR_HEIGHT = 18
+let BACKGROUND_COLOR = '#3DD84C'
+let TOUCHABLE_BACKGROUND_COLOR = '#3DD84C'
+const SLIDE_DURATION = 300
+const ACTIVE_OPACITY = 0.6
+const SATURATION = 0.9
+const DURATION = 3000
+
+
+export default class BottomAlert extends Component {
 
     constructor(props) {
         super(props)
@@ -23,65 +32,39 @@ class BottomAlert extends Component {
         this.timer = null
     }
 
-    componentDidMount() {
-        if (this.props.visible === true) {
-            // Slide animation
-            requestAnimationFrame(() => {
-                Animated.parallel([
-                    Animated.timing(
-                        this.state.height,
-                        {
-                            toValue: this.props.statusbarHeight * 2,
-                            duration: SLIDE_DURATION
-                        }
-                    ),
-                    Animated.timing(
-                        this.state.opacity,
-                        {
-                            toValue: 1,
-                            duration: SLIDE_DURATION
-                        }
-                    )
-                ]).start()
-            })
+    show(text, type, duration) {
 
-            if(this.props.hideAfter){
-                // Hide after time
-                this.timer = setTimeout(() => {
-                    requestAnimationFrame(() => {
-                        Animated.parallel([
-                            Animated.timing(
-                                this.state.height,
-                                {
-                                    toValue: 0,
-                                    duration: SLIDE_DURATION
-                                }
-                            ),
-                            Animated.timing(
-                                this.state.opacity,
-                                {
-                                    toValue: 0,
-                                    duration: SLIDE_DURATION
-                                }
-                            )
-                        ]).start()
-                    })
+        this.duration = duration || DURATION;
 
-                }, 3000);
-            }
+        this.state.isShow ? (this.timer ? clearTimeout(this.timer) : null): null
 
-        }
+        this.setState({
+            isShow: true,
+            text: text,
+            alertType:type,
+        });
 
-        if (this.props.statusbarHeight) STATUS_BAR_HEIGHT = this.props.statusbarHeight
-    }
+        // Slide animation
+        requestAnimationFrame(() => {
+            Animated.parallel([
+                Animated.timing(
+                    this.state.height,
+                    {
+                        toValue: BAR_HEIGHT * 2,
+                        duration: SLIDE_DURATION
+                    }
+                ),
+                Animated.timing(
+                    this.state.opacity,
+                    {
+                        toValue: 1,
+                        duration: SLIDE_DURATION
+                    }
+                )
+            ]).start()
+        })
 
-    componentWillUnmount() {
-        clearTimeout(this.timer)
-    }
-
-    componentWillReceiveProps(nextProps) {
-
-        if(nextProps.hideAfter){
+        if(this.duration) {
             // Hide after time
             this.timer = setTimeout(() => {
                 requestAnimationFrame(() => {
@@ -103,65 +86,65 @@ class BottomAlert extends Component {
                     ]).start()
                 })
 
-            }, 3000);
+            }, this.duration);
         }
 
-        if (this.props.statusbarHeight) STATUS_BAR_HEIGHT = this.props.statusbarHeight
     }
 
+
+    componentWillUnmount() {
+        clearTimeout(this.timer)
+    }
+
+
     render() {
-        if (this.props.alertType === 'error') {
+        if (this.state.alertType === 'error') {
             BACKGROUND_COLOR = '#C02827'
             TOUCHABLE_BACKGROUND_COLOR = '#FB6567'
-        } else if (this.props.alertType === 'success') {
+        } else if (this.state.alertType === 'success') {
             BACKGROUND_COLOR = '#3CC29E'
             TOUCHABLE_BACKGROUND_COLOR = '#59DC9A'
-        } else if (this.props.alertType === 'info') {
+        } else if (this.state.alertType === 'info') {
             BACKGROUND_COLOR = '#3b6976'
             TOUCHABLE_BACKGROUND_COLOR = '#8EDBE5'
         }
 
         return (
-
-            <Animated.View style={[styles.view, {
-                        height: this.state.height,
-                        opacity: this.state.opacity,
-                        backgroundColor: saturate(BACKGROUND_COLOR, SATURATION)
-                      }]}>
-                <TouchableOpacity
-                    style={[styles.touchableOpacity, {
-                           backgroundColor: saturate(TOUCHABLE_BACKGROUND_COLOR, SATURATION)
-                         }]}
-                    onPress={this.props.onPress}
-                    activeOpacity={ACTIVE_OPACITY}
-                >
-                    <Animated.Text
-                        style={[styles.text, {
-                                 color: this.props.color || styles.text.color,
-                                 opacity: 1
-                            }]}
-                        allowFontScaling={false}
-                    >
-                        {this.props.message}
-                    </Animated.Text>
-                </TouchableOpacity>
-            </Animated.View>
+            <View>
+                {this.state.isShow &&
+                    <Animated.View style={[styles.view, {
+                            height: this.state.height,
+                            opacity: this.state.opacity,
+                            backgroundColor: saturate(BACKGROUND_COLOR, SATURATION)
+                          }]}>
+                        <TouchableOpacity
+                            style={[styles.touchableOpacity, {
+                               backgroundColor: saturate(TOUCHABLE_BACKGROUND_COLOR, SATURATION)
+                             }]}
+                            onPress={this.props.onPress}
+                            activeOpacity={ACTIVE_OPACITY}
+                        >
+                            <Animated.Text
+                                style={[styles.text, {
+                                     color: styles.text.color,
+                                     opacity: 1
+                                }]}
+                                allowFontScaling={false}
+                            >
+                                {this.state.text}
+                            </Animated.Text>
+                        </TouchableOpacity>
+                    </Animated.View>
+                }
+            </View>
         )
-
     }
 
 }
 
-let STATUS_BAR_HEIGHT = 20
-let BACKGROUND_COLOR = '#3DD84C'
-let TOUCHABLE_BACKGROUND_COLOR = '#3DD84C'
-const SLIDE_DURATION = 300
-const ACTIVE_OPACITY = 0.6
-const SATURATION = 0.9
-
 const styles = {
     view: {
-        height: STATUS_BAR_HEIGHT * 2,
+        height: BAR_HEIGHT * 2,
         bottom: 0,
         right: 0,
         left: 0,
@@ -172,8 +155,9 @@ const styles = {
         justifyContent: 'flex-end',
     },
     text: {
-        height: STATUS_BAR_HEIGHT,
-        marginBottom: STATUS_BAR_HEIGHT / 2,
+        height: BAR_HEIGHT,
+        marginBottom: BAR_HEIGHT / 2,
+        marginTop: BAR_HEIGHT / 2,
         fontSize: 13,
         fontWeight: '400',
         lineHeight: 15,
@@ -183,19 +167,10 @@ const styles = {
 }
 
 BottomAlert.propTypes = {
-    visible: PropTypes.bool.isRequired,
-    alertType: PropTypes.string.isRequired,
-    message: PropTypes.string.isRequired,
-    hideAfter: PropTypes.bool,
     onPress: PropTypes.func
 }
 
 BottomAlert.defaultProps = {
-    visible: false,
-    alertType: 'success',
-    message: '',
-    hideAfter:true,
-    statusbarHeight: STATUS_BAR_HEIGHT,
     onPress: null
 }
 
@@ -214,5 +189,3 @@ function saturate(color, percent) {
     let b = ((B.toString(16).length == 1) ? '0' + B.toString(16) : B.toString(16))
     return `#${r + g + b}`
 }
-
-export default BottomAlert
