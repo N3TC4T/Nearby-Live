@@ -37,6 +37,7 @@
     "react-native-invertible-scroll-view": "^1.0.0",
     "react-native-parsed-text": "0.0.18",
     "react-native-progress": "^3.2.0",
+    "react-native-root-siblings": "^1.2.0",
     "react-native-router-flux": "^3.37.0",
     "react-native-side-menu": "^0.20.1",
     "react-native-tab-view": "0.0.59",
