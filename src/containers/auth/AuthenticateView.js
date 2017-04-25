@@ -344,9 +344,10 @@ class Authenticate extends Component {
                             {/*<Text style={[styles.whiteText]} onPress={()=>{console.log('lost password')}}> Forget password ?</Text>*/}
                         {/*</View>*/}
                     {/*</View>*/}
+                </Image>
 
                 <BottomAlert ref="alert" />
-                </Image>
+
             </ScrollView>
         )
     }
