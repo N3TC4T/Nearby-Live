@@ -206,12 +206,12 @@ function fetcher(method, endpoint, params, body) {
                     jsonRes = await rawRes.json();
                 } catch (error) {
                     const err = { message: ErrorMessages.invalidJson };
-                    throw err;
+                    debug(err)
                 }
 
                 // Only continue if the header is successful
-                if (rawRes && rawRes.status === 200) { return jsonRes; }
-                throw jsonRes;
+                if (rawRes && rawRes.status === 200) { return jsonRes || rawRes; }
+                throw jsonRes || rawRes;
             })
             .then((res) => {
                 debug(res, `API Response #${requestNum} from ${thisUrl}`);
