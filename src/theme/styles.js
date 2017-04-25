@@ -125,6 +125,9 @@ export default {
     },
 
     // Helper Text Styles
+    textLeftAligned: {
+        textAlign: 'center',
+    },
     textCenterAligned: {
         textAlign: 'center',
     },
