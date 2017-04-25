@@ -4,5 +4,6 @@
 
 import Alerts from './SimpleAlert';
 import BottomAlert from './BottomAlert';
+import Toast from './ToastAlert'
 
-export { Alerts, BottomAlert};
+export { Alerts, BottomAlert, Toast };
