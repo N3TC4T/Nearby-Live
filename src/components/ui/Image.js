@@ -246,6 +246,12 @@ export default class ImageViewer extends Component {
 
     handleDownloadImage = () => {
         let uri = this.refs.originalImage.props.source.uri;
+
+        if (uri.endsWith('.gif')){
+            this.refs.alert.show('Unfortunately can not download GIF right now.','error' )
+            return
+        }
+
         if (Platform.OS === 'ios'){
             let promise = CameraRoll.saveToCameraRoll(uri, 'photo');
             promise.then(res => (

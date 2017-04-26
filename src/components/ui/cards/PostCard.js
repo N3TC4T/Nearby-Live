@@ -150,6 +150,61 @@ class PostCard extends Component {
             });
     };
 
+
+
+    renderContent = () => {
+        const { post } = this.props
+
+        let isGift = false
+
+        // check if post content is gif
+        if (post.txt.split(/\n/)[0].endsWith('.gif') || post.txt.split(/\n/)[0].startsWith('.http')){
+            isGift = true
+            this.gifURL = post.txt.split(/\n/)[0]
+            this.cleanText = post.txt.split(/\n/)[2]
+        }
+
+
+        if (isGift){
+            return(
+                <View style={[styles.cardContent]}>
+                    <View style={[AppStyles.row, styles.cardImage]}>
+                        <ImageViewer
+                            disabled={false}
+                            source={{ uri: this.gifURL   }}
+                            doubleTapEnabled={true}
+                            onMove={(e, gestureState) => null}
+                            downloadable={true}
+                        />
+                    </View>
+                    <View style={AppStyles.row}>
+                        <Text style={[styles.postText]}>{ this.cleanText }</Text>
+                    </View>
+                </View>
+            )
+        }else{
+            return(
+                <View style={[styles.cardContent]}>
+                    {!!post.img &&
+                        <View style={[AppStyles.row, styles.cardImage]}>
+                            <ImageViewer
+                                disabled={false}
+                                source={{ uri: getImageURL(post.img)  }}
+                                doubleTapEnabled={true}
+                                onMove={(e, gestureState) => null}
+                                downloadable={true}
+                            />
+                        </View>
+                    }
+                    <View style={AppStyles.row}>
+                        <Text style={[styles.postText]}>{post.txt}</Text>
+                    </View>
+                </View>
+            )
+        }
+
+    }
+
     render = () => {
         const { post , onPressWatch } = this.props;
 
@@ -192,25 +247,12 @@ class PostCard extends Component {
                             </View>
                         </View>
 
-                        <View style={[styles.cardContent]}>
-                            {!!post.img &&
-                            <View style={[AppStyles.row, styles.cardImage]}>
-                                <ImageViewer
-                                    disabled={false}
-                                    source={{ uri: getImageURL(post.img)  }}
-                                    doubleTapEnabled={true}
-                                    onMove={(e, gestureState) => null}
-                                    downloadable={true}
-                                />
-                            </View>
-                            }
-                            {!!post.txt &&
-                            <View style={AppStyles.row}>
-                                <Text style={[styles.postText]}>{post.txt}</Text>
-                            </View>
-                            }
 
-                        </View>
+
+
+                        { this.renderContent()}
+
+
                         <View style={[styles.cardAction]}>
                             <View onPress={onPressWatch} style={AppStyles.flex1}>
                                 <TouchableOpacity  onPress={this._onPressWatch}>
