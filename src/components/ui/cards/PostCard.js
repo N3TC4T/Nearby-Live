@@ -177,9 +177,11 @@ class PostCard extends Component {
                             downloadable={true}
                         />
                     </View>
-                    <View style={AppStyles.row}>
-                        <Text style={[styles.postText]}>{ this.cleanText }</Text>
-                    </View>
+                    {!! this.cleanText &&
+                        <View style={AppStyles.row}>
+                            <Text style={[styles.postText]}>{ this.cleanText }</Text>
+                        </View>
+                    }
                 </View>
             )
         }else{
@@ -196,9 +198,11 @@ class PostCard extends Component {
                             />
                         </View>
                     }
-                    <View style={AppStyles.row}>
-                        <Text style={[styles.postText]}>{post.txt}</Text>
-                    </View>
+                    {!!post.txt &
+                        <View style={AppStyles.row}>
+                            <Text style={[styles.postText]}>{post.txt}</Text>
+                        </View>
+                    }
                 </View>
             )
         }
