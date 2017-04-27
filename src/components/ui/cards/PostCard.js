@@ -155,17 +155,17 @@ class PostCard extends Component {
     renderContent = () => {
         const { post } = this.props
 
-        let isGift = false
+        let isGIF = false
 
         // check if post content is gif
         if (post.txt.split(/\n/)[0].endsWith('.gif') || post.txt.split(/\n/)[0].startsWith('.http')){
-            isGift = true
+            isGIF = true
             this.gifURL = post.txt.split(/\n/)[0]
             this.cleanText = post.txt.split(/\n/)[2]
         }
 
 
-        if (isGift){
+        if (isGIF){
             return(
                 <View style={[styles.cardContent]}>
                     <View style={[AppStyles.row, styles.cardImage]}>
@@ -177,7 +177,7 @@ class PostCard extends Component {
                             downloadable={true}
                         />
                     </View>
-                    {!! this.cleanText &&
+                    {!!this.cleanText &&
                         <View style={AppStyles.row}>
                             <Text style={[styles.postText]}>{ this.cleanText }</Text>
                         </View>
@@ -198,7 +198,7 @@ class PostCard extends Component {
                             />
                         </View>
                     }
-                    {!!post.txt &
+                    {!!post.txt &&
                         <View style={AppStyles.row}>
                             <Text style={[styles.postText]}>{post.txt}</Text>
                         </View>
