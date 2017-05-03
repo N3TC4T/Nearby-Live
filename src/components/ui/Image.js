@@ -146,8 +146,6 @@ export default class ImageViewer extends Component {
     }
 
     componentWillMount() {
-        const { source } = this.props;
-
         this.state.layout.x.addListener((animated) => this.handleLayoutChange(animated, LAYOUT_ENUM.X));
         this.state.layout.y.addListener((animated) => this.handleLayoutChange(animated, LAYOUT_ENUM.Y));
 
@@ -159,20 +157,28 @@ export default class ImageViewer extends Component {
             onPanResponderTerminate: this.handleRelease
         });
 
-        if (typeof source === 'object' && typeof source.uri === 'string') {
-            Image.prefetch(source.uri);
-            Image.getSize(source.uri, (width, height) => {
-                this._imageSize = { width, height };
-            });
-        }
+
     }
 
     componentDidMount() {
+        const { source } = this.props;
+
+        this.mounted = true;
+
         if (this.props.threshold) {
             this._thresholdTimer = setTimeout(() => {
                 this.setState({ thresholdReached: true });
                 this._thresholdTimer = null;
             }, this.props.threshold);
+        }
+
+        if (typeof source === 'object' && typeof source.uri === 'string' && this.mounted) {
+            Image.prefetch(source.uri);
+            Image.getSize(source.uri, (width, height) => {
+                this._imageSize = { width, height };
+            });
+        }else {
+            return
         }
     }
 
@@ -192,6 +198,8 @@ export default class ImageViewer extends Component {
 
         this.state.layout.x.removeAllListeners();
         this.state.layout.y.removeAllListeners();
+
+        this.mounted = false;
     }
 
 
