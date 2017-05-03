@@ -53,7 +53,7 @@ class CommentCard extends Component {
                         </View>
                     </View>
 
-                    <View style={[AppStyles.leftAligned]}>
+                    <View style={[styles.commentContent, AppStyles.leftAligned]}>
                         {!!comment.img &&
                         <View style={[AppStyles.row, styles.commentImage]}>
                             <ImageViewer
@@ -62,12 +62,13 @@ class CommentCard extends Component {
                                 doubleTapEnabled={true}
                                 onMove={(e, gestureState) => null}
                                 downloadable={true}
+                                imageStyle={{width:200}}
                             />
 
                         </View>
                         }
                         {!!comment.txt &&
-                        <View style={[AppStyles.row, styles.commentContent]}>
+                        <View style={[AppStyles.row]}>
                             <Text style={[styles.commentText]}>{comment.txt}</Text>
                         </View>
                         }
@@ -98,12 +99,11 @@ const styles = StyleSheet.create({
         paddingLeft:8
     },
     commentContent: {
-        paddingLeft:42,
-        paddingTop:2,
+        marginTop:2,
+        marginLeft:42,
     },
     commentImage:{
-        paddingTop:10,
-        paddingLeft:42,
+        paddingTop:10
     },
     commenterLocation:{
         color:'gray',
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
         fontFamily: AppFonts.base.family,
         fontSize: AppFonts.base.size * 0.90,
         fontWeight: '400',
-        color:AppColors.textPrimary
+        color:AppColors.textPrimary,
     }
 });
 

@@ -168,6 +168,11 @@ class PostCard extends Component {
         if (isGIF){
             return(
                 <View style={[styles.cardContent]}>
+                    {!!this.cleanText &&
+                        <View style={[AppStyles.row, styles.cardText]}>
+                            <Text style={[styles.postText]}>{ this.cleanText }</Text>
+                        </View>
+                    }
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
                             disabled={false}
@@ -177,16 +182,16 @@ class PostCard extends Component {
                             downloadable={true}
                         />
                     </View>
-                    {!!this.cleanText &&
-                        <View style={AppStyles.row}>
-                            <Text style={[styles.postText]}>{ this.cleanText }</Text>
-                        </View>
-                    }
                 </View>
             )
         }else{
             return(
                 <View style={[styles.cardContent]}>
+                    {!!post.txt &&
+                        <View style={[AppStyles.row, styles.cardText]}>
+                            <Text style={[styles.postText]}>{post.txt}</Text>
+                        </View>
+                    }
                     {!!post.img &&
                         <View style={[AppStyles.row, styles.cardImage]}>
                             <ImageViewer
@@ -196,11 +201,6 @@ class PostCard extends Component {
                                 onMove={(e, gestureState) => null}
                                 downloadable={true}
                             />
-                        </View>
-                    }
-                    {!!post.txt &&
-                        <View style={AppStyles.row}>
-                            <Text style={[styles.postText]}>{post.txt}</Text>
                         </View>
                     }
                 </View>
@@ -263,10 +263,10 @@ class PostCard extends Component {
                                     <View  style={[AppStyles.row, AppStyles.centerAligned]}>
                                         {!post.w ?
                                             (
-                                                <Icon size={28} color={'grey'} type={'foundation'} name={'eye'} />
+                                                <Icon size={23} color={'grey'} type={'foundation'} name={'eye'} />
                                             ) :
                                             (
-                                                <Icon size={30} color={'#C02827'} type={'foundation'} name={'eye'} />
+                                                <Icon size={23} color={'#C02827'} type={'foundation'} name={'eye'} />
                                             )
                                         }
                                     </View>
@@ -275,26 +275,26 @@ class PostCard extends Component {
                             <View style={AppStyles.flex1}>
                                 <TouchableOpacity  onPress={this._onPressComments}>
                                     <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                                        <Icon size={22} color={'grey'} type={'material-community'} name={'comment-processing-outline'}/>
+                                        <Icon size={18} color={'grey'} type={'material-community'} name={'comment-processing-outline'}/>
                                         {post.cc !== 0 &&
-                                        <Text style={AppStyles.paddingLeftSml}>{post.cc}</Text>
+                                        <Text style={[AppStyles.paddingLeftSml, AppStyles.subtext]}>{post.cc}</Text>
                                         }
                                     </View>
                                 </TouchableOpacity>
                             </View>
                             <View style={AppStyles.flex1}>
                                 <TouchableOpacity  onPress={this._onPressLike} >
-                                    <View style={[AppStyles.row, AppStyles.centerAligned, {padding:18}]}>
+                                    <View style={[AppStyles.row, AppStyles.centerAligned]}>
                                         {!post.gp ? (
                                             <Animation
                                                 ref={animation => { this.animation = animation; }}
                                                 style={{
-                                              width: 180,
-                                              height: 180,
-                                              marginTop:-80,
-                                              marginBottom:-80,
-                                              marginLeft:-80,
-                                              marginRight:-80
+                                              width: 130,
+                                              height: 130,
+                                              marginTop:-50,
+                                              marginBottom:-50,
+                                              marginLeft:-50,
+                                              marginRight:-50
                                             }}
                                                 source={require('../../../animations/like.json')}
                                             />
@@ -302,19 +302,19 @@ class PostCard extends Component {
                                             <Animation
                                                 ref={animation => { this.animation = animation; }}
                                                 style={{
-                                              width: 180,
-                                              height: 180,
-                                              marginTop:-80,
-                                              marginBottom:-80,
-                                              marginLeft:-80,
-                                              marginRight:-80
+                                              width: 130,
+                                              height: 130,
+                                              marginTop:-50,
+                                              marginBottom:-50,
+                                              marginLeft:-50,
+                                              marginRight:-50
                                             }}
                                                 progress={1}
                                                 source={require('../../../animations/like.json')}
                                             />
                                         )}
                                         {post.pc !== 0 &&
-                                        <Text style={[AppStyles.paddingLeftSml]}>{post.pc}</Text>
+                                        <Text style={[{paddingLeft:2}, AppStyles.subtext]} >{post.pc}</Text>
                                         }
                                     </View>
                                 </TouchableOpacity>
@@ -367,16 +367,18 @@ const styles = StyleSheet.create({
     cardImage:{
         alignItems: 'center',
         justifyContent: 'center',
-        paddingBottom:5
     },
     cardContent: {
-        paddingRight: 16,
-        paddingLeft: 16,
         paddingTop: 6,
-        paddingBottom: 16,
+    },
+    cardText: {
+        paddingRight: 10,
+        paddingLeft: 10,
+        paddingBottom: 10,
+
     },
     cardAction: {
-        marginTop:5,
+        padding:5,
         flexDirection: 'row',
         alignItems: 'center',
         backgroundColor:'#f1f1f1',
