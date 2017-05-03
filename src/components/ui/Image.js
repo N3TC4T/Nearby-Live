@@ -60,9 +60,7 @@ const styles = StyleSheet.create({
     imageContainer:{
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom:5,
         height: 200,
-        width:AppSizes.screen.width * 0.85,
         borderWidth:2,
         borderColor:'transparent'
     }
@@ -453,12 +451,12 @@ export default class ImageViewer extends Component {
         })
 
 
-        let width = this._imageSize.width * ( AppSizes.screen.width * 0.85 / this._imageSize.width);
-        let height = this._imageSize.height * ( AppSizes.screen.height * 0.50/ this._imageSize.height);
+        let width = this._imageSize.width * ( AppSizes.screen.width  / this._imageSize.width);
+        let height = this._imageSize.height * ( AppSizes.screen.height * 0.60/ this._imageSize.height);
 
 
         return (
-            <Animated.View>
+            <View>
                 <Animated.View style={[styles.imageContainer]}>
                     <TouchableWithoutFeedback
                         onPress={this.toggleModal}
@@ -541,7 +539,7 @@ export default class ImageViewer extends Component {
 
                     <BottomAlert ref="alert" />
                 </Modal>
-            </Animated.View>
+            </View>
         );
     }
 }
