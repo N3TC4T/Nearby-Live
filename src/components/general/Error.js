@@ -21,14 +21,13 @@ const Error = ({ text, tryAgain }) => (
 
     <Spacer size={10} />
 
-    <Text h3>{text}</Text>
+    <Text style={AppStyles.textCenterAligned} h3>{text}</Text>
 
     <Spacer size={20} />
 
     {!!tryAgain &&
       <Button
         small
-        outlined
         title={'Try again'}
         onPress={tryAgain}
       />
