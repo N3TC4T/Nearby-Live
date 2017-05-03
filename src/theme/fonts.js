@@ -16,7 +16,7 @@ const base = {
       family: 'HelveticaNeue',
     },
     android: {
-      family: 'Roboto',
+      family: 'normal',
     },
   }),
 };
