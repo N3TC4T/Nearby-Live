@@ -10,6 +10,7 @@ import router from '@redux/router/reducer';
 import user from '@redux/user/reducer';
 import stream from '@redux/stream/reducer';
 import conversations from '@redux/conversations/reducer';
+import notifications from '@redux/notifications/reducer';
 
 // Combine all
 const appReducer = combineReducers({
@@ -17,6 +18,7 @@ const appReducer = combineReducers({
   user,
   stream,
   conversations,
+  notifications,
 });
 
 // Setup root reducer

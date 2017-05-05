@@ -1,21 +1,26 @@
 /**
- * Notification Actions
+ * Notifications Actions
  */
 
-import { AsyncStorage } from "react-native";
+import AppAPI from '@lib/api';
 
 
-import AppAPI from "@lib/api";
-import { APIConfig } from "@constants/";
-
-
-export function eventHandler(data) {
+export function getNotifications(startFrom) {
     return (dispatch) => {
+        let latest = false
 
+        startFrom == -1 ? latest = true: null
+
+        return AppAPI.notifications.get({last: startFrom, latest: latest})
+            .then((res) => {
                 dispatch({
-                    type: 'CONVERSATIONS_REPLACE',
+                    type: 'NOTIFICATIONS_UPDATE',
                     data: res,
                 });
 
+            })
     };
 }
+
+
+

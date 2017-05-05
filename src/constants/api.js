@@ -22,6 +22,8 @@ export default {
 
         ['conversations', '/conversations'],
 
+        ['notifications', '/system-messages'],
+
         ['people', '/people'],
 
         ['upload_image', '/upload-image.ashx']
@@ -30,18 +32,6 @@ export default {
     tokenKey: 'token',
 };
 
-// GET /api/conversations/v_u0LCEDtHMfoPLEIfsJPQ/receipt HTTP/1.1
-// 1
-
-// POST /api/conversations/v_u0LCEDtHMfoPLEIfsJPQ/typing HTTP/1.1
-//
-// GET /api/conversations/v_u0LCEDtHMfoPLEIfsJPQ/status HTTP/1.1
-// {"ConversationID":"v_u0LCEDtHMfoPLEIfsJPQ","AllowedToMessage":true}
-//
-// GET /api/people/v_u0LCEDtHMfoPLEIfsJPQ/name HTTP/1.1
-// "Brian Hamachek"
-
-// GET /api/system-messages?type1=8&type2=-1&last=-1&latest=true HTTP/1.1
 
 //socket
 

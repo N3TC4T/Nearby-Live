@@ -6,7 +6,7 @@ import { Scene } from 'react-native-router-flux';
 
 // Consts and Libs
 import { AppConfig } from '@constants/';
-import { AppStyles, AppSizes } from '@theme/';
+import { AppStyles, AppSizes, AppColors } from '@theme/';
 
 // Components
 import { TabIcon } from '@ui/';
@@ -21,12 +21,12 @@ import Placeholder from '@components/general/Placeholder';
 import Home from '@containers/main/home/HomeContainer';
 import CommentsContainer from '@containers/main/home/stream/comments/CommentsContainer';
 import ConversationContainer from '@containers/main/home/conversations/conversation/ConversationContainer';
+import NotificationsContainer from '@containers/main/notifications/NotificationsContainer';
 
 
-const navbarPropsTabs = {
-    ...AppConfig.navbarProps,
+const sceneStyleProps = {
     sceneStyle: {
-        ...AppConfig.navbarProps.sceneStyle,
+        backgroundColor: AppColors.background,
         paddingBottom: AppSizes.tabbarHeight,
     },
 };
@@ -40,6 +40,7 @@ const scenes = (
             icon={props => TabIcon({ ...props, icon: 'home', size:22, type:'simple-line-icon' })}
         >
             <Scene
+                { ...sceneStyleProps }
                 hideNavBar
                 key={'main'}
                 component={Home}
@@ -70,6 +71,7 @@ const scenes = (
 
 
         <Scene
+            { ...sceneStyleProps }
             key={'people'}
             hideNavBar
             component={Placeholder}
@@ -78,6 +80,7 @@ const scenes = (
             analyticsDesc={'People: People'}
         />
         <Scene
+            { ...sceneStyleProps }
             key={'new-post'}
             hideNavBar
             component={Placeholder}
@@ -86,14 +89,15 @@ const scenes = (
             analyticsDesc={'Posts: New'}
         />
         <Scene
+            { ...sceneStyleProps }
             key={'notifications'}
             hideNavBar
-            component={Placeholder}
-            text={'Notifications'}
+            component={NotificationsContainer}
             icon={props => TabIcon({ ...props, icon: 'bell', size:22, type:'simple-line-icon' })}
             analyticsDesc={'Notifications: Notifications'}
         />
         <Scene
+            { ...sceneStyleProps }
             key={'profile'}
             hideNavBar
             component={Placeholder}

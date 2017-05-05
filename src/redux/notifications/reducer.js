@@ -1,16 +1,36 @@
+import schema from "./models";
+
 /**
- * User Reducer
+ * Notifications Reducer
  */
 
 // Set initial state
-const initialState = {};
+const initialState = schema.getEmptyState();
 
-export default function userReducer(state = initialState, action) {
-  switch (action.type) {
-    case 'USER_REPLACE':
-      return action.data;
+export default function notificationsReducer(state = initialState, action) {
+    switch (action.type) {
 
-    default:
-      return state;
-  }
+        case 'NOTIFICATIONS_UPDATE': {
+            const session = schema.session(state);
+            const { Notification } = session;
+
+            if (action.data && typeof action.data === 'object') {
+                action.data.map(
+                    row => {
+                        // check if notification not exist then create
+                        if (Notification.hasId(row.id)) {
+                            Notification.withId(row.id).update(row);
+                        }else {
+                            Notification.create(row)
+                        }
+                    }
+                );
+            }
+
+            return session.state;
+        }
+
+        default:
+            return state;
+    }
 }

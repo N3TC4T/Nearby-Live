@@ -18,4 +18,7 @@ export default {
     //Conversations
     missingConversationID: 'Missing conversation id',
 
+    //Notifications
+    notifications404: 'There are no notification to show.',
+
 };
