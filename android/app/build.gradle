@@ -58,7 +58,7 @@ import com.android.build.OutputFile
  *   inputExcludes: ["android/**", "ios/**"],
  *
  *   // override which node gets called and with what additional arguments
- *   nodeExecutableAndArgs: ["node"]
+ *   nodeExecutableAndArgs: ["node"],
  *
  *   // supply additional arguments to the packager
  *   extraPackagerArgs: []
@@ -87,8 +87,6 @@ android {
     buildToolsVersion "25.0.2"
 
     defaultConfig {
-        renderscriptTargetApi 19
-        renderscriptSupportModeEnabled true
         applicationId "com.nearby"
         minSdkVersion 16
         targetSdkVersion 22
@@ -106,17 +104,8 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
-    signingConfigs {
-         release {
-             storeFile file("my-release-key.keystore")
-             storePassword "123456"
-             keyAlias "my-key-alias"
-             keyPassword "123456"
-             }
-         }
     buildTypes {
         release {
-            signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
@@ -137,19 +126,15 @@ android {
 }
 
 dependencies {
-    compile project(':react-native-fetch-blob')
-    compile project(':react-native-video')
-    compile project(':react-native-image-picker')
-    compile project(':lottie-react-native')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-google-analytics-bridge')
     compile project(':react-native-device-info')
+    compile project(':react-native-video')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-google-analytics-bridge')
+    compile project(':react-native-fetch-blob')
+    compile project(':lottie-react-native')
     compile fileTree(dir: "libs", include: ["*.jar"])
     compile "com.android.support:appcompat-v7:23.0.1"
-    compile "com.facebook.fresco:fresco:1.0.0"
-    compile "com.facebook.fresco:animated-gif:1.0.0"
-    // supports Android versions before Ice Cream Sandwich (API level 14)
-    compile 'com.facebook.fresco:animated-base-support:1.0.0'
     compile "com.facebook.react:react-native:+"  // From node_modules
 }
 

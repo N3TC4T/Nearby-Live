@@ -4,7 +4,7 @@
 /* global __DEV__ */
 import { AppColors, AppStyles, AppSizes } from '@theme/';
 
-import { Navigator } from 'react-native'
+import { Platform } from 'react-native'
 
 
 export default {
@@ -29,7 +29,7 @@ export default {
     hideNavBar: false,
     sceneStyle: {
       backgroundColor: AppColors.background,
-      paddingTop: Navigator.NavigationBar.Styles.General.TotalNavHeight
+      paddingTop: Platform.os === 'ios' ? 64 : 48,
     },
   },
 };
