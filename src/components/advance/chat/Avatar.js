@@ -1,5 +1,5 @@
 import React from "react";
-import {Image, StyleSheet, View} from "react-native";
+import {Image, StyleSheet, View, ViewPropTypes} from "react-native";
 import AvatarRender from "./AvatarRender";
 import { isSameUser , isSameDay, warnDeprecated} from "./utils";
 
@@ -91,12 +91,12 @@ Avatar.propTypes = {
   currentMessage: React.PropTypes.object,
   nextMessage: React.PropTypes.object,
   containerStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
   imageStyle: React.PropTypes.shape({
-    left: View.propTypes.style,
-    right: View.propTypes.style,
+    left: ViewPropTypes.style,
+    right: ViewPropTypes.style,
   }),
   //TODO: remove in next major release
   isSameDay: React.PropTypes.func,

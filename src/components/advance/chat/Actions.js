@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {
     StyleSheet,
     View,
+    ViewPropTypes,
     Image,
     Modal,
     Button,
@@ -409,7 +410,7 @@ Actions.propTypes = {
     onSend: React.PropTypes.func,
     options: React.PropTypes.object,
     icon: React.PropTypes.func,
-    containerStyle: View.propTypes.style,
-    wrapperStyle: View.propTypes.style,
-    iconTextStyle: Text.propTypes.style,
+    containerStyle: ViewPropTypes.style,
+    wrapperStyle: ViewPropTypes.style,
+    iconTextStyle: ViewPropTypes.style,
 };

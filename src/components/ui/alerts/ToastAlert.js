@@ -2,6 +2,7 @@ import React, {Component, PropTypes} from 'react'
 import {
     StyleSheet,
     View,
+    ViewPropTypes,
     Text,
     Animated,
     Dimensions,
@@ -64,7 +65,7 @@ class ToastContainer extends Component {
     static displayName = 'ToastContainer';
 
     static propTypes = {
-        ...View.propTypes,
+        ...ViewPropTypes,
         duration: PropTypes.number,
         visible: PropTypes.bool,
         position: PropTypes.number,
