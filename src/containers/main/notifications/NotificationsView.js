@@ -19,8 +19,6 @@ import { List, ListItem } from '@components/ui';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
-moment.updateLocale('en', null);
-
 /* Component ==================================================================== */
 class NotificationsListing extends Component {
     static componentName = 'NotificationsListing';
