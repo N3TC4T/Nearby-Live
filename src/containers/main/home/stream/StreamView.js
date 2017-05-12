@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import {
     View,
-    ListView,
+    SectionList,
     RefreshControl,
     InteractionManager,
 } from 'react-native';
@@ -18,7 +18,7 @@ import AppAPI from '@lib/api';
 
 // Components
 import { PostCard } from '@ui/cards'
-import { ListInfinite, List, ListItem, Spacer, Text } from '@components/ui';
+import { List } from '@components/ui';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
@@ -45,31 +45,25 @@ class PostsListing extends Component {
             isLoadingMore:false,
             sectionIndex:0,
             error:null,
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            })
+            dataSource:null,
         };
 
-        this.state.dataSource = this.getUpdatedDataSource(props);
+        this.state.dataSource = props.postsListing
 
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.postsListing !== this.props.postsListing) {
             this.setState({
-                dataSource: this.getUpdatedDataSource(nextProps)
+                dataSource: nextProps.postsListing,
             })
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         InteractionManager.runAfterInteractions(() => {
             this.fetchPosts(true, true);
         });
-    }
-
-    getUpdatedDataSource = (props) => {
-        return this.state.dataSource.cloneWithRows(props.postsListing);
     }
 
     getChildContext() {
@@ -113,12 +107,12 @@ class PostsListing extends Component {
 
         this.props.updateSectionIndex(selectedIndex)
 
-        if (this._listView){
-            this._listView.scrollTo({y:0})
-        }
+        //Todo : this should fix in SectioList
+        // this._sectionList.scrollToIndex({ index: 0 })
+
     }
 
-    _onLoadMore = async () => {
+    LoadMore =  () => {
 
         const { isLoadingMore, sectionIndex } = this.state ;
 
@@ -128,7 +122,7 @@ class PostsListing extends Component {
 
         let startFrom = postsListing[postsListing.length -1 ].id
 
-        await this.props.getPosts(sectionIndex, startFrom)
+        this.props.getPosts(sectionIndex, startFrom)
             .then(() => {
                 this.setState({
                     isLoadingMore: false ,
@@ -137,15 +131,27 @@ class PostsListing extends Component {
 
     }
 
-    _canLoadMore = () => {
-        const { isLoadingMore, sectionIndex } = this.state
-
-        return !isLoadingMore && sectionIndex !== 2
+    renderItem = ({item})  => {
+        const { user ,likePost, watchPost , unwatchPost, featurePost, deletePost, reportPost } = this.props
+        return (
+            <PostCard
+                post={item}
+                reportable={ item.pid !== user.profile.id }
+                deletable={ item.pid == user.profile.id }
+                featureAble={ user.points.AvailablePoints > 0 }
+                onPressLike={ likePost }
+                onPressDelete={ deletePost }
+                onPressFeature={ featurePost }
+                onPressReport={ reportPost }
+                onPressWatch={ watchPost }
+                onPressUnWatch={ unwatchPost }
+            />
+        )
     }
 
 
     render = () => {
-        const { postsListing, user ,likePost, watchPost , unwatchPost, featurePost, deletePost, reportPost } = this.props;
+        const { postsListing,  } = this.props;
         const { isRefreshing, dataSource, sectionIndex } = this.state;
 
         const sections = ['Recent', 'Following', 'Trending']
@@ -182,34 +188,19 @@ class PostsListing extends Component {
                         containerStyle={{height: 30}}
                     />
 
-                    <List containerStyle={{marginTop:0, height:AppSizes.screen.height-160}}>
-                        <ListView
-                            ref={listView => (this._listView = listView)}
-                            enableEmptySections
-                            renderScrollComponent={props => <ListInfinite  {...props} />}
-                            renderRow={post => <PostCard
-                            post={post}
-                            reportable={ post.pid !== user.profile.id }
-                            deletable={ post.pid == user.profile.id }
-                            featureAble={ user.points.AvailablePoints > 0 }
-                            onPressLike={likePost}
-                            onPressDelete={deletePost}
-                            onPressFeature={featurePost}
-                            onPressReport={reportPost}
-                            onPressWatch={watchPost}
-                            onPressUnWatch={unwatchPost}
-                         />
-                        }
-                            dataSource={dataSource}
-                            canLoadMore={this._canLoadMore}
-                            onLoadMoreAsync={this._onLoadMore}
-                            refreshControl={
-                              <RefreshControl
-                                refreshing={isRefreshing}
-                                onRefresh={()=>{this.fetchPosts(true)}}
-                                tintColor={AppColors.brand.primary}
-                              />
-                              }
+                    <List containerStyle={[{marginTop:0, borderTopColor:'transparent'}]}>
+                        <SectionList
+                            ref={(ref) => { this._sectionList = ref }}
+                            renderItem={this.renderItem}
+                            sections={[
+                                {key: sectionIndex, data: dataSource},
+                              ]}
+                            refreshing={isRefreshing}
+                            initialNumToRender={5}
+                            onRefresh={() => {this.fetchPosts(true)}}
+                            onEndReached={this.LoadMore}
+                            onEndReachedThreshold={100}
+                            keyExtractor={item => item.id}
                         />
                     </List>
                 </View>
