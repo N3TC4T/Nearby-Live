@@ -31,5 +31,14 @@ export default {
       backgroundColor: AppColors.background,
       paddingTop: Platform.os === 'ios' ? 64 : 48,
     },
+    navigationBarStyle:{
+      ...AppStyles.navbar
+    },
+    titleStyle:{
+        ...AppStyles.navbarTitle
+    },
+    backButtonTextStyle:{
+
+    }
   },
 };
