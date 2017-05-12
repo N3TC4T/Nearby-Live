@@ -8,7 +8,7 @@ import moment from 'moment';
 import React, { Component, PropTypes } from 'react';
 import {
     View,
-    ListView,
+    FlatList,
     RefreshControl,
     InteractionManager,
 } from 'react-native';
@@ -27,7 +27,7 @@ import AppAPI from '@lib/api';
 import Error from '@components/general/Error';
 import Loading from '@components/general/Loading';
 import ActionSheet from '@expo/react-native-action-sheet';
-import { ListInfinite, List, ListItem } from '@components/ui';
+import { List, ListItem } from '@components/ui';
 import { SearchBar, Icon } from 'react-native-elements'
 
 
@@ -70,31 +70,24 @@ class ConversationsListing extends Component {
             isLoadingMore:false,
             startFrom:-1,
             error:null,
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            })
         };
 
-        this.state.dataSource = this.getUpdatedDataSource(props);
+        this.state.dataSource = props.conversationsListing
 
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.conversationsListing !== this.props.conversationsListing) {
             this.setState({
-                dataSource: this.getUpdatedDataSource(nextProps)
+                dataSource: nextProps.conversationsListing,
             })
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         InteractionManager.runAfterInteractions(() => {
             this.fetchConversations(true);
         });
-    }
-
-    getUpdatedDataSource = (props) => {
-        return this.state.dataSource.cloneWithRows(props.conversationsListing);
     }
 
     /**
@@ -125,7 +118,7 @@ class ConversationsListing extends Component {
     }
 
 
-    _onLoadMore = async () => {
+    LoadMore = async () => {
 
         const { isLoadingMore, startFrom } = this.state ;
 
@@ -139,12 +132,6 @@ class ConversationsListing extends Component {
                 });
             });
 
-    }
-
-    _canLoadMore = () => {
-        const { isLoadingMore } = this.state
-
-        return !isLoadingMore
     }
 
     _onPressConversation = (conversation) => {
@@ -197,10 +184,13 @@ class ConversationsListing extends Component {
     }
 
 
-    renderRow = (conversation) => {
+    renderItem = (obj) => {
+        const conversation = obj.item
         let badgeProps  = {};
 
-        conversation.new > 0 ? badgeProps = {badge:{ value: conversation.new  , badgeTextStyle:{fontSize:10, fontWeight:'bold'} , badgeContainerStyle: { padding:8,backgroundColor: '#002C54', borderRadius:5, marginTop:7 } } } : null ;
+
+        //Todo: fix badge bug
+        conversation.new > 0 ? badgeProps = {badge:{ value: conversation.new  , badgeTextStyle:{fontSize:10, fontWeight:'bold', color: 'orange'} , badgeContainerStyle: { padding:8,backgroundColor: '#002C54', borderRadius:5, marginTop:7 } } } : null ;
 
         return (
             <ListItem
@@ -236,7 +226,7 @@ class ConversationsListing extends Component {
         });
 
         this.setState({
-            dataSource: this.getUpdatedDataSource({conversationsListing:newFilter})
+            dataSource: newFilter
         })
 
 
@@ -265,7 +255,6 @@ class ConversationsListing extends Component {
                     <View style={[AppStyles.row]}>
                         <View style={[AppStyles.flex6]}>
                             <SearchBar
-                                lightTheme
                                 onChangeText={this._onSearchChange}
                                 inputStyle={{height:38}}
                                 containerStyle={{backgroundColor:'transparent'}}
@@ -283,20 +272,14 @@ class ConversationsListing extends Component {
 
                     </View>
                     <List containerStyle={{marginTop:0, height:AppSizes.screen.height-120}}>
-                        <ListView
-                            enableEmptySections
-                            renderScrollComponent={props => <ListInfinite  {...props} />}
-                            renderRow={conversation => this.renderRow(conversation)}
-                            dataSource={dataSource}
-                            canLoadMore={this._canLoadMore}
-                            onLoadMoreAsync={this._onLoadMore}
-                            refreshControl={
-                              <RefreshControl
-                                refreshing={isRefreshing}
-                                onRefresh={ () => { this.fetchConversations(true) } }
-                                tintColor={AppColors.brand.primary}
-                              />
-                              }
+                        <FlatList
+                            renderItem={conversation => this.renderItem(conversation)}
+                            data={dataSource}
+                            refreshing={isRefreshing}
+                            onRefresh={() => {this.fetchConversations(true)}}
+                            onEndReached={this.LoadMore}
+                            onEndReachedThreshold={100}
+                            keyExtractor={item => item.id}
                         />
                     </List>
                 </View>

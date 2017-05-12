@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
     TouchableOpacity,
     RefreshControl,
-    ListView,
+    FlatList,
     View,
     Text,
     Platform,
@@ -41,32 +41,25 @@ class CommentsListing extends Component {
             isRefreshing: true,
             isEditable: true,
             error:null,
-            dataSource: new ListView.DataSource({
-                rowHasChanged: (row1, row2) => row1 !== row2,
-            })
         };
 
-        this.state.dataSource = this.getUpdatedDataSource(props);
+        this.state.dataSource = this.props.post.comments
     }
 
     componentWillReceiveProps(nextProps) {
         if (nextProps.post.comments !== this.props.post.comments) {
             this.setState({
-                dataSource: this.getUpdatedDataSource(nextProps)
+                dataSource: nextProps.post.comments,
             })
         }
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         InteractionManager.runAfterInteractions(() => {
             this.fetchComments(true);
         });
     }
 
-
-    getUpdatedDataSource = (props) => {
-        return this.state.dataSource.cloneWithRows(props.post.comments);
-    }
 
     /**
      * Fetch Comments from API
@@ -127,61 +120,63 @@ class CommentsListing extends Component {
         //todo: need to catch error and give retry to user
     }
 
+    _rendInput = () => {
+        const { isEditable } = this.state
+
+        return(
+            <View style={[styles.inputContainer]}>
+                <View style={[styles.primary]}>
+                    <TouchableOpacity
+                        style={[styles.actionContainer]}
+                        onPress={()=>{console.log('attach')}}
+                    >
+                        <View  style={[AppStyles.flex1]}>
+                            <Icon size={22} color={'grey'} type={'material'} name={'add-a-photo'} />
+                        </View>
+                    </TouchableOpacity>
+                    <TextInput
+                        ref={textInput => (this._textInput = textInput)}
+                        placeholder={'Comment'}
+                        placeholderTextColor={'grey'}
+                        multiline={true}
+                        style={[styles.textInput]}
+                        enablesReturnKeyAutomatically={true}
+                        underlineColorAndroid="transparent"
+                        editable={isEditable}
+                    />
+                    <TouchableOpacity
+                        style={[styles.sendContainer]}
+                        onPress={this._onSend}
+                    >
+                        <View style={[AppStyles.flex1]}>
+                            <Icon size={22} color={'grey'} type={'ionicon'} name={'md-send'} />
+
+                        </View>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
+
+
     render = () => {
-        const { isRefreshing, isEditable, dataSource, error } = this.state;
+        const { isRefreshing, dataSource, error } = this.state;
 
         const { post } = this.props
 
         if (error) return <Error text={error} tryAgain={() => { this.fetchComments() } } />;
 
-
         return (
-            <View style={[AppStyles.container]}>
-                <ListView
-                    enableEmptySections
-                    initialListSize={8}
-                    renderRow={comment => <CommentCard comment={comment} ownerId={post.pid} />}
-                    dataSource={dataSource}
-                    automaticallyAdjustContentInsets={false}
-                    refreshControl={
-                          <RefreshControl
-                                refreshing={isRefreshing}
-                                onRefresh={this.fetchComments}
-                                tintColor={AppColors.brand.primary}
-                              />
-                          }
+            <View style={[AppStyles.container, {paddingTop:AppSizes.paddingSml}]}>
+                <FlatList
+                    renderItem={comment => <CommentCard comment={comment.item} ownerId={post.pid} />}
+                    data={dataSource}
+                    refreshing={isRefreshing}
+                    onRefresh={() => {this.fetchComments(true)}}
+                    keyExtractor={item => item.id}
                 />
-                <View style={[styles.inputContainer]}>
-                    <View style={[styles.primary]}>
-                        <TouchableOpacity
-                            style={[styles.actionContainer]}
-                            onPress={()=>{console.log('attach')}}
-                        >
-                            <View  style={[AppStyles.flex1]}>
-                                <Icon size={22} color={'grey'} type={'material'} name={'add-a-photo'} />
-                            </View>
-                        </TouchableOpacity>
-                        <TextInput
-                            ref={textInput => (this._textInput = textInput)}
-                            placeholder={'Comment'}
-                            placeholderTextColor={'grey'}
-                            multiline={true}
-                            style={[styles.textInput]}
-                            enablesReturnKeyAutomatically={true}
-                            underlineColorAndroid="transparent"
-                            editable={isEditable}
-                        />
-                        <TouchableOpacity
-                            style={[styles.sendContainer]}
-                            onPress={this._onSend}
-                        >
-                            <View style={[AppStyles.flex1]}>
-                                <Icon size={22} color={'grey'} type={'ionicon'} name={'md-send'} />
 
-                            </View>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                { this._rendInput() }
             </View>
         );
     }
