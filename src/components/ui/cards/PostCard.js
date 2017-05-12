@@ -7,14 +7,16 @@ import moment from "moment";
 import React, {Component, PropTypes} from "react";
 import {
     StyleSheet,
+    TouchableWithoutFeedback,
+    Animated,
+    PanResponder,
     Image,
     View,
     TouchableOpacity,
     Clipboard
 } from "react-native";
 
-import {Icon} from "react-native-elements";
-import Animation from "lottie-react-native";
+import { Icon } from "react-native-elements";
 
 // Actions
 import { Actions } from 'react-native-router-flux';
@@ -27,6 +29,87 @@ import { getImageURL } from "@lib/util";
 // Components
 import {Image as ImageViewer, Avatar, Badge, Text} from "@ui/";
 import { Toast } from "@ui/alerts/";
+
+
+/* Component ==================================================================== */
+class AnimatedLike extends Component {
+    static propTypes = {
+        onPress: PropTypes.func,
+        liked : PropTypes.bool,
+        count: PropTypes.number
+    };
+
+    static defaultProps = {
+        liked: false,
+        count: 0
+    };
+
+    constructor (props) {
+        super( props);
+
+        this.state = {
+            scale: new Animated.Value(1),
+            liked: props.liked,
+            count: props.count
+        };
+    }
+
+    _onPress = () => {
+        this.setState({
+            liked:true,
+            count : this.state.liked ? this.state.count : this.state.count + 1
+        })
+
+        Animated.timing(
+            this.state.scale,
+            {
+                toValue: 3,
+                friction: 1,
+                duration: 200
+            },
+        ).start();
+
+        setTimeout(() => {
+            Animated.spring(
+                this.state.scale,
+                {
+                    toValue: 1,
+                    friction: 1,
+                    duration: 200
+                },
+            ).start(() => {
+                if (this.props.onPress) {
+                    this.props.onPress();
+                }
+            });
+
+
+
+        }, 50)
+    }
+
+    render () {
+        return (
+            <View style={AppStyles.flex1}>
+                <TouchableWithoutFeedback onPress={this._onPress}>
+                    <View style={[AppStyles.row, AppStyles.centerAligned]}>
+                        <Animated.View
+                            style={[{transform: [ {scale: this.state.scale }]}, this.props.style]}
+                        >
+                            <Icon size={20} color={this.state.liked ? '#EB1010' : 'grey'} type={'material-community'} name={this.state.liked ? 'heart' : 'heart-outline'} />
+                        </Animated.View>
+                        {this.state.count !== 0 &&
+                            <Text style={[{paddingLeft:6}, AppStyles.subtext]} >{this.state.count}</Text>
+                        }
+                    </View>
+                </TouchableWithoutFeedback>
+            </View>
+        );
+    }
+}
+
+
+
 
 /* Component ==================================================================== */
 class PostCard extends Component {
@@ -51,6 +134,10 @@ class PostCard extends Component {
         onPressUnWatch: PropTypes.func.isRequired,
     };
 
+
+    shouldComponentUpdate(nextProps, nextState){
+        return this.props.post != nextProps.post
+    }
 
     _onPressWatch = () => {
         const { post, onPressWatch, onPressUnWatch } = this.props
@@ -82,8 +169,6 @@ class PostCard extends Component {
         const { post , onPressLike} = this.props;
 
         if (!post.gp){
-            this.animation.play();
-
             onPressLike(post.id, post.pid)
         }
     };
@@ -169,9 +254,9 @@ class PostCard extends Component {
             return(
                 <View style={[styles.cardContent]}>
                     {!!this.cleanText &&
-                        <View style={[AppStyles.row, styles.cardText]}>
-                            <Text style={[styles.postText]}>{ this.cleanText }</Text>
-                        </View>
+                    <View style={[AppStyles.row, styles.cardText]}>
+                        <Text style={[styles.postText]}>{ this.cleanText }</Text>
+                    </View>
                     }
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
@@ -188,20 +273,20 @@ class PostCard extends Component {
             return(
                 <View style={[styles.cardContent]}>
                     {!!post.txt &&
-                        <View style={[AppStyles.row, styles.cardText]}>
-                            <Text style={[styles.postText]}>{post.txt}</Text>
-                        </View>
+                    <View style={[AppStyles.row, styles.cardText]}>
+                        <Text style={[styles.postText]}>{post.txt}</Text>
+                    </View>
                     }
                     {!!post.img &&
-                        <View style={[AppStyles.row, styles.cardImage]}>
-                            <ImageViewer
-                                disabled={false}
-                                source={{ uri: getImageURL(post.img)  }}
-                                doubleTapEnabled={true}
-                                onMove={(e, gestureState) => null}
-                                downloadable={true}
-                            />
-                        </View>
+                    <View style={[AppStyles.row, styles.cardImage]}>
+                        <ImageViewer
+                            disabled={false}
+                            source={{ uri: getImageURL(post.img)  }}
+                            doubleTapEnabled={true}
+                            onMove={(e, gestureState) => null}
+                            downloadable={true}
+                        />
+                    </View>
                     }
                 </View>
             )
@@ -231,7 +316,7 @@ class PostCard extends Component {
                             <View style={[styles.postHeaderContainer]}>
                                 <View style={[AppStyles.row]}>
                                     {/*user name*/}
-                                    <Text>{post.name}</Text>
+                                    <Text style={[styles.usernameText]}>{post.name}</Text>
 
                                     {/*user badge*/}
                                     {!!post.ul && <Badge type={post.ul}/> }
@@ -251,24 +336,13 @@ class PostCard extends Component {
                             </View>
                         </View>
 
-
-
-
                         { this.renderContent()}
-
 
                         <View style={[styles.cardAction]}>
                             <View onPress={onPressWatch} style={AppStyles.flex1}>
                                 <TouchableOpacity  onPress={this._onPressWatch}>
                                     <View  style={[AppStyles.row, AppStyles.centerAligned]}>
-                                        {!post.w ?
-                                            (
-                                                <Icon size={23} color={'grey'} type={'foundation'} name={'eye'} />
-                                            ) :
-                                            (
-                                                <Icon size={23} color={'#C02827'} type={'foundation'} name={'eye'} />
-                                            )
-                                        }
+                                        <Icon size={20} color={'grey'} type={'ionicon'} name={!post.w ? 'md-eye' : 'md-eye-off'} />
                                     </View>
                                 </TouchableOpacity>
                             </View>
@@ -282,43 +356,13 @@ class PostCard extends Component {
                                     </View>
                                 </TouchableOpacity>
                             </View>
-                            <View style={AppStyles.flex1}>
-                                <TouchableOpacity  onPress={this._onPressLike} >
-                                    <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                                        {!post.gp ? (
-                                            <Animation
-                                                ref={animation => { this.animation = animation; }}
-                                                style={{
-                                              width: 130,
-                                              height: 130,
-                                              marginTop:-50,
-                                              marginBottom:-50,
-                                              marginLeft:-50,
-                                              marginRight:-50
-                                            }}
-                                                source={require('../../../animations/like.json')}
-                                            />
-                                        ) : (
-                                            <Animation
-                                                ref={animation => { this.animation = animation; }}
-                                                style={{
-                                              width: 130,
-                                              height: 130,
-                                              marginTop:-50,
-                                              marginBottom:-50,
-                                              marginLeft:-50,
-                                              marginRight:-50
-                                            }}
-                                                progress={1}
-                                                source={require('../../../animations/like.json')}
-                                            />
-                                        )}
-                                        {post.pc !== 0 &&
-                                        <Text style={[{paddingLeft:2}, AppStyles.subtext]} >{post.pc}</Text>
-                                        }
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
+
+                            <AnimatedLike
+                                onPress={this._onPressLike}
+                                liked={post.gp}
+                                count={post.pc}
+                            />
+
                         </View>
                     </View>
                 ) : (
@@ -360,13 +404,17 @@ const styles = StyleSheet.create({
             width: 0.3,
         }
     },
-
+    usernameText:{
+        color:AppColors.textCard
+    },
     cardHeader: {
         padding: 10
     },
     cardImage:{
         alignItems: 'center',
         justifyContent: 'center',
+        borderWidth:0.5,
+        borderColor:'#a9a9a9'
     },
     cardContent: {
         paddingTop: 6,
@@ -407,7 +455,7 @@ const styles = StyleSheet.create({
     postText:{
         fontFamily: AppFonts.base.family,
         fontSize: AppFonts.base.size * 0.92,
-        color:AppColors.textPrimary
+        color:AppColors.textCard
     },
     postOptions:{
         position: 'absolute',

@@ -235,8 +235,8 @@ export default {
     // TabBar
     tabbar: {
         backgroundColor: Colors.tabbar.background,
-        borderTopColor: Colors.border,
-        borderTopWidth: 1,
+        // borderTopColor: Colors.border,
+        // borderTopWidth: 1,
     },
 
 

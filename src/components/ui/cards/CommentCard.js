@@ -75,7 +75,7 @@ class CommentCard extends Component {
 
                     </View>
                 </View>
-                <View style={AppStyles.hr}/>
+
             </View>
 
         );
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         fontFamily: AppFonts.base.family,
         fontSize: AppFonts.base.size * 0.85,
         fontWeight:'500',
-        color:'#525252'
+        color:'#b8b8b8'
     },
     commentText:{
         fontFamily: AppFonts.base.family,

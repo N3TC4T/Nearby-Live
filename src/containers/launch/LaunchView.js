@@ -54,7 +54,7 @@ class AppLaunch extends Component {
 
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         // Show status bar on app launch
         StatusBar.setHidden(false, true);
 
@@ -71,19 +71,14 @@ class AppLaunch extends Component {
     }
 
     render = () => (
-        <View style={[AppStyles.container]}>
-            <Image
-                source={require('../../images/launch.jpg')}
-                style={[styles.launchImage, AppStyles.containerCentered]}
-            >
-                <ActivityIndicator
-                    animating
-                    size={'large'}
-                    color={'#C1C5C8'}
-                />
-                <Spacer size={20}/>
-                <Text style={[styles.loadingText]} h2>Loading...</Text>
-            </Image>
+        <View style={[AppStyles.container,  AppStyles.containerCentered]}>
+            <ActivityIndicator
+                animating
+                size={'large'}
+                color={'#C1C5C8'}
+            />
+            <Spacer size={20}/>
+            <Text style={[styles.loadingText]} h2>Loading...</Text>
         </View>
     );
 }

@@ -26,14 +26,14 @@ import Icon from 'react-native-vector-icons/Octicons';
 const styles = StyleSheet.create({
     title: {
         textAlign: 'left',
-        color: '#0A0A0A',
+        color: '#ffffff',
         fontSize: 15,
         width: 180,
         alignSelf: 'center',
     },
     statusText :{
         textAlign: 'left',
-        color: '#0A0A0A',
+        color: '#ffffff',
         fontSize: 10,
     },
     titleWrapper: {

@@ -3,7 +3,7 @@
  */
 
 const app = {
-    background: '#F1F1F2',
+    background: '#16253D',
     cardBackground: '#FFFFFF',
     listItemBackground: '#FFFFFF',
 };
@@ -16,8 +16,9 @@ const brand = {
 };
 
 const text = {
-    textPrimary: '#222222',
+    textPrimary: '#f1f1f1',
     textSecondary: '#777777',
+    textCard:'#222222',
     headingPrimary: brand.brand.primary,
     headingSecondary: brand.brand.primary,
 };

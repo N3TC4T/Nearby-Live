@@ -1,12 +1,13 @@
 /**
  * Loading Screen
  *
- <Loading text={'Server is down'} />
+ <Loading text={'Loading ...'} />
  *
  */
 import React, { PropTypes, Component } from 'react';
 import { View } from 'react-native';
-import Animation from 'lottie-react-native';
+import ProgressCircle from 'react-native-progress/Circle';
+
 
 // Consts and Libs
 import { AppStyles, AppSizes } from '@theme/';
@@ -28,9 +29,6 @@ class Loading extends Component {
         transparent: false
     };
 
-    componentDidMount() {
-        this.animation.play();
-    }
 
     render = () => {
         const {transparent, text} = this.props
@@ -43,16 +41,7 @@ class Loading extends Component {
                   transparent && { backgroundColor: 'rgba(255,255,255,0.75)' },
                 ]}
             >
-                <Animation
-                    ref={animation => { this.animation = animation; }}
-                    style={{
-                      width: AppSizes.screen.width,
-                      height: 200,
-                     marginTop:AppSizes.screen.width*-0.50
-                    }}
-                    loop={true}
-                    source={require('../../animations/loading.json')}
-                />
+                <ProgressCircle borderWidth={2} indeterminate={true} size={50}/>
 
                 <Spacer size={10}/>
 
