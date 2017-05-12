@@ -9,7 +9,6 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
-import com.airbnb.android.react.lottie.LottiePackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -35,8 +34,7 @@ public class MainApplication extends Application implements ReactApplication {
             new VectorIconsPackage(),
             new ImagePickerPackage(),
             new GoogleAnalyticsBridgePackage(),
-            new RNFetchBlobPackage(),
-            new LottiePackage()
+            new RNFetchBlobPackage()
       );
     }
   };
