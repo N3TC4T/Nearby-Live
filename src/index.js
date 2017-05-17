@@ -9,13 +9,12 @@ import { persistStore, autoRehydrate } from 'redux-persist'; // for persist redu
 import { applyMiddleware, compose, createStore } from 'redux';
 import { connect, Provider } from 'react-redux';
 import { Router } from 'react-native-router-flux';
+import { Platform } from 'react-native'
 
 
 import logger from 'redux-logger'
 import thunk from 'redux-thunk';
 
-
-import ActionSheet from '@expo/react-native-action-sheet';
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
@@ -56,7 +55,7 @@ persistStore(store,{  blacklist:['router', 'stream'] , storage: AsyncStorage })
 export default function AppContainer() {
     return (
           <Provider store={store}>
-            <RouterWithRedux scenes={AppRoutes} style={AppStyles.appContainer} />
+            <RouterWithRedux scenes={AppRoutes} style={AppStyles.appContainer} animation='fade' duration={Platform.OS === 'android' ? 0 : null} />
           </Provider>
     );
 }
