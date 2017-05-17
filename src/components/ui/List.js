@@ -8,7 +8,7 @@ import React, { Component, PropTypes } from 'react';
 import { List } from 'react-native-elements';
 
 // Consts and Libs
-import { AppColors } from '@theme/';
+import { AppColors, AppSizes } from '@theme/';
 
 /* Component ==================================================================== */
 class CustomList extends Component {
@@ -29,8 +29,9 @@ class CustomList extends Component {
       ...this.props,
       containerStyle: [{
         margin: 0,
+        marginBottom: AppSizes.tabbarHeight,
         backgroundColor: AppColors.background,
-        borderTopColor: AppColors.border,
+        borderTopWidth: 0,
         borderBottomWidth: 0,
       }],
     };

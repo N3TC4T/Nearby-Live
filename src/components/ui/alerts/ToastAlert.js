@@ -19,7 +19,7 @@ const DIMENSION = Dimensions.get('window');
 const WINDOW_WIDTH = DIMENSION.width;
 const positions = {
     TOP: 50,
-    BOTTOM: -50,
+    BOTTOM: -60,
     CENTER: 0
 };
 
@@ -96,7 +96,7 @@ class ToastContainer extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount () {
         if (this.state.visible) {
             this._showTimeout = setTimeout(() => this._show(), this.props.delay);
         }
@@ -118,7 +118,7 @@ class ToastContainer extends Component {
         }
     };
 
-    componentWillUnmount = () => {
+    componentWillUnmount () {
         this._hide();
     };
 
@@ -242,7 +242,7 @@ class Toast extends Component {
 
     _toast = null;
 
-    componentWillMount = () => {
+    componentWillMount () {
         this._toast = new RootSiblings(<ToastContainer
             {...this.props}
             duration={0}
@@ -256,7 +256,7 @@ class Toast extends Component {
         />);
     };
 
-    componentWillUnmount = () => {
+    componentWillUnmount () {
         this._toast.destroy();
     };
 

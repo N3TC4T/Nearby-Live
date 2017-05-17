@@ -271,7 +271,7 @@ class ConversationsListing extends Component {
                         </View>
 
                     </View>
-                    <List containerStyle={{marginTop:0, height:AppSizes.screen.height-120}}>
+                    <List containerStyle={{marginTop:0}}>
                         <FlatList
                             renderItem={conversation => this.renderItem(conversation)}
                             data={dataSource}

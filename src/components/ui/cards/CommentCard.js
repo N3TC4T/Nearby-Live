@@ -107,17 +107,17 @@ const styles = StyleSheet.create({
     },
     commenterLocation:{
         color:'gray',
-        fontSize:AppFonts.base.size * 0.70,
+        fontSize:AppFonts.base.size * 0.65,
     },
     commenterName:{
         fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size * 0.85,
+        fontSize: AppFonts.base.size * 0.80,
         fontWeight:'500',
         color:'#b8b8b8'
     },
     commentText:{
         fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size * 0.90,
+        fontSize: AppFonts.base.size,
         fontWeight: '400',
         color:AppColors.textPrimary,
     }

@@ -188,7 +188,7 @@ class PostsListing extends Component {
                         containerStyle={{height: 30}}
                     />
 
-                    <List containerStyle={[{marginTop:0, borderTopColor:'transparent'}]}>
+                    <List containerStyle={[{marginTop:0,marginBottom:40}]}>
                         <SectionList
                             ref={(ref) => { this._sectionList = ref }}
                             renderItem={this.renderItem}

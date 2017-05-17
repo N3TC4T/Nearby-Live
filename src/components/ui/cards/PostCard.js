@@ -63,7 +63,7 @@ class AnimatedLike extends Component {
         Animated.timing(
             this.state.scale,
             {
-                toValue: 3,
+                toValue: 1.5,
                 friction: 1,
                 duration: 200
             },
@@ -77,15 +77,12 @@ class AnimatedLike extends Component {
                     friction: 1,
                     duration: 200
                 },
-            ).start(() => {
-                if (this.props.onPress) {
-                    this.props.onPress();
-                }
-            });
-
-
-
+            ).start();
         }, 50)
+
+        if (this.props.onPress) {
+            this.props.onPress();
+        }
     }
 
     render () {
