@@ -141,7 +141,7 @@ class NotificationsListing extends Component {
 
         return (
             <View style={[AppStyles.container]}>
-                <List containerStyle={[{marginTop:0}]}>
+                <List containerStyle={[{marginTop:0, marginBottom:0}]}>
                     <FlatList
                         renderItem={notification => this.renderItem(notification)}
                         data={dataSource}

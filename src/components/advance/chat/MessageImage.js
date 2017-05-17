@@ -26,6 +26,7 @@ export default class MessageImage extends React.Component {
             doubleTapEnabled={true} // by default double tap will zoom image
             onMove={(e, gestureState) => null}
             downloadable={true}
+            imageStyle={{width:200}}
         />
       </View>
     );
