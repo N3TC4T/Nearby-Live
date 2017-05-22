@@ -16,7 +16,8 @@ const base = {
       family: 'HelveticaNeue',
     },
     android: {
-      family: 'OpenSans-Semibold',
+      family: 'OpenSans-Reqular',
+      familyBold:  'OpenSans-Bold'
     },
   }),
 };

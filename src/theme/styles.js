@@ -186,7 +186,7 @@ export default {
         left: 0,
         right: 0,
         borderBottomWidth: 1,
-        borderBottomColor: Colors.border,
+        borderBottomColor: 'black',
         height: 1,
         backgroundColor: 'transparent',
         marginTop: Sizes.paddingSml,

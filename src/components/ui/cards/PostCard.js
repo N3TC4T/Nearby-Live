@@ -346,7 +346,7 @@ class PostCard extends Component {
                             <View style={AppStyles.flex1}>
                                 <TouchableOpacity  onPress={this._onPressComments}>
                                     <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                                        <Icon size={18} color={'grey'} type={'material-community'} name={'comment-processing-outline'}/>
+                                        <Icon size={18} color={'grey'} type={'font-awesome'} name={'comment-o'}/>
                                         {post.cc !== 0 &&
                                         <Text style={[AppStyles.paddingLeftSml, AppStyles.subtext]}>{post.cc}</Text>
                                         }
@@ -402,7 +402,9 @@ const styles = StyleSheet.create({
         }
     },
     usernameText:{
-        color:AppColors.textCard
+        color:AppColors.textCard,
+        fontFamily: AppFonts.base.familyBold,
+        fontSize:AppFonts.base.size * 0.90,
     },
     cardHeader: {
         padding: 10
@@ -419,7 +421,7 @@ const styles = StyleSheet.create({
     cardText: {
         paddingRight: 10,
         paddingLeft: 10,
-        paddingBottom: 10,
+        paddingBottom: 20,
 
     },
     cardAction: {
@@ -451,8 +453,8 @@ const styles = StyleSheet.create({
     },
     postText:{
         fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size * 0.92,
-        color:AppColors.textCard
+        fontSize: AppFonts.base.size,
+        color:AppColors.textCard,
     },
     postOptions:{
         position: 'absolute',

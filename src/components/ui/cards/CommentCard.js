@@ -54,24 +54,23 @@ class CommentCard extends Component {
                     </View>
 
                     <View style={[styles.commentContent, AppStyles.leftAligned]}>
-                        {!!comment.img &&
-                        <View style={[AppStyles.row, styles.commentImage]}>
-                            <ImageViewer
-                                disabled={false}
-                                source={{ uri: getImageURL(comment.img)  }}
-                                doubleTapEnabled={true}
-                                onMove={(e, gestureState) => null}
-                                downloadable={true}
-                                imageStyle={{width:200}}
-                            />
+                        {!!comment.img ? (
+                            <View style={[AppStyles.row, styles.commentImage]}>
+                                <ImageViewer
+                                    disabled={false}
+                                    source={{ uri: getImageURL(comment.img)  }}
+                                    doubleTapEnabled={true}
+                                    onMove={(e, gestureState) => null}
+                                    downloadable={true}
+                                    imageStyle={{width:200}}
+                                />
 
-                        </View>
-                        }
-                        {!!comment.txt &&
-                        <View style={[AppStyles.row]}>
-                            <Text style={[styles.commentText]}>{comment.txt}</Text>
-                        </View>
-                        }
+                            </View>
+                        ) : (
+                            <View style={[AppStyles.row]}>
+                                <Text style={[styles.commentText]}>{comment.txt}</Text>
+                            </View>
+                        )}
 
                     </View>
                 </View>
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     container: {
         marginLeft: AppSizes.paddingSml,
         marginRight: AppSizes.paddingSml,
-        marginTop:AppSizes.paddingSml
+        marginTop:AppSizes.paddingSml,
     },
     commentHeader: {
         paddingTop:10
@@ -110,15 +109,13 @@ const styles = StyleSheet.create({
         fontSize:AppFonts.base.size * 0.65,
     },
     commenterName:{
-        fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size * 0.80,
-        fontWeight:'500',
-        color:'#b8b8b8'
+        fontFamily: AppFonts.base.familyBold,
+        fontSize: AppFonts.base.size * 0.85,
+        color:"#ffffff"
     },
     commentText:{
         fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size,
-        fontWeight: '400',
+        fontSize: AppFonts.base.size * 0.80,
         color:AppColors.textPrimary,
     }
 });

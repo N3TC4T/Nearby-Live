@@ -170,6 +170,7 @@ class CommentsListing extends Component {
             <View style={[AppStyles.container, {paddingTop:AppSizes.paddingSml}]}>
                 <FlatList
                     renderItem={comment => <CommentCard comment={comment.item} ownerId={post.pid} />}
+                    ItemSeparatorComponent={() => (<View style={AppStyles.hr} />)}
                     data={dataSource}
                     refreshing={isRefreshing}
                     onRefresh={() => {this.fetchComments(true)}}
