@@ -1,6 +1,6 @@
 {
   "name": "Nearby",
-  "version": "0.2.4",
+  "version": "0.3.6",
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
