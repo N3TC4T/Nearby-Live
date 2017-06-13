@@ -3,8 +3,8 @@
  */
 import { connect } from 'react-redux';
 
-import * as ConversationsActions from '@redux/conversations/actions';
-import { conversationSelector } from '@redux/conversations/selectors';
+import * as ConversationsActions from '@redux/core/conversations/actions';
+import { conversationSelector } from '@redux/core/conversations/selectors';
 
 // Components
 import ConversationView from './ConversationView';

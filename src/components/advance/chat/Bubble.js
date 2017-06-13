@@ -8,7 +8,7 @@ import {
   ViewPropTypes,
 } from 'react-native';
 
-import {Icon} from 'react-native-elements'
+import { Icon } from '@ui/'
 
 import MessageText from './MessageText';
 import MessageImage from './MessageImage';

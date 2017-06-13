@@ -7,7 +7,6 @@ import {
 } from 'react-native';
 
 import ActionSheet from '@expo/react-native-action-sheet';
-import { ButtonGroup }  from 'react-native-elements'
 
 
 // Consts and Libs
@@ -18,7 +17,7 @@ import AppAPI from '@lib/api';
 
 // Components
 import { PostCard } from '@ui/cards'
-import { List } from '@components/ui';
+import { SegmentButton } from '@ui/'
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
@@ -166,11 +165,10 @@ class PostsListing extends Component {
         if (!isRefreshing && (!postsListing || postsListing.length < 1)) {
             return (
                 <View style={[AppStyles.container]}>
-                    <ButtonGroup
+                    <SegmentButton
                         onPress={this.updateIndex}
                         selectedIndex={sectionIndex}
                         buttons={sections}
-                        containerStyle={{height: 30}}
                     />
                     <Error text={ErrorMessages.posts404} tryAgain={() => { this.fetchPosts(true) } }  />
                 </View>
@@ -181,28 +179,26 @@ class PostsListing extends Component {
         return (
             <ActionSheet ref={component => this._actionSheetRef = component}>
                 <View style={[AppStyles.container]}>
-                    <ButtonGroup
+                    <SegmentButton
                         onPress={this.updateIndex}
                         selectedIndex={sectionIndex}
                         buttons={sections}
-                        containerStyle={{height: 30}}
                     />
 
-                    <List containerStyle={[{marginTop:0,marginBottom:40}]}>
-                        <SectionList
-                            ref={(ref) => { this._sectionList = ref }}
-                            renderItem={this.renderItem}
-                            sections={[
+                    <SectionList
+                        ref={(ref) => { this._sectionList = ref }}
+                        renderItem={this.renderItem}
+                        sections={[
                                 {key: sectionIndex, data: dataSource},
                               ]}
-                            refreshing={isRefreshing}
-                            initialNumToRender={5}
-                            onRefresh={() => {this.fetchPosts(true)}}
-                            onEndReached={this.LoadMore}
-                            onEndReachedThreshold={100}
-                            keyExtractor={item => item.id}
-                        />
-                    </List>
+                        refreshing={isRefreshing}
+                        initialNumToRender={5}
+                        onRefresh={() => {this.fetchPosts(true)}}
+                        onEndReached={this.LoadMore}
+                        onEndReachedThreshold={100}
+                        keyExtractor={item => item.id}
+                    />
+
                 </View>
             </ActionSheet>
         );

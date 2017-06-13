@@ -3,9 +3,9 @@ import { createSelector } from 'reselect';
 import { createSelector as ormCreateSelector } from 'redux-orm';
 
 
-export const ormSelector = state => state.notifications;
+export const ormSelector = state => state.systemNotifications;
 
-export const notificationsSelector = createSelector(
+export const systemNotificationsSelector = createSelector(
     ormSelector,
     ormCreateSelector(schema, session => {
         return session.Notification.all().orderBy(['date'], 'desc').toRefArray();

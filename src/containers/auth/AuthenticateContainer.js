@@ -4,7 +4,7 @@
 import { connect } from 'react-redux';
 
 // Actions
-import * as UserActions from '@redux/user/actions';
+import * as UserActions from '@redux/core/user/actions';
 
 import AuthenticateRender from './AuthenticateView';
 

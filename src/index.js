@@ -19,7 +19,7 @@ import thunk from 'redux-thunk';
 // Consts and Libs
 import { AppStyles } from '@theme/';
 import AppRoutes from '@navigation/';
-import Analytics from '@lib/analytics';
+import { AnalyticsMiddleware, socketMiddleware, apiMiddleware } from '@redux/middleware/';
 
 // All redux reducers (rolled into one mega-reducer)
 import rootReducer from '@redux/index';
@@ -29,7 +29,9 @@ const RouterWithRedux = connect()(Router);
 
 // Load middleware
 let middleware = [
-    Analytics,
+    AnalyticsMiddleware,
+    socketMiddleware,
+    apiMiddleware,
     thunk, // Allows action creators to return functions (not just plain objects)
 ];
 
@@ -47,8 +49,12 @@ const store = compose(
     autoRehydrate()
 )(createStore)(rootReducer);
 
+
+// store dispatch in global for external access
+global.dispatch = store.dispatch
+
 // begin periodically persisting the store
-persistStore(store,{  blacklist:['router', 'stream'] , storage: AsyncStorage })
+persistStore(store,{  whitelist:['user'] , storage: AsyncStorage })
 
 /* Component ==================================================================== */
 // Wrap App in Redux provider (makes Redux available to all sub-components)

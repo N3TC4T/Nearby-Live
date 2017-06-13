@@ -1,5 +1,5 @@
 import { ORM } from "redux-orm";
-import { attr , many, Model} from 'redux-orm';
+import { attr , Model} from 'redux-orm';
 
 
 /* Models  ==================================================================== */

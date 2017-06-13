@@ -5,22 +5,22 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // Actions
-import * as NotificationsActions from '@redux/notifications/actions';
+import * as NotificationsActions from '@redux/core/system-notifications/actions';
 
 // Selectors
-import { notificationsSelector } from '@redux/notifications/selectors';
+import { systemNotificationsSelector } from '@redux/core/system-notifications/selectors';
 
-import NotificationsListingRender from './NotificationsView';
+import SystemNotificationsListingRender from './NotificationsView';
 
 /* Redux ==================================================================== */
 const mapStateToProps = state => ({
     user: state.user,
-    notificationsListing: notificationsSelector(state),
+    systemNotificationsListing: systemNotificationsSelector(state),
 });
 
 // Any actions to map to the component?
 const mapDispatchToProps = {
-    getNotifications: NotificationsActions.getNotifications,
+    getSystemNotifications: NotificationsActions.getSystemNotifications,
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsListingRender);
+export default connect(mapStateToProps, mapDispatchToProps)(SystemNotificationsListingRender);

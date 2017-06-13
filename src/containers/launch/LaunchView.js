@@ -13,8 +13,6 @@ import {
     ActivityIndicator,
 } from 'react-native';
 
-import WebSocket from 'reconnecting-websocket';
-
 import { Actions } from 'react-native-router-flux';
 
 // Consts and Libs
@@ -23,9 +21,9 @@ import { Text, Spacer } from '@ui/'
 
 /* Styles ==================================================================== */
 const styles = StyleSheet.create({
-    launchImage: {
-        width: AppSizes.screen.width,
-        height: AppSizes.screen.height,
+    logo: {
+        width: AppSizes.screen.width * 0.55,
+        resizeMode: 'contain',
     },
     loadingText:{
         color:'#fff'
@@ -41,19 +39,6 @@ class AppLaunch extends Component {
     };
 
 
-    connectToWebSocket = async (token) => {
-        const ws = new WebSocket('wss://www.wnmlive.com/mobile-ws.ashx');
-
-        ws.addEventListener('open', () => {
-            ws.send(`token=${token}`);
-        });
-
-        ws.addEventListener('message', (event) => {
-            console.log(event.data);
-        });
-
-    }
-
     componentDidMount () {
         // Show status bar on app launch
         StatusBar.setHidden(false, true);
@@ -64,21 +49,22 @@ class AppLaunch extends Component {
             .then((token) => {
                 Actions.app({ type: 'reset' })
                 // connect to websocket
-                this.connectToWebSocket(token)
+                Actions.app({ type: 'CONNECT' , token:token})
             })
             // Not Logged in, show Login screen
             .catch(() => Actions.authenticate({ type: 'reset' }));
     }
 
     render = () => (
-        <View style={[AppStyles.container,  AppStyles.containerCentered]}>
-            <ActivityIndicator
-                animating
-                size={'large'}
-                color={'#C1C5C8'}
-            />
-            <Spacer size={20}/>
-            <Text style={[styles.loadingText]} h2>Loading...</Text>
+        <View style={[AppStyles.container,  AppStyles.containerCentered, {backgroundColor:'#232F3A'}]}>
+            <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
+                <View style={[AppStyles.flex1, AppStyles.containerCentered]}>
+                    <Image
+                        source={require('../../images/logo.png')}
+                        style={[styles.logo]}
+                    />
+                </View>
+            </View>
         </View>
     );
 }

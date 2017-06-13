@@ -1,16 +1,16 @@
 import schema from "./models";
 
 /**
- * Notifications Reducer
+ * System Notifications Reducer
  */
 
 // Set initial state
-const initialState = schema.getEmptyState();
+const initialState = { ...schema.getEmptyState(), UnreadCount:0 };
 
 export default function notificationsReducer(state = initialState, action) {
     switch (action.type) {
 
-        case 'NOTIFICATIONS_UPDATE': {
+        case 'SYSTEM_NOTIFICATIONS_UPDATE': {
             const session = schema.session(state);
             const { Notification } = session;
 
@@ -28,6 +28,16 @@ export default function notificationsReducer(state = initialState, action) {
             }
 
             return session.state;
+        }
+        case 'SYSTEM_NOTIFICATIONS_UNREAD_COUNT_UPDATE':{
+            if (typeof action.data === 'number') {
+                return {
+                    ...state,
+                    UnreadCount: action.data
+                };
+            }
+
+            return state
         }
 
         default:

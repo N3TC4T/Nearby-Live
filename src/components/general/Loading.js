@@ -41,7 +41,7 @@ class Loading extends Component {
                   transparent && { backgroundColor: 'rgba(255,255,255,0.75)' },
                 ]}
             >
-                <ProgressCircle borderWidth={2} indeterminate={true} size={50}/>
+                <ProgressCircle borderWidth={3} indeterminate={true} size={50}/>
 
                 <Spacer size={10}/>
 

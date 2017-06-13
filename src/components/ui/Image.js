@@ -1,5 +1,7 @@
 'use strict';
 
+import uuid from 'uuid';
+
 import React, { Component, PropTypes } from 'react';
 
 import {
@@ -21,8 +23,8 @@ import RNFetchBlob from 'react-native-fetch-blob'
 import * as Progress from 'react-native-progress';
 
 //components
+import { Icon } from '@ui/'
 import { BottomAlert } from '@ui/alerts/'
-import { Icon } from 'react-native-elements';
 
 // consts
 import { AppSizes, AppStyles } from "@theme/"
@@ -264,11 +266,18 @@ export default class ImageViewer extends Component {
                 this.refs.alert.show('Photo saved successfully!','success' )
             ))
         }else {
-            const ret = RNFetchBlob.config({ fileCache : true,}).fetch('GET', uri)
+            const ret = RNFetchBlob.config({
+                fileCache : true,
+                path : `${RNFetchBlob.fs.dirs.DocumentDir}/${uuid.v4()}.jpg`
+            }).fetch('GET', uri)
+
             this.refs.alert.show('Downloading ...','info',false )
+
             ret.then(res => {
-                let promise = CameraRoll.saveToCameraRoll(res.path(), 'photo');
-                promise.then(res => {
+                let promise = CameraRoll.saveToCameraRoll(`file://${res.path()}`, 'photo');
+                promise.then(cres => {
+                    // removed cache file
+                    res.flush()
                     this.refs.alert.show('Photo saved successfully!','success' )
                 })
             });

@@ -11,8 +11,6 @@ import {
     InteractionManager,
 } from 'react-native';
 
-import { Icon } from "react-native-elements";
-
 
 // Consts and Libs
 import AppAPI from '@lib/api';
@@ -21,7 +19,7 @@ import { ErrorMessages } from '@constants/';
 
 // Components
 import Error from '@components/general/Error';
-import { Spacer, List } from "@ui/"
+import { Icon, Spacer, List } from "@ui/"
 import { CommentCard } from '@ui/cards'
 
 /* Component ==================================================================== */
@@ -149,7 +147,7 @@ class CommentsListing extends Component {
                         onPress={this._onSend}
                     >
                         <View style={[AppStyles.flex1]}>
-                            <Icon size={22} color={'grey'} type={'ionicon'} name={'md-send'} />
+                            <Icon size={24} color={'grey'} type={'ionicon'} name={'md-send'} />
 
                         </View>
                     </TouchableOpacity>
@@ -211,14 +209,16 @@ const styles = StyleSheet.create({
         }),
     },
     sendContainer:{
+        top:2,
         width: 26,
-        height: 16,
+        height: 20,
         marginRight: 10,
         marginBottom: 15,
     },
     actionContainer:{
+        top:1,
         width: 26,
-        height: 18,
+        height: 20,
         marginLeft: 10,
         marginBottom: 15,
     },

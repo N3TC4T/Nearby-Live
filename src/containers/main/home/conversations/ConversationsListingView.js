@@ -10,6 +10,8 @@ import {
     View,
     FlatList,
     RefreshControl,
+    StyleSheet,
+    TouchableOpacity,
     InteractionManager,
 } from 'react-native';
 
@@ -18,7 +20,7 @@ import {
 import { Actions } from 'react-native-router-flux';
 
 // Consts and Libs
-import { AppColors, AppStyles , AppSizes } from '@theme/';
+import { AppColors, AppStyles , AppSizes, AppFonts } from '@theme/';
 import { ErrorMessages } from '@constants/';
 import { getImageURL } from '@lib/util'
 import AppAPI from '@lib/api';
@@ -27,9 +29,7 @@ import AppAPI from '@lib/api';
 import Error from '@components/general/Error';
 import Loading from '@components/general/Loading';
 import ActionSheet from '@expo/react-native-action-sheet';
-import { List, ListItem } from '@components/ui';
-import { SearchBar, Icon } from 'react-native-elements'
-
+import { Text, Avatar, Icon, SearchBar } from '@components/ui';
 
 
 moment.updateLocale('en', {
@@ -50,6 +50,64 @@ moment.updateLocale('en', {
         yy: '%dY'
     }
 });
+
+/* Styles ==================================================================== */
+
+const styles = StyleSheet.create({
+    headerContainer:{
+      backgroundColor:'#FFF',
+        borderBottomWidth: 0.8,
+        borderColor:'#E9EBEE'
+    },
+    row: {
+        backgroundColor: '#fff',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        margin: 0,
+        paddingHorizontal: 10,
+        paddingVertical: 10,
+        borderRadius: 2,
+        marginBottom: 2,
+        borderColor: '#C8C7CC',
+        borderBottomWidth: 1,
+    },
+    message: {
+        flex: 1,
+        flexDirection: 'column',
+        paddingLeft: 10,
+    },
+    header: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    user: {
+        fontWeight: 'bold',
+        flex: 1,
+        marginBottom: 2,
+    },
+    time:{
+        fontSize: AppFonts.base.size * 0.7,
+        color:'grey'
+    },
+    badgeContainer: {
+        width:17,
+        height:17,
+        borderRadius:15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#006e95',
+        marginTop:2,
+    },
+    badgeText:{
+        color:'#FFFFFF',
+        fontSize:AppFonts.base.size * 0.7,
+        fontWeight:'600'
+    }
+});
+
+
 
 /* Component ==================================================================== */
 
@@ -186,32 +244,44 @@ class ConversationsListing extends Component {
 
     renderItem = (obj) => {
         const conversation = obj.item
-        let badgeProps  = {};
+
+        return(
+            <TouchableOpacity style={[ styles.row ]} onPress={ () => {this._onPressConversation(conversation)}}>
+                {!!conversation.img ? (
+                    <Avatar
+                        source={{ uri: getImageURL(conversation.img, true) }}
+                        imgKey={conversation.img}
+                    />
+                ) : (
+                    <Avatar
+                        source={{ uri: getImageURL() }}
+                    />
+                )}
+                <View style={[ styles.message ]}>
+                    <View style={[ styles.header ]}>
+                        <Text style={[ styles.user ]}>
+                            {conversation.name.replace(/(\r\n|\n|\r)/gm,"")}
+                        </Text>
+
+                        <Text style={[styles.time]}>{moment(conversation.last).fromNow()}</Text>
 
 
-        //Todo: fix badge bug
-        conversation.new > 0 ? badgeProps = {badge:{ value: conversation.new  , badgeTextStyle:{fontSize:10, fontWeight:'bold', color: 'orange'} , badgeContainerStyle: { padding:8,backgroundColor: '#002C54', borderRadius:5, marginTop:7 } } } : null ;
-
-        return (
-            <ListItem
-                roundAvatar
-                hideChevron
-                key={conversation.id}
-                onPress={ () => { this._onPressConversation(conversation) }}
-                onLongPress={() => this._onLongPress(conversation)}
-                title={conversation.name}
-                rightTitleContainerStyle={{flex:0.25}}
-                subtitle={
-                    conversation.msg.length > 1 ? (
-                    (conversation.msg.includes('[PHOTO-MSG]') ? '[Picture Message]' : ((conversation.msg).length > 48) ? (((conversation.msg).substring(0,80)) + '...') : conversation.msg)) : null
-                }
-                subtitleStyle={{textAlign:'left'}}
-                rightTitle={moment(conversation.last).fromNow()}
-                rightTitleStyle={{fontSize:10}}
-                avatar={{uri: getImageURL(conversation.img, true)} }
-                avatarStyle={{ width: 35,height: 35}}
-                {...badgeProps }
-            />
+                    </View>
+                    <View style={[ styles.header ]}>
+                        <Text style={[ AppStyles.subtext, AppStyles.flex4 ]}>
+                            {
+                                 conversation.msg.length > 1 ? (
+                                     (conversation.msg.includes('[PHOTO-MSG]') ? '[Picture Message]' : ((conversation.msg).length > 48) ? (((conversation.msg).replace(/(\r\n|\n|\r)/gm,"").substring(0,80)) + '...') : conversation.msg.replace(/(\r\n|\n|\r)/gm,""))) : null
+                             }
+                        </Text>
+                        {!!conversation.new > 0 &&
+                        <View style={[AppStyles.flex1 , AppStyles.rightAligned]}>
+                            <View style={[styles.badgeContainer]}><Text style={[styles.badgeText]}>{ conversation.new }</Text></View>
+                        </View>
+                        }
+                    </View>
+                </View>
+            </TouchableOpacity>
         )
     }
 
@@ -252,9 +322,10 @@ class ConversationsListing extends Component {
         return (
             <ActionSheet ref={component => this._actionSheetRef = component}>
                 <View style={[AppStyles.container]}>
-                    <View style={[AppStyles.row]}>
+                    <View style={[AppStyles.row, styles.headerContainer]}>
                         <View style={[AppStyles.flex6]}>
                             <SearchBar
+                                lightTheme
                                 onChangeText={this._onSearchChange}
                                 inputStyle={{height:38}}
                                 containerStyle={{backgroundColor:'transparent'}}
@@ -266,22 +337,22 @@ class ConversationsListing extends Component {
                                 name='md-options'
                                 type='ionicon'
                                 color='grey'
+                                size={22}
                                 underlayColor={'transparent'}
                                 onPress={this._onPressOptions} />
                         </View>
-
                     </View>
-                    <List containerStyle={{marginTop:0}}>
-                        <FlatList
-                            renderItem={conversation => this.renderItem(conversation)}
-                            data={dataSource}
-                            refreshing={isRefreshing}
-                            onRefresh={() => {this.fetchConversations(true)}}
-                            onEndReached={this.LoadMore}
-                            onEndReachedThreshold={100}
-                            keyExtractor={item => item.id}
-                        />
-                    </List>
+
+                    <FlatList
+                        renderItem={conversation => this.renderItem(conversation)}
+                        data={dataSource}
+                        refreshing={isRefreshing}
+                        onRefresh={() => {this.fetchConversations(true)}}
+                        onEndReached={this.LoadMore}
+                        onEndReachedThreshold={100}
+                        keyExtractor={item => item.id}
+                    />
+
                 </View>
             </ActionSheet>
 

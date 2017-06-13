@@ -14,6 +14,7 @@ const base = {
   ...Platform.select({
     ios: {
       family: 'HelveticaNeue',
+      familyBold:'HelveticaNeue',
     },
     android: {
       family: 'OpenSans-Reqular',

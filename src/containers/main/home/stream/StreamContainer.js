@@ -5,10 +5,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // Actions
-import * as StreamActions from '@redux/stream/actions';
+import * as StreamActions from '@redux/core/stream/actions';
 
 // Selectors
-import { streamSelector } from '@redux/stream/selectors';
+import { streamSelector } from '@redux/core/stream/selectors';
 
 import PostsListingRender from './StreamView';
 

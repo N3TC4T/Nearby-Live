@@ -202,6 +202,13 @@ function fetcher(method, endpoint, params, body) {
 
                 let jsonRes = {};
 
+                // calling dispatch for parsing headers
+                dispatch({
+                    type: 'API_SUCCESS_RESPONSE',
+                    headers: rawRes.headers
+
+                })
+
                 try {
                     jsonRes = await rawRes.json();
                 } catch (error) {

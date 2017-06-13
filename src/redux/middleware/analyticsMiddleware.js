@@ -9,7 +9,7 @@ import { AppConfig } from '@constants/';
 // Google Analytics
 const GoogleAnalytics = new GoogleAnalyticsTracker(AppConfig.gaTrackingId);
 
-const track = store => next => (action) => {
+const analyticsMiddleware = store => next => (action) => {
   // Track each screen view to Redux
   // - Requires that each Scene in RNRF have a 'analyticsDesc' prop
   switch (action.type) {
@@ -33,4 +33,4 @@ const track = store => next => (action) => {
   return next(action);
 };
 
-export default track;
+export default analyticsMiddleware;

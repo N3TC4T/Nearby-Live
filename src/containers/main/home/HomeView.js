@@ -4,6 +4,7 @@
  */
 import React, { Component, PropTypes } from 'react';
 import {
+    Animated,
     View,
     StyleSheet,
     InteractionManager,
@@ -38,6 +39,36 @@ const styles = StyleSheet.create({
     tabbarIndicator: {
         backgroundColor: AppColors.tabbarTop.indicator,
     },
+    tabbarLabel:{
+        paddingTop:4,
+        paddingBottom:4
+    },
+    rightNotify: {
+        marginTop: 15,
+        marginRight: 15,
+        backgroundColor: '#f44336',
+        height: 5,
+        width: 5,
+        borderRadius: 12,
+        borderColor:'black',
+        borderWidth:0.2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 4,
+    },
+    leftNotify: {
+        marginTop: 15,
+        marginRight: 95,
+        backgroundColor: '#f44336',
+        height: 5,
+        width: 5,
+        borderRadius: 12,
+        borderColor:'black',
+        borderWidth:0.2,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 4,
+    },
 });
 
 /* Component ==================================================================== */
@@ -53,27 +84,35 @@ class HomeTabs extends Component {
         };
     }
 
-    componentDidMount = () => {
+    componentDidMount ()  {
         InteractionManager.runAfterInteractions(() => {
             this.setTabs();
         });
     };
 
+    componentWillReceiveProps (nextProps){
+        if(nextProps.UnseenWatchedCount != this.props.UnseenWatchedCount || nextProps.UnreadMessagesCount != this.props.UnreadMessagesCount){
+            this.setState({
+                navigation: { ...this.state.navigation, needUpdate:true },
+            });
+        }
+    }
 
     setTabs = () => {
         const routes = [
             {
                 key: '0',
                 id: 'watched',
-                title:'watched'
+                title:'WATCHED',
             },{
                 key: '1',
                 id: 'stream',
-                title:'stream'
+                title:'STREAM',
+
             },{
                 key: '2',
                 id: 'messages',
-                title:'messages'
+                title:'MESSAGES',
             }
         ];
 
@@ -81,6 +120,7 @@ class HomeTabs extends Component {
             navigation: {
                 index: 1,
                 routes,
+                needUpdate:false,
             },
         }, () => {
             this.setState({
@@ -99,14 +139,53 @@ class HomeTabs extends Component {
         });
     };
 
+
+    renderBadge = (route) => {
+        const { UnreadMessagesCount, UnseenWatchedCount } = this.props
+
+        if (route.index === 2 && UnreadMessagesCount != 0 ) {
+            return (
+                <View style={styles.rightNotify}/>
+            );
+        }
+
+        if (route.index === 0 && UnseenWatchedCount != 0 ) {
+            return (
+                <View style={styles.leftNotify}/>
+            );
+        }
+
+        return null
+    };
+
+    renderLabel = props => ({ route, index }) => {
+        const inputRange = props.navigationState.routes.map((x, i) => i);
+        const outputRange = inputRange.map(
+            inputIndex => (inputIndex === index ? '#FFFFFF' : '#818F92'),
+        );
+        const color = props.position.interpolate({
+            inputRange,
+            outputRange,
+        });
+
+        return (
+            <Animated.Text style={[styles.tabbarLabel, { color }]}>
+                {route.title}
+            </Animated.Text>
+        );
+    };
+
     /**
      * Header Component
      */
     renderHeader = props => (
         <TabBar
             {...props}
+            renderBadge={this.renderBadge}
             style={styles.tabbar}
             indicatorStyle={styles.tabbarIndicator}
+            labelStyle={styles.tabbarLabel}
+            renderLabel={this.renderLabel(props)}
         />
     );
 
@@ -156,7 +235,7 @@ class HomeTabs extends Component {
 
     }
 
-    render = () => {
+    render () {
         if (this.state.loading || !this.state.navigation) return <Loading />;
         if (this.state.error) return <Error text={this.state.error} />;
 

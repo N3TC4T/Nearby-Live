@@ -5,7 +5,7 @@
 import AppAPI from '@lib/api';
 
 
-export function getNotifications(startFrom) {
+export function getSystemNotifications(startFrom) {
     return (dispatch) => {
         let latest = false
 
@@ -14,7 +14,7 @@ export function getNotifications(startFrom) {
         return AppAPI.notifications.get({last: startFrom, latest: latest})
             .then((res) => {
                 dispatch({
-                    type: 'NOTIFICATIONS_UPDATE',
+                    type: 'SYSTEM_NOTIFICATIONS_UPDATE',
                     data: res,
                 });
 

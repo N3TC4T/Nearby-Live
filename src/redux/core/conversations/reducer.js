@@ -6,7 +6,7 @@ import schema from "./models";
 
 // Set initial state
 
-const initialState = schema.getEmptyState();
+const initialState = { ...schema.getEmptyState(), UnreadCount:0 };
 
 export default function conversationsReducer(state = initialState, action) {
     switch (action.type) {
@@ -30,6 +30,18 @@ export default function conversationsReducer(state = initialState, action) {
             }
 
             return session.state;
+        }
+
+
+        case 'CONVERSATIONS_UNREAD_COUNT_UPDATE':{
+            if (typeof action.data === 'number') {
+                return {
+                    ...state,
+                    UnreadCount: action.data
+                };
+            }
+
+            return state
         }
 
         case 'CONVERSATIONS_DELETE': {

@@ -5,7 +5,7 @@ import schema from "./models";
  */
 
 // Set initial state
-const initialState = schema.getEmptyState();
+const initialState = { ...schema.getEmptyState(), UnreadCount:0 }
 
 export default function streamReducer(state = initialState, action) {
     switch (action.type) {
@@ -22,6 +22,18 @@ export default function streamReducer(state = initialState, action) {
                 ...state,
                 selectedSectionIndex,
             };
+        }
+
+
+        case 'WATCHED_UNREAD_COUNT_UPDATE':{
+            if (typeof action.data === 'number') {
+                return {
+                    ...state,
+                    UnreadCount: action.data
+                };
+            }
+
+            return state
         }
 
         /* Posts ==================================================================== */

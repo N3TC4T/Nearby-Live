@@ -4,10 +4,10 @@
 import { connect } from 'react-redux';
 
 // Actions
-import * as ConversationsActions from '@redux/conversations/actions';
+import * as ConversationsActions from '@redux/core/conversations/actions';
 
 // Selectors
-import { conversationsSelector } from "@redux/conversations/selectors";
+import { conversationsSelector } from "@redux/core/conversations/selectors";
 
 // Render
 import ConversationsListingRender from './ConversationsListingView';

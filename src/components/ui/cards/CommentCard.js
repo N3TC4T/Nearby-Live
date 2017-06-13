@@ -110,12 +110,11 @@ const styles = StyleSheet.create({
     },
     commenterName:{
         fontFamily: AppFonts.base.familyBold,
-        fontSize: AppFonts.base.size * 0.85,
-        color:"#ffffff"
+        fontSize: AppFonts.base.size * 0.75,
     },
     commentText:{
         fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size * 0.80,
+        fontSize: AppFonts.base.size * 0.90,
         color:AppColors.textPrimary,
     }
 });

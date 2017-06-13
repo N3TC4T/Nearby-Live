@@ -1,11 +1,11 @@
 /**
  * Badge - type
  *
- <Badge
- type={'gold')
- />
+ <Badge type={'gold') />
  *
  */
+
+
 import React, { PropTypes } from 'react';
 import {
     View,
@@ -37,7 +37,9 @@ const styles = StyleSheet.create({
         backgroundColor:'#C8000A'
     },
     badgeOwner:{
-        backgroundColor:'#00b7d3'
+        backgroundColor:'#00b7d3',
+        height:10,
+        width:30,
     },
     text: {
         lineHeight: 14,
@@ -45,47 +47,62 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign:'center',
     }
-})
+});
+
+styleSelector = (type) => {
+    switch (type) {
+        case 'gold':
+            return styles.badgeGold;
+            break;
+        case 'vip staff':
+        case 'staff':
+            return styles.badgeStaff;
+            break;
+        case 'vip admin':
+        case 'admin':
+            return styles.badgeAdmin;
+            break;
+        case 'vip':
+            return styles.badgeVip;
+            break;
+        case 'owner':
+            return styles.badgeOwner;
+            break
+
+    }
+}
+
+textSelector = (type) => {
+    switch (type) {
+        case 'gold':
+            return 'GOLD';
+            break;
+        case 'vip staff':
+        case 'staff':
+            return 'STAFF';
+            break;
+        case 'vip admin':
+        case 'admin':
+            return 'ADMIN';
+            break;
+        case 'vip':
+            return 'VIP';
+            break;
+        case 'owner':
+            return 'Owner';
+            break
+
+    }
+
+}
 
 const Badge = ({ type }) => (
     <View>
-        {type == 'gold' &&
-            <View style={[ styles.badge, styles.badgeGold]}>
-                <Text style={[ styles.text ]} p>GOLD</Text>
-            </View>
-        }
-        {type == 'vip staff' &&
-            <View style={[ styles.badge, styles.badgeStaff]}>
-                <Text style={[ styles.text ]} p>STAFF</Text>
-            </View>
-        }
-        {type == 'staff' &&
-            <View style={[ styles.badge, styles.badgeStaff]}>
-                <Text style={[ styles.text ]} p>STAFF</Text>
-            </View>
-        }
-        {type == 'vip admin' &&
-            <View style={[ styles.badge, styles.badgeAdmin]}>
-                <Text style={[ styles.text ]} p>ADMIN</Text>
-            </View>
-        }
-        {type == 'admin' &&
-        <View style={[ styles.badge, styles.badgeAdmin]}>
-            <Text style={[ styles.text ]} p>ADMIN</Text>
+        <View style={[styleSelector(type) , styles.badge]} >
+            <Text style={[ styles.text ]} p>{textSelector(type)}</Text>
         </View>
-        }
-        {type == 'vip' &&
-            <View style={[ styles.badge, styles.badgeVip]}>
-                <Text style={[ styles.text ]} p>VIP</Text>
-            </View>
-        }
-        {type == 'owner' &&
-        <View style={[ styles.badge, styles.badgeOwner]}>
-            <Text style={[ styles.text ]} p>Owner</Text>
-        </View>
-        }
     </View>
-)
+);
 
 
 Badge.propTypes = {

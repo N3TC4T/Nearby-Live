@@ -18,9 +18,8 @@ import { AppStyles, AppColors, AppSizes, AppFonts } from "@theme/";
 import AppAPI from '@lib/api';
 
 // Components
-import {Spacer, Text, Button } from "@ui/";
+import {Spacer, Text, Icon } from "@ui/";
 import { BottomAlert } from '@ui/alerts/'
-import { Icon } from 'react-native-elements'
 
 // consts
 const MARGIN = 40;
@@ -242,13 +241,15 @@ class Authenticate extends Component {
 
                     <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                         <View style={styles.inputWrapper}>
-                            <Icon
-                                name='email'
-                                type='entypo'
-                                color='#F2F6F6'
-                                size={20}
-                                containerStyle={styles.inlineIcon}
-                            />
+                            <View style={styles.inlineIcon}>
+                                <Icon
+                                    name='email'
+                                    type='entypo'
+                                    color='#F2F6F6'
+                                    size={20}
+                                    containerStyle={styles.inlineIcon}
+                                />
+                            </View>
                             <TextInput style={styles.input}
                                        keyboardType="email-address"
                                        placeholder={'Email'}
@@ -266,12 +267,13 @@ class Authenticate extends Component {
 
                     <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                         <View style={styles.inputWrapper}>
-                            <Icon
-                                name='lock'
-                                color='#F2F6F6'
-                                size={20}
-                                containerStyle={styles.inlineIcon}
-                            />
+                            <View style={styles.inlineIcon}>
+                                <Icon
+                                    name='lock'
+                                    color='#F2F6F6'
+                                    size={20}
+                                />
+                            </View>
                             <TextInput style={styles.input}
                                        ref="password"
                                        placeholder={'Password'}

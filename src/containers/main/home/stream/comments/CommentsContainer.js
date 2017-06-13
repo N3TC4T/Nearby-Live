@@ -5,10 +5,10 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // Actions
-import * as StreamActions from '@redux/stream/actions';
+import * as StreamActions from '@redux/core/stream/actions';
 
 // selector
-import { postSelector } from "@redux/stream/selectors";
+import { postSelector } from "@redux/core/stream/selectors";
 
 // Consts and Libs
 import { ErrorMessages } from '@constants/';

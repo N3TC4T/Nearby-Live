@@ -4,23 +4,92 @@
     <TabIcon icon={'search'} selected={false} />
  *
  */
-import React, { PropTypes } from 'react';
-import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux'
 
+import React, { Component, PropTypes } from 'react';
+
+import {
+    StyleSheet,
+    Text,
+    View
+} from 'react-native';
+
+import { Icon } from '@ui/'
 import { AppColors } from '@theme/';
 
-/* Component ==================================================================== */
-const TabIcon = ({ icon, type, size,  selected }) => (
-  <Icon
-    name={icon}
-    size={size}
-    type={type}
-    color={selected ? AppColors.tabbar.iconSelected : AppColors.tabbar.iconDefault}
-  />
-);
 
-TabIcon.propTypes = { icon: PropTypes.string.isRequired, size:PropTypes.number, type: PropTypes.string, selected: PropTypes.bool };
-TabIcon.defaultProps = { icon: 'search', selected: false, size:26 };
 
-/* Export Component ==================================================================== */
-export default TabIcon;
+/* Styles ==================================================================== */
+const styles = StyleSheet.create({
+    IconBadge: {
+        position:'absolute',
+        top:-4,
+        right:6,
+        width:15,
+        height:15,
+        borderRadius:15,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#FF0000'
+    }
+});
+
+
+/* Pass state to component ==================================================================== */
+const mapStateToProps = (state , props )  => ({
+    UnreadNotifyCount: props.tabType == 'notification-system' ? state.systemNotifications.UnreadCount : 0
+});
+
+class TabIcon extends React.Component {
+    static propTypes = {
+        title: PropTypes.string,
+        icon: PropTypes.string.isRequired,
+        size:PropTypes.number,
+        type: PropTypes.string,
+        selected: PropTypes.bool,
+        tabType: PropTypes.string,
+        raised: PropTypes.bool,
+    }
+
+    static defaultProps = {
+        icon: 'search',
+        selected: false,
+        size:26,
+        tabType:'',
+        raised:false
+    };
+
+
+    render() {
+
+        console.log(this.props)
+
+        const { title, icon, size, type, selected, raised } = this.props
+
+        return(
+            <View>
+                <Icon
+                    name={icon}
+                    size={size}
+                    type={type}
+                    color={selected ? AppColors.tabbar.iconSelected : (raised ?  AppColors.tabbar.iconSelected : AppColors.tabbar.iconDefault)}
+                    raised={raised}
+                    containerStyle={{
+                          backgroundColor:raised ? AppColors.tabbar.iconNew : 'transparent',
+                          marginTop:raised ? 12 : 0
+                     }}
+                />
+                <Text style={{color:selected ? AppColors.tabbar.iconSelected : AppColors.tabbar.iconDefault, fontSize:10}}>
+                    { title }
+                </Text>
+                {this.props.UnreadNotifyCount > 0 &&
+                    <View style={[styles.IconBadge]}>
+                        <Text style={{color:'#FFFFFF', fontSize:10}}>{this.props.UnreadNotifyCount}</Text>
+                    </View>
+                }
+            </View>
+        )
+    }
+}
+
+export default connect(mapStateToProps)(TabIcon);

@@ -43,7 +43,7 @@ export default class AvatarImage extends Component{
                     style = {[
                        styles.roundAvatar
                    ]}
-                    source = {this.props.source}
+                    source = {this.props.source ? this.props.source : require('../../images/placeholder.user.png') }
                     onLoad = {(event)=>this.onLoad(event)}
                 />
 
