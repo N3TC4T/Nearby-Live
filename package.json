@@ -27,6 +27,7 @@
     "react-addons-shallow-compare": "^15.4.2",
     "react-addons-update": "^15.4.2",
     "react-native": "^0.44.0",
+    "react-native-blur": "^3.0.0",
     "react-native-device-info": "^0.10.2",
     "react-native-fetch-blob": "^0.10.2",
     "react-native-google-analytics-bridge": "^5.0.0",
