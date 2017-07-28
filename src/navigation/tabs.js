@@ -10,18 +10,14 @@ import { AppStyles, AppSizes, AppColors } from '@theme/';
 
 // Components
 import { TabIcon } from '@ui/';
-import { ChatNavBar } from '@components/advance/chat'
-
 
 // Scenes
 import Placeholder from '@components/general/Placeholder';
 
-
 // Containers
 import Home from '@containers/main/home/HomeContainer';
-import CommentsContainer from '@containers/main/home/stream/comments/CommentsContainer';
-import ConversationContainer from '@containers/main/home/conversations/conversation/ConversationContainer';
-import NotificationsContainer from '@containers/main/notifications/NotificationsContainer';
+import SystemNotificationsContainer from '@containers/main/system-notifications/SystemNotificationsContainer';
+
 
 
 const sceneStyleProps = {
@@ -34,41 +30,16 @@ const sceneStyleProps = {
 /* Routes ==================================================================== */
 const scenes = (
     <Scene key={'tabBar'} tabs tabBarIconContainerStyle={AppStyles.tabbar} pressOpacity={0.95}>
+
         <Scene
+            { ...sceneStyleProps }
             hideNavBar
             key={'home'}
             icon={props => <TabIcon  {...props} title={'Home'} icon={'home'} size={22} type={'material-icons'} /> }
-        >
-            <Scene
-                { ...sceneStyleProps }
-                hideNavBar
-                key={'main'}
-                component={Home}
-                title={AppConfig.appName}
-                analyticsDesc={'Home: Main'}
-            />
-
-            <Scene
-                hideTabBar
-                {...AppConfig.navbarProps}
-                key={'commentsView'}
-                component={CommentsContainer}
-                title={'Comments'}
-                analyticsDesc={'CommentsView: View Comments'}
-            />
-
-            <Scene
-                hideTabBar
-                passProps
-                { ...AppConfig.navbarProps }
-                key={'conversationView'}
-                component={ ConversationContainer }
-                navBar={ ChatNavBar }
-                analyticsDesc={'conversationView: Chat View Someone'}
-            />
-
-        </Scene>
-
+            component={Home}
+            title={AppConfig.appName}
+            analyticsDesc={'Home: Main'}
+        />
 
         <Scene
             { ...sceneStyleProps }
@@ -79,6 +50,7 @@ const scenes = (
             icon={props => <TabIcon  {...props} title={'Explore'} icon={'explore'} size={22} type={'material-icons'} /> }
             analyticsDesc={'People: People'}
         />
+
         <Scene
             { ...sceneStyleProps }
             key={'new-post'}
@@ -88,14 +60,16 @@ const scenes = (
             icon={props => <TabIcon  {...props} raised={true} icon={'add'} size={20} type={'material-icons'} /> }
             analyticsDesc={'Posts: New'}
         />
+
         <Scene
             { ...sceneStyleProps }
             key={'notifications'}
             hideNavBar
-            component={NotificationsContainer}
+            component={SystemNotificationsContainer}
             icon={props => <TabIcon  {...props} tabType={'notification-system'} title={'Notifications'} icon={'notifications'} size={22} type={'material-icons'} /> }
-            analyticsDesc={'SystemNotifications: Notifications'}
+            analyticsDesc={'SystemNotifications: Notifications-List'}
         />
+
         <Scene
             { ...sceneStyleProps }
             key={'profile'}

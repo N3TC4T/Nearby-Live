@@ -7,10 +7,13 @@ import { Actions, Scene, ActionConst } from 'react-native-router-flux';
 // Consts and Libs
 import { AppConfig } from '@constants/';
 
-// Scenes
+// Containers
 import AppLaunch from '@containers/launch/LaunchContainer';
+
+// Scenes
 import AuthScenes from './auth';
 import TabsScenes from './tabs';
+import SubScenes from './sub-scenes';
 
 /* Routes ==================================================================== */
 export default Actions.create(
@@ -29,6 +32,10 @@ export default Actions.create(
         <Scene key={'app'} {...AppConfig.navbarProps} hideNavBar type={ActionConst.RESET}>
             {/* Tabbar */}
             {TabsScenes}
+
+            {/* Sub-Scenes */}
+            {SubScenes}
         </Scene>
+
     </Scene>,
 );

@@ -45,6 +45,21 @@ export function getPosts(sectionIndex , startFrom) {
     };
 }
 
+export function getUserPosts(userID , startFrom) {
+    return (dispatch) => {
+        return AppAPI.people_info.get({ pid: userID, section:'posts',last: startFrom})
+            .then((res) => {
+                dispatch({
+                    type: 'POSTS_UPDATE',
+                    data: res,
+                    section:3
+                });
+
+            })
+    };
+}
+
+
 export function likePost(postID, ownerId) {
     return (dispatch) => {
         dispatch({

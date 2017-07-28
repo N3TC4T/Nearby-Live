@@ -37,3 +37,11 @@ export const postSelector = createSelector(
 
     })
 );
+
+export const userPostsSelector = createSelector(
+    ormSelector,
+    (state, props) => props,
+    ormCreateSelector(schema, (session, props) => {
+        return session.Post.filter(post => post.pid === props.pid).orderBy(['date'], 'desc').toRefArray()
+    })
+);
