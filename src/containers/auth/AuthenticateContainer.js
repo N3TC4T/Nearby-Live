@@ -10,11 +10,12 @@ import AuthenticateRender from './AuthenticateView';
 
 
 const mapStateToProps = state => ({
-  user: state.user,
+    user: state.user,
 });
 
 const mapDispatchToProps = {
-  login: UserActions.login,
+    emailLogin: UserActions.emailLogin,
+    facebookLogin:UserActions.facebookLogin,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AuthenticateRender);

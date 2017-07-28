@@ -15,7 +15,7 @@ const mapStateToProps = () => ({
 
 // Any actions to map to the component?
 const mapDispatchToProps = {
-  login: UserActions.login,
+    getLoginStatus: UserActions.getLoginStatus,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AppLaunchRender);

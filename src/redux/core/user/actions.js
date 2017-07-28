@@ -8,22 +8,36 @@ import { AsyncStorage } from "react-native";
 import AppAPI from "@lib/api";
 import { APIConfig } from "@constants/";
 
-/**
- * Login to Nearby and receive Token
- */
-export function login(credentials, freshLogin) {
+
+// check if there is any token or user logged in
+export function getLoginStatus() {
     return dispatch => new Promise(async (resolve, reject) => {
-        const userCreds = credentials || null;
+        let apiToken;
+
+        if (AppAPI.getToken) apiToken = await AppAPI.getToken();
+        if (apiToken) {
+            return resolve(apiToken);
+        }
+        else
+            return reject();
+    })
+}
+
+
+/**
+ * Login to Nearby with email and password and receive Token
+ */
+export function emailLogin(credentials, freshLogin) {
+    return dispatch => new Promise(async (resolve, reject) => {
+        const userCredentials = credentials || null;
 
         // Force logout, before logging in
         if (freshLogin && AppAPI.deleteToken) await AppAPI.deleteToken();
 
-        let apiToken;
-
-        if (userCreds) {
+        if (userCredentials) {
             AppAPI[APIConfig.tokenKey].get({
-                email: userCreds.email,
-                password: userCreds.password,
+                email: userCredentials.email,
+                password: userCredentials.password,
                 lat:0,
                 long:0,
             }).then(async(res) => {
@@ -32,7 +46,7 @@ export function login(credentials, freshLogin) {
                 }
 
                 // Save new Credentials to AsyncStorage
-                await AsyncStorage.setItem('api/credentials', userCreds.email);
+                await AsyncStorage.setItem('api/credentials', userCredentials.email);
 
                 // Set token in AsyncStorage + memory
                 await AsyncStorage.setItem('api/token', res);
@@ -49,13 +63,53 @@ export function login(credentials, freshLogin) {
                     }).catch(err => reject(err));
 
             }).catch(err => reject(err));
-        } else {
-            if (AppAPI.getToken) apiToken = await AppAPI.getToken();
-            if (apiToken){
-                return resolve(apiToken);
-            }
-            else
-                return reject();
+        }else{
+            return reject()
+        }
+    });
+}
+
+
+
+/**
+ * Login to Nearby with facebook accessToken
+ */
+export function facebookLogin(accessToken, freshLogin) {
+    return dispatch => new Promise(async (resolve, reject) => {
+
+        // Force logout, before logging in
+        if (freshLogin && AppAPI.deleteToken) await AppAPI.deleteToken();
+
+
+        if (accessToken) {
+            AppAPI.oauth.post({
+                token: accessToken,
+                enhanced: true,
+                provider:2,
+                lat:0,
+                long:0,
+            }).then(async(res) => {
+                if (!res.IsSuccess) {
+                    return reject('Cant login with facebook right now!');
+                }
+
+                // Set token in AsyncStorage + memory
+                await AsyncStorage.setItem('api/token', res.Token);
+
+
+                // Get user details from API, using user token
+                return AppAPI.connect.get()
+                    .then(async(userData) => {
+                        dispatch({
+                            type: 'USER_REPLACE',
+                            data: userData,
+                        });
+                        return resolve(userData);
+                    }).catch(err => reject(err));
+
+            }).catch(err => reject(err));
+        }else{
+            return reject()
         }
     });
 }
@@ -71,36 +125,5 @@ export function logout() {
                 type: 'USER_REPLACE',
                 data: {},
             });
-        });
-}
-
-/**
- * Get My User Data
- */
-export function getMe() {
-    return dispatch => AppAPI.me.get()
-        .then((userData) => {
-            dispatch({
-                type: 'USER_REPLACE',
-                data: userData,
-            });
-
-            return userData;
-        });
-}
-
-/**
- * Update My User Data
- * - Receives complete user data in return
- */
-export function updateMe(payload) {
-    return dispatch => AppAPI.me.post(payload)
-        .then((userData) => {
-            dispatch({
-                type: 'USER_REPLACE',
-                data: userData,
-            });
-
-            return userData;
         });
 }

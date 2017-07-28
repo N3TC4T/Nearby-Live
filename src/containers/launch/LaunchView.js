@@ -35,7 +35,7 @@ class AppLaunch extends Component {
     static componentName = 'AppLaunch';
 
     static propTypes = {
-        login: PropTypes.func.isRequired,
+        getLoginStatus: PropTypes.func.isRequired,
     };
 
 
@@ -44,7 +44,7 @@ class AppLaunch extends Component {
         StatusBar.setHidden(false, true);
 
         // Try to authenticate based on existing token
-        this.props.login()
+        this.props.getLoginStatus()
         // Logged in, show index screen
             .then((token) => {
                 Actions.app({ type: 'reset' })

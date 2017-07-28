@@ -15,6 +15,7 @@ export default {
     //    - AppAPI.post.delete()
     endpoints: new Map([
         ['token', '/token'],
+        ['oauth', '/external/token'],
         ['connect', '/account/connect'],
 
         ['stream' , '/stream/world/{section}'],
@@ -25,32 +26,10 @@ export default {
         ['notifications', '/system-messages'],
 
         ['people', '/people'],
+        ['people_info', '/people/{pid}/{section}'],
 
         ['upload_image', '/upload-image.ashx']
     ]),
 
     tokenKey: 'token',
 };
-
-
-//socket
-
-// const WebSocket = require('ws');
-//
-// const ws = new WebSocket('https://www.wnmlive.com/mobile-ws.ashx');
-//
-// ws.on('open', function open() {
-//     console.log('connected');
-//     ws.send('token=B20951B47EC54FC899B');
-// });
-//
-// ws.on('message', function incoming(data) {
-//     console.log(data);
-// });
-//
-// ws.on('close', function close() {
-//     console.log('disconnected');
-// });
-
-// {"IsNewMessage":false,"IsNewComment":true,"IsUpdatedUnreadMessageCount":false,"UnreadMessages":0,"UnreadPosts":0,"ConversationID":null}
-
