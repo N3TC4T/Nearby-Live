@@ -62,8 +62,6 @@ class TabIcon extends React.Component {
 
     render() {
 
-        console.log(this.props)
-
         const { title, icon, size, type, selected, raised } = this.props
 
         return(
@@ -84,7 +82,12 @@ class TabIcon extends React.Component {
                 </Text>
                 {this.props.UnreadNotifyCount > 0 &&
                     <View style={[styles.IconBadge]}>
-                        <Text style={{color:'#FFFFFF', fontSize:10}}>{this.props.UnreadNotifyCount}</Text>
+                        <Text style={{color:'#FFFFFF', fontSize:10}}>
+                            { this.props.UnreadNotifyCount > 100
+                                ? 'N'
+                                : this.props.UnreadNotifyCount
+                            }
+                        </Text>
                     </View>
                 }
             </View>

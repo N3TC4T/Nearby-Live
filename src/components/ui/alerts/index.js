@@ -1,9 +1,8 @@
 /**
- * UI Elements
+ * Alert and Toast
  */
 
-import Alerts from './SimpleAlert';
-import BottomAlert from './BottomAlert';
-import Toast from './ToastAlert'
+import Alert from './Alert';
+import Toast from './Toast'
 
-export { Alerts, BottomAlert, Toast };
+export { Alert , Toast };

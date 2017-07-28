@@ -189,7 +189,6 @@ export default {
         borderBottomColor: '#cbd9dc',
         height: 1,
         backgroundColor: 'transparent',
-        marginTop: Sizes.paddingSml,
     },
 
     // Grid
@@ -219,14 +218,14 @@ export default {
 
     // Navbar
     navbar: {
-        backgroundColor: Colors.brand.primary,
+        backgroundColor: '#FCFCFA',
         borderBottomWidth: 0,
+        height:Sizes.navbarHeight,
     },
     navbarTitle: {
-        color: '#ffffff',
-        fontWeight: 'bold',
+        color: '#364150',
         fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size,
+        fontSize: Fonts.base.size * 1.1,
     },
     navbarButton: {
         tintColor: '#ffffff',

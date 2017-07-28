@@ -26,6 +26,8 @@ import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
 
+import {Actions} from 'react-native-router-flux';
+
 
 /* Styles ==================================================================== */
 const styles = StyleSheet.create({
@@ -87,6 +89,11 @@ class HomeTabs extends Component {
     componentDidMount ()  {
         InteractionManager.runAfterInteractions(() => {
             this.setTabs();
+            //
+            // Actions.userProfileView({
+            //     userID: 'EidkMM3HkT1lesFgX39y5Q',
+            // });
+
         });
     };
 

@@ -46,7 +46,11 @@ class CommentCard extends Component {
                         <View style={[styles.commentHeaderContainer]}>
                             <View style={[AppStyles.row]}>
                                 <Text style={[styles.commenterName]}>{comment.name}</Text>
-                                {comment.pid === ownerId && <Badge type={'owner'}/> }
+                                {comment.pid === ownerId &&
+                                <View style={{marginTop:-3}}>
+                                    <Badge type={'owner'}/>
+                                </View>
+                                }
                             </View>
 
                             <Text style={[styles.commenterLocation]}>{moment(comment.date).fromNow()}  @ {comment.loc}</Text>
@@ -62,7 +66,7 @@ class CommentCard extends Component {
                                     doubleTapEnabled={true}
                                     onMove={(e, gestureState) => null}
                                     downloadable={true}
-                                    imageStyle={{width:200}}
+                                    containerStyle={{width:200, height:200}}
                                 />
 
                             </View>
@@ -99,6 +103,7 @@ const styles = StyleSheet.create({
     },
     commentContent: {
         marginTop:2,
+        marginBottom:8,
         marginLeft:42,
     },
     commentImage:{

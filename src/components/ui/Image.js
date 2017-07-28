@@ -15,6 +15,7 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     Modal,
+    StatusBar,
     InteractionManager
 } from 'react-native';
 
@@ -24,7 +25,7 @@ import * as Progress from 'react-native-progress';
 
 //components
 import { Icon } from '@ui/'
-import { BottomAlert } from '@ui/alerts/'
+import { Alert } from '@ui/alerts/'
 
 // consts
 import { AppSizes, AppStyles } from "@theme/"
@@ -62,7 +63,6 @@ const styles = StyleSheet.create({
     imageContainer:{
         alignItems: 'center',
         justifyContent: 'center',
-        height: 200,
         borderWidth:2,
         borderColor:'transparent'
     }
@@ -74,6 +74,7 @@ export default class ImageViewer extends Component {
         source: Image.propTypes.source,
         disabled: PropTypes.bool,
         imageStyle: Image.propTypes.style,
+        containerStyle:Image.propTypes.style,
         doubleTapEnabled: PropTypes.bool,
 
         // required if it's a local image
@@ -98,6 +99,7 @@ export default class ImageViewer extends Component {
     static defaultProps = {
         doubleTapEnabled: true,
         imageStyle: {},
+        containerStyle:{},
         imageWidth: AppSizes.screen.width,
         imageHeight: AppSizes.screen.height / 2,
         closeOnBack: true,
@@ -256,14 +258,18 @@ export default class ImageViewer extends Component {
         let uri = this.refs.originalImage.props.source.uri;
 
         if (uri.endsWith('.gif')){
-            this.refs.alert.show('Unfortunately can not download GIF right now.','error' )
+            Alert.show('Unfortunately can not download GIF right now.', {
+                type:'error'
+            })
             return
         }
 
         if (Platform.OS === 'ios'){
             let promise = CameraRoll.saveToCameraRoll(uri, 'photo');
             promise.then(res => (
-                this.refs.alert.show('Photo saved successfully!','success' )
+                Alert.show('Photo saved successfully!','success', {
+                    type:'error'
+                })
             ))
         }else {
             const ret = RNFetchBlob.config({
@@ -271,14 +277,19 @@ export default class ImageViewer extends Component {
                 path : `${RNFetchBlob.fs.dirs.DocumentDir}/${uuid.v4()}.jpg`
             }).fetch('GET', uri)
 
-            this.refs.alert.show('Downloading ...','info',false )
+            Alert.show('Downloading ...', {
+                type:'info',
+                duration:0
+            })
 
             ret.then(res => {
                 let promise = CameraRoll.saveToCameraRoll(`file://${res.path()}`, 'photo');
                 promise.then(cres => {
                     // removed cache file
                     res.flush()
-                    this.refs.alert.show('Photo saved successfully!','success' )
+                    Alert.show('Photo saved successfully!', {
+                        type:'success',
+                    })
                 })
             });
         }
@@ -430,7 +441,8 @@ export default class ImageViewer extends Component {
         const {
             source,
             downloadable,
-            imageStyle
+            imageStyle,
+            containerStyle,
         } = this.props;
 
         const {
@@ -444,9 +456,21 @@ export default class ImageViewer extends Component {
 
         let content = this.props.children;
 
-        if ((loading || progress < 1) && thresholdReached) {
-            const IndicatorComponent = (typeof indicator === 'function' ? indicator : DefaultIndicator);
-            content = (<IndicatorComponent progress={progress}  indeterminate={!loading || !progress}/>);
+
+        // Check if height or width is so low then hide progress
+        let hideProgress = false;
+
+        if ('width' && 'height' in containerStyle){
+            if (containerStyle.width < 200 || containerStyle.height < 200){
+               hideProgress = true
+            }
+        }
+
+        if (!hideProgress){
+            if ((loading || progress < 1) && thresholdReached ) {
+                const IndicatorComponent = (typeof indicator === 'function' ? indicator : DefaultIndicator);
+                content = (<IndicatorComponent progress={progress}  indeterminate={!loading || !progress}/>);
+            }
         }
 
         if (this._imageSize.width / AppSizes.screen.width > this._imageSize.height / AppSizes.screen.height) {
@@ -474,7 +498,7 @@ export default class ImageViewer extends Component {
 
         return (
             <View>
-                <Animated.View style={[styles.imageContainer]}>
+                <Animated.View style={[styles.imageContainer, containerStyle]}>
                     <TouchableWithoutFeedback
                         onPress={this.toggleModal}
                     >
@@ -554,7 +578,6 @@ export default class ImageViewer extends Component {
                         />
                     </Animated.View>
 
-                    <BottomAlert ref="alert" />
                 </Modal>
             </View>
         );

@@ -37,8 +37,5 @@ export default {
     titleStyle:{
         ...AppStyles.navbarTitle
     },
-    backButtonTextStyle:{
-
-    }
   },
 };

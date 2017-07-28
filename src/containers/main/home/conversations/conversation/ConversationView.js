@@ -11,7 +11,7 @@ import {
     View,
 } from 'react-native';
 
-import {ChatRender, Actions, Bubble} from '@components/advance/chat';
+import {ChatRender, Actions, Bubble} from './Render';
 
 import Error from '@components/general/Error';
 import Loading from '@components/general/Loading';

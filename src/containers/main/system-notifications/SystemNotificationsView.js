@@ -2,9 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import {
     View,
     StyleSheet,
-    Button,
     FlatList,
-    RefreshControl,
     InteractionManager,
 } from 'react-native';
 

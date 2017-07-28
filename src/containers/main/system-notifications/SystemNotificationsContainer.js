@@ -5,12 +5,12 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 // Actions
-import * as NotificationsActions from '@redux/core/system-notifications/actions';
+import * as SystemNotificationsActions from '@redux/core/system-notifications/actions';
 
 // Selectors
 import { systemNotificationsSelector } from '@redux/core/system-notifications/selectors';
 
-import SystemNotificationsListingRender from './NotificationsView';
+import SystemNotificationsListingRender from './SystemNotificationsView';
 
 /* Redux ==================================================================== */
 const mapStateToProps = state => ({
@@ -20,7 +20,7 @@ const mapStateToProps = state => ({
 
 // Any actions to map to the component?
 const mapDispatchToProps = {
-    getSystemNotifications: NotificationsActions.getSystemNotifications,
+    getSystemNotifications: SystemNotificationsActions.getSystemNotifications,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SystemNotificationsListingRender);

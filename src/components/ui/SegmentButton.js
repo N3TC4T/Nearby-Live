@@ -4,6 +4,7 @@ import {
     View,
     Text as NativeText,
     StyleSheet,
+    ViewPropTypes,
     TouchableHighlight,
     Platform,
 } from 'react-native';
@@ -132,7 +133,7 @@ ButtonGroup.propTypes = {
     component: PropTypes.any,
     onPress: PropTypes.func,
     buttons: PropTypes.array,
-    containerStyle: View.propTypes.style,
+    containerStyle: ViewPropTypes.style,
     textStyle: NativeText.propTypes.style,
     selectedTextStyle: NativeText.propTypes.style,
     underlayColor: PropTypes.string,
@@ -146,10 +147,10 @@ ButtonGroup.propTypes = {
         width: PropTypes.number,
     }),
     lastBorderStyle: PropTypes.oneOfType([
-        View.propTypes.style,
+        ViewPropTypes.style,
         NativeText.propTypes.style,
     ]),
-    buttonStyle: View.propTypes.style,
+    buttonStyle: ViewPropTypes.style,
     selectedBackgroundColor: PropTypes.string,
     containerBorderRadius: PropTypes.number,
 };

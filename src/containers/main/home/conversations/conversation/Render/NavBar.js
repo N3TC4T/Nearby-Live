@@ -11,7 +11,8 @@ import {
     View,
 } from 'react-native';
 
-import { Actions } from 'react-native-router-flux';
+// components
+import { BackButton } from '@components/ui'
 
 // const and libs
 import { AppSizes, AppStyles } from '@theme/'
@@ -26,14 +27,14 @@ import Icon from 'react-native-vector-icons/Octicons';
 const styles = StyleSheet.create({
     title: {
         textAlign: 'left',
-        color: '#ffffff',
+        color: '#364150',
         fontSize: 15,
         width: 180,
         alignSelf: 'center',
     },
     statusText :{
         textAlign: 'left',
-        color: '#ffffff',
+        color: '#364150',
         fontSize: 10,
     },
     titleWrapper: {
@@ -194,33 +195,14 @@ class NavBar extends React.Component {
     renderBackButton() {
         const state = this.props.navigationState;
 
-        const style = [
-            styles.backButton,
-            state.leftButtonStyle,
-        ];
 
         if (state.index === 0 && (!state.parentIndex || state.parentIndex === 0)) {
             return null;
         }
 
-        const buttonImage = this.props.backButtonImage
-
 
         return (
-            <TouchableOpacity
-                testID="backNavButton"
-                style={style}
-                onPress={Actions.pop}
-            >
-             { buttonImage &&
-                <Image
-                source={buttonImage}
-                style={[
-                  styles.backButtonImage,
-                ]}
-                />
-                }
-            </TouchableOpacity>
+            <BackButton />
         );
     }
 

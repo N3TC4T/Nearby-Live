@@ -8,6 +8,17 @@ import {
 
 
 export default class AvatarImage extends Component{
+
+    static propTypes = {
+        source: Image.propTypes.source,
+        imgKey: PropTypes.string,
+        size: PropTypes.number
+    }
+
+    static defaultProps = {
+        size:35
+    };
+
     constructor(props){
         super(props);
 
@@ -40,9 +51,11 @@ export default class AvatarImage extends Component{
                 <Animated.Image
                     resizeMode = {'contain'}
                     key = {this.props.imgKey}
-                    style = {[
-                       styles.roundAvatar
-                   ]}
+                    style = {{
+                        height: this.props.size,
+                        width:this.props.size,
+                        borderRadius: 50,
+                   }}
                     source = {this.props.source ? this.props.source : require('../../images/placeholder.user.png') }
                     onLoad = {(event)=>this.onLoad(event)}
                 />
@@ -54,10 +67,11 @@ export default class AvatarImage extends Component{
                         style={[
                            {
                              opacity: this.state.thumbnailOpacity,
-                             position: 'absolute'
-
-                             },
-                             styles.roundAvatar
+                             position: 'absolute',
+                             height: this.props.size,
+                             width:this.props.size,
+                             borderRadius: 50,
+                            }
                          ]}
                         source={require('../../images/placeholder.user.png')}
                         onLoad={(event) => this.onThumbnailLoad(event)}
@@ -67,14 +81,3 @@ export default class AvatarImage extends Component{
         )
     }
 }
-
-/* Component Styles ==================================================================== */
-
-const styles = StyleSheet.create({
-    roundAvatar:{
-        height: 35,
-        width:35,
-        borderRadius: 50,
-
-    },
-})

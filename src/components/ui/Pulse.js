@@ -68,7 +68,7 @@ Pulse.defaultProps = {
     interval: 2000,
     size: 100,
     pulseMaxSize: 250,
-    borderColor: '#D8335B',
+    borderColor: '#CB0000',
     backgroundColor: '#ED225B55',
     getStyle: undefined,
 };

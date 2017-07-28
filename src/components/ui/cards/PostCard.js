@@ -197,6 +197,14 @@ class PostCard extends Component {
     }
 
 
+    _onPressAvatar = () => {
+        const { post } = this.props;
+
+        Actions.userProfileView({
+            userID: post.pid,
+        });
+
+    };
 
     _onPressOption = () => {
 
@@ -265,6 +273,7 @@ class PostCard extends Component {
                     }
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
+                            containerStyle={{height:200}}
                             disabled={false}
                             source={{ uri: this.gifURL   }}
                             doubleTapEnabled={true}
@@ -285,6 +294,7 @@ class PostCard extends Component {
                     {!!post.img &&
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
+                            containerStyle={{height:200}}
                             disabled={false}
                             source={{ uri: getImageURL(post.img)  }}
                             doubleTapEnabled={true}
@@ -300,46 +310,48 @@ class PostCard extends Component {
     }
 
     render = () => {
-        const { post , onPressWatch } = this.props;
+        const { post } = this.props;
 
         return (
             <View style={[styles.container, styles.card]}>
                 {!post.reported ? (
                     <View>
-                        <View style={[styles.cardHeader, AppStyles.row]}>
-                            {!!post.pImg ? (
-                                <Avatar
-                                    source={{ uri: getImageURL(post.pImg, true) }}
-                                    imgKey={post.pImg}
-                                />
-                            ) : (
-                                <Avatar
-                                    source={{ uri: getImageURL() }}
-                                />
-                            )}
+                        <TouchableWithoutFeedback onPress={this._onPressAvatar}>
+                            <View style={[styles.cardHeader, AppStyles.row]}>
+                                {!!post.pImg ? (
+                                    <Avatar
+                                        source={{ uri: getImageURL(post.pImg, true) }}
+                                        imgKey={post.pImg}
+                                    />
+                                ) : (
+                                    <Avatar
+                                        source={{ uri: getImageURL() }}
+                                    />
+                                )}
 
-                            <View style={[styles.postHeaderContainer]}>
-                                <View style={[AppStyles.row]}>
-                                    {/*user name*/}
-                                    <Text style={[styles.usernameText]}>{post.name}</Text>
+                                <View style={[styles.postHeaderContainer]}>
+                                    <View style={[AppStyles.row]}>
+                                        {/*user name*/}
+                                        <Text style={[styles.usernameText]}>{post.name}</Text>
 
-                                    {/*user badge*/}
-                                    {!!post.ul && <Badge type={post.ul}/> }
+                                        {/*user badge*/}
+                                        {!!post.ul && <Badge type={post.ul}/> }
 
-                                    {/*user rank*/}
-                                    {post.ur != -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
+                                        {/*user rank*/}
+                                        {post.ur != -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
 
-                                    {/*post options right*/}
-                                    <View style={styles.postOptions}>
-                                        <TouchableOpacity  onPress={this._onPressOption}>
-                                            <Icon  size={20} color={'#bbbbbb'} name="dots-vertical" type="material-community"/>
-                                        </TouchableOpacity>
+                                        {/*post options right*/}
+                                        <View style={styles.postOptions}>
+                                            <TouchableOpacity  onPress={this._onPressOption}>
+                                                <Icon  size={20} color={'#bbbbbb'} name="dots-vertical" type="material-community"/>
+                                            </TouchableOpacity>
+                                        </View>
                                     </View>
-                                </View>
 
-                                <Text style={[styles.posterLocation]}>{moment(post.date).fromNow()} @ {post.loc}</Text>
+                                    <Text style={[styles.posterLocation]}>{moment(post.date).fromNow()} @ {post.loc}</Text>
+                                </View>
                             </View>
-                        </View>
+                        </TouchableWithoutFeedback>
 
                         { this.renderContent()}
 
