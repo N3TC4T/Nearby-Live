@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@expo/react-native-action-sheet": "git+https://github.com/expo/react-native-action-sheet.git",
+    "babel-plugin-transform-remove-console": "^6.8.4",
     "md5": "^2.2.1",
     "moment": "^2.17.1",
     "qs": "^6.3.0",
