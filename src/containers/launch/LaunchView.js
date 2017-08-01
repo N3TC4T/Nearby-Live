@@ -60,7 +60,7 @@ class AppLaunch extends Component {
             <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                 <View style={[AppStyles.flex1, AppStyles.containerCentered]}>
                     <Image
-                        source={require('../../images/logo.png')}
+                        source={require('../../assets/image/logo.png')}
                         style={[styles.logo]}
                     />
                 </View>

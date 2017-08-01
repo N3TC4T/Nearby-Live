@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     buttonSubmit: {
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#004445',
+        backgroundColor: '#1B4B5A',
         height: MARGIN,
         zIndex: 100,
         borderRadius:3,
@@ -136,8 +136,8 @@ class Authenticate extends Component {
 
         this.state = {
             isLoading: false,
-            email:'Email',
-            password:'Password'
+            email:'',
+            password:''
         };
 
         this.buttonAnimated = new Animated.Value(0);
@@ -165,6 +165,7 @@ class Authenticate extends Component {
         }
 
         if (isLoading) return;
+
 
         if (email && password) {
 
@@ -271,7 +272,7 @@ class Authenticate extends Component {
         return (
             <View style={[AppStyles.container, AppStyles.windowSize]}>
 
-                <Video source={require('../../assets/video/390214194mp4.mp4')}
+                <Video source={require('../../assets/video/background.mp4')}
                        style={styles.backgroundVideo}
                        rate={1} volume={1} muted={true}
                        resizeMode="cover" repeat={true} key="video1" />
@@ -357,7 +358,7 @@ class Authenticate extends Component {
                                           onPress={this._onPressLogin}
                                           activeOpacity={1} >
                             {this.state.isLoading ?
-                                <Image source={require('../../images/loading.gif')} style={styles.buttonSubmitImage} />
+                                <Image source={require('../../assets/image/loading.gif')} style={styles.buttonSubmitImage} />
                                 :
                                 <Text style={[styles.buttonSubmitText]}>Login to account</Text>
                             }

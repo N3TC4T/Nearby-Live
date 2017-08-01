@@ -56,7 +56,7 @@ export default class AvatarImage extends Component{
                         width:this.props.size,
                         borderRadius: 50,
                    }}
-                    source = {this.props.source ? this.props.source : require('../../images/placeholder.user.png') }
+                    source = {this.props.source ? this.props.source : require('../../assets/image/placeholder.user.png') }
                     onLoad = {(event)=>this.onLoad(event)}
                 />
 
@@ -73,7 +73,7 @@ export default class AvatarImage extends Component{
                              borderRadius: 50,
                             }
                          ]}
-                        source={require('../../images/placeholder.user.png')}
+                        source={require('../../assets/image/placeholder.user.png')}
                         onLoad={(event) => this.onThumbnailLoad(event)}
                     />
                 }

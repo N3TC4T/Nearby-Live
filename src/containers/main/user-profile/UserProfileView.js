@@ -171,7 +171,7 @@ class AvatarPulseLoader extends Component {
                 ))}
 
                     <Image
-                        source={require('../../../images/placeholder.user.png')}
+                        source={require('../../../assets/image/placeholder.user.png')}
                         style={{
 							width: 100,
 							height: 100,
