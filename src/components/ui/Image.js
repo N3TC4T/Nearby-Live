@@ -2,12 +2,13 @@
 
 import uuid from 'uuid';
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 
 import {
     CameraRoll,
     StyleSheet,
     View,
+    ImageBackground,
     Image,
     Animated,
     PanResponder,
@@ -18,6 +19,9 @@ import {
     StatusBar,
     InteractionManager
 } from 'react-native';
+
+import PropTypes from 'prop-types';
+
 
 
 import RNFetchBlob from 'react-native-fetch-blob'
@@ -34,7 +38,7 @@ import { AppSizes, AppStyles } from "@theme/"
 import { backgroundValueCalculation } from '@lib/util';
 
 
-const AnimatedImage = Animated.createAnimatedComponent(Image);
+const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 const DefaultIndicator = Progress.Circle;
 
 const LAYOUT_ENUM = {
