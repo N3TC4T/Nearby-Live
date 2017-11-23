@@ -1,10 +1,14 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
     Animated,
     View,
     Image,
-    StyleSheet
+    StyleSheet,
+    TouchableWithoutFeedback
 } from 'react-native';
+import PropTypes from 'prop-types';
+
+
 
 
 export default class AvatarImage extends Component{
@@ -12,11 +16,12 @@ export default class AvatarImage extends Component{
     static propTypes = {
         source: Image.propTypes.source,
         imgKey: PropTypes.string,
-        size: PropTypes.number
-    }
+        size: PropTypes.number,
+        onPress: PropTypes.func
+    };
 
     static defaultProps = {
-        size:35
+        size:35,
     };
 
     constructor(props){
@@ -31,7 +36,7 @@ export default class AvatarImage extends Component{
         Animated.timing(this.state.thumbnailOpacity,{
             toValue: 0,
             duration : 250
-        }).start()
+        }).start();
 
         this.setState({completelyLoaded:true})
 
@@ -42,25 +47,29 @@ export default class AvatarImage extends Component{
             duration: 250
         }).start();
     }
+
+
     render(){
-        let { completelyLoaded } = this.state
+        let { completelyLoaded } = this.state;
 
         return (
-            <View>
-
-                <Animated.Image
-                    resizeMode = {'contain'}
-                    key = {this.props.imgKey}
-                    style = {{
+            <TouchableWithoutFeedback
+                onPress={this.props.onPress ? this.props.onPress : null}
+            >
+                <View>
+                    <Animated.Image
+                        resizeMode = {'contain'}
+                        key = {this.props.imgKey}
+                        style = {{
                         height: this.props.size,
                         width:this.props.size,
                         borderRadius: 50,
                    }}
-                    source = {this.props.source ? this.props.source : require('../../assets/image/placeholder.user.png') }
-                    onLoad = {(event)=>this.onLoad(event)}
-                />
+                        source = {this.props.source ? this.props.source : require('../../assets/image/placeholder.user.png') }
+                        onLoad = {(event)=>this.onLoad(event)}
+                    />
 
-                { !completelyLoaded &&
+                    { !completelyLoaded &&
 
                     <Animated.Image
                         resizeMode={'contain'}
@@ -76,8 +85,10 @@ export default class AvatarImage extends Component{
                         source={require('../../assets/image/placeholder.user.png')}
                         onLoad={(event) => this.onThumbnailLoad(event)}
                     />
-                }
-            </View>
+                    }
+                </View>
+            </TouchableWithoutFeedback>
+
         )
     }
 }
