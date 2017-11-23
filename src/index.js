@@ -39,7 +39,7 @@ if (__DEV__) {
     // Dev-only middleware
     middleware = [
         ...middleware,
-        logger(), // Logs state changes to the dev console
+        logger, // Logs state changes to the dev console
     ];
 }
 
