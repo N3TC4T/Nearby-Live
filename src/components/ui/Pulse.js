@@ -1,5 +1,8 @@
 import React from 'react';
 import { View, StyleSheet, Animated, Easing, Dimensions } from 'react-native';
+import PropTypes from 'prop-types';
+
+
 
 const { height, width } = Dimensions.get('window');
 
@@ -56,12 +59,12 @@ class Pulse extends React.Component {
 
 
 Pulse.propTypes = {
-    interval: React.PropTypes.number,
-    size: React.PropTypes.number,
-    pulseMaxSize: React.PropTypes.number,
-    borderColor: React.PropTypes.string,
-    backgroundColor: React.PropTypes.string,
-    getStyle: React.PropTypes.func,
+    interval: PropTypes.number,
+    size: PropTypes.number,
+    pulseMaxSize: PropTypes.number,
+    borderColor: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    getStyle: PropTypes.func,
 };
 
 Pulse.defaultProps = {

@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from 'prop-types';
 import {Image, StyleSheet, View, ViewPropTypes} from "react-native";
 import AvatarRender from "./AvatarRender";
 import { isSameUser , isSameDay, warnDeprecated} from "./utils";
@@ -86,19 +87,19 @@ Avatar.defaultProps = {
 };
 
 Avatar.propTypes = {
-  renderAvatarOnTop: React.PropTypes.bool,
-  position: React.PropTypes.oneOf(['left', 'right']),
-  currentMessage: React.PropTypes.object,
-  nextMessage: React.PropTypes.object,
-  containerStyle: React.PropTypes.shape({
+  renderAvatarOnTop: PropTypes.bool,
+  position: PropTypes.oneOf(['left', 'right']),
+  currentMessage: PropTypes.object,
+  nextMessage: PropTypes.object,
+  containerStyle: PropTypes.shape({
     left: ViewPropTypes.style,
     right: ViewPropTypes.style,
   }),
-  imageStyle: React.PropTypes.shape({
+  imageStyle: PropTypes.shape({
     left: ViewPropTypes.style,
     right: ViewPropTypes.style,
   }),
   //TODO: remove in next major release
-  isSameDay: React.PropTypes.func,
-  isSameUser: React.PropTypes.func
+  isSameDay: PropTypes.func,
+  isSameUser: PropTypes.func
 };

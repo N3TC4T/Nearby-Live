@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 import {
     StyleSheet,
     View,
@@ -9,6 +9,8 @@ import {
     TouchableWithoutFeedback,
     Easing
 } from 'react-native';
+
+import PropTypes from 'prop-types';
 
 import RootSiblings from 'react-native-root-siblings';
 

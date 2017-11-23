@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Animated,
     InteractionManager,
@@ -446,8 +447,8 @@ const styles = StyleSheet.create({
 });
 
 ChatRender.childContextTypes = {
-    actionSheet: React.PropTypes.func,
-    getLocale: React.PropTypes.func,
+    actionSheet: PropTypes.func,
+    getLocale: PropTypes.func,
 };
 
 ChatRender.defaultProps = {
@@ -490,35 +491,35 @@ ChatRender.defaultProps = {
 };
 
 ChatRender.propTypes = {
-    messages: React.PropTypes.array,
-    onSend: React.PropTypes.func,
-    onInputTextChanged: React.PropTypes.func,
-    loadEarlier: React.PropTypes.bool,
-    onLoadEarlier: React.PropTypes.func,
-    locale: React.PropTypes.string,
-    isAnimated: React.PropTypes.bool,
-    renderAccessory: React.PropTypes.func,
-    renderActions: React.PropTypes.func,
-    renderAvatar: React.PropTypes.func,
-    renderBubble: React.PropTypes.func,
-    renderFooter: React.PropTypes.func,
-    renderChatFooter: React.PropTypes.func,
-    renderMessageText: React.PropTypes.func,
-    renderMessageImage: React.PropTypes.func,
-    renderComposer: React.PropTypes.func,
-    renderCustomView: React.PropTypes.func,
-    renderDay: React.PropTypes.func,
-    renderInputToolbar: React.PropTypes.func,
-    renderLoadEarlier: React.PropTypes.func,
-    renderLoading: React.PropTypes.func,
-    renderMessage: React.PropTypes.func,
-    renderSend: React.PropTypes.func,
-    renderTime: React.PropTypes.func,
-    user: React.PropTypes.object,
-    bottomOffset: React.PropTypes.number,
-    isLoadingEarlier: React.PropTypes.bool,
-    messageIdGenerator: React.PropTypes.func,
-    keyboardShouldPersistTaps: React.PropTypes.oneOf(['always', 'never', 'handled']),
+    messages: PropTypes.array,
+    onSend: PropTypes.func,
+    onInputTextChanged: PropTypes.func,
+    loadEarlier: PropTypes.bool,
+    onLoadEarlier: PropTypes.func,
+    locale: PropTypes.string,
+    isAnimated: PropTypes.bool,
+    renderAccessory: PropTypes.func,
+    renderActions: PropTypes.func,
+    renderAvatar: PropTypes.func,
+    renderBubble: PropTypes.func,
+    renderFooter: PropTypes.func,
+    renderChatFooter: PropTypes.func,
+    renderMessageText: PropTypes.func,
+    renderMessageImage: PropTypes.func,
+    renderComposer: PropTypes.func,
+    renderCustomView: PropTypes.func,
+    renderDay: PropTypes.func,
+    renderInputToolbar: PropTypes.func,
+    renderLoadEarlier: PropTypes.func,
+    renderLoading: PropTypes.func,
+    renderMessage: PropTypes.func,
+    renderSend: PropTypes.func,
+    renderTime: PropTypes.func,
+    user: PropTypes.object,
+    bottomOffset: PropTypes.number,
+    isLoadingEarlier: PropTypes.bool,
+    messageIdGenerator: PropTypes.func,
+    keyboardShouldPersistTaps: PropTypes.oneOf(['always', 'never', 'handled']),
 };
 
 export {

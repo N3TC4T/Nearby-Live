@@ -4,7 +4,8 @@
  <Loading text={'Loading ...'} />
  *
  */
-import React, { PropTypes, Component } from 'react';
+import React, {  Component } from 'react';
+import PropTypes from 'prop-types';
 import { View } from 'react-native';
 import ProgressCircle from 'react-native-progress/Circle';
 

@@ -1,6 +1,5 @@
-import React, {
-    PropTypes,
-} from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import {
     Platform,
     Animated,
@@ -175,6 +174,22 @@ class NavBar extends React.Component {
 
     componentWillMount() {
         this._isMounted = false;
+    }
+
+
+    getName = () => {
+
+        const { pid } = this.props
+
+        AppAPI.people.post('status', pid)
+            .then((res) => {
+                if (this._isMounted){
+                    this.setState({
+                        isCheckingOnline:false,
+                        isOnline: !!res[0].IsOnline
+                    })
+                }
+            })
     }
 
     getOnlineStatus = () => {

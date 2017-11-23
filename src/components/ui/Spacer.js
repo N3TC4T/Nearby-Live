@@ -4,7 +4,10 @@
     <Spacer size={10} />
  *
  */
-import React, { PropTypes } from 'react';
+import React from'react';
+import PropTypes from 'prop-types';
+
+
 import { View } from 'react-native';
 
 /* Component ==================================================================== */

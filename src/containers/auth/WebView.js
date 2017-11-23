@@ -2,7 +2,8 @@
  * Auth WebView
  *  - Used by sign up and password reset
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Actions } from 'react-native-router-flux';
 
 // Components

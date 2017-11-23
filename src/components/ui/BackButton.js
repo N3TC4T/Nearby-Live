@@ -4,7 +4,8 @@
  <BackButton />
  *
  */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { TouchableOpacity } from 'react-native';
 import { Icon } from '@components/ui';
 

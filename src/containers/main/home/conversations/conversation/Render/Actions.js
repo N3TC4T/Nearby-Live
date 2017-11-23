@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
     StyleSheet,
     View,
@@ -391,7 +392,7 @@ const styles = StyleSheet.create({
 });
 
 Actions.contextTypes = {
-    actionSheet: React.PropTypes.func,
+    actionSheet: PropTypes.func,
 };
 
 Actions.defaultProps = {
@@ -404,9 +405,9 @@ Actions.defaultProps = {
 };
 
 Actions.propTypes = {
-    onSend: React.PropTypes.func,
-    options: React.PropTypes.object,
-    icon: React.PropTypes.func,
+    onSend: PropTypes.func,
+    options: PropTypes.object,
+    icon: PropTypes.func,
     containerStyle: ViewPropTypes.style,
     wrapperStyle: ViewPropTypes.style,
     iconTextStyle: ViewPropTypes.style,

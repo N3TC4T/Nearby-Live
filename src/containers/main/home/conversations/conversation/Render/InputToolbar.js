@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   StyleSheet,
   View,
@@ -89,11 +90,11 @@ InputToolbar.defaultProps = {
 };
 
 InputToolbar.propTypes = {
-  renderAccessory: React.PropTypes.func,
-  renderActions: React.PropTypes.func,
-  renderSend: React.PropTypes.func,
-  renderComposer: React.PropTypes.func,
-  onPressActionButton: React.PropTypes.func,
+  renderAccessory: PropTypes.func,
+  renderActions: PropTypes.func,
+  renderSend: PropTypes.func,
+  renderComposer: PropTypes.func,
+  onPressActionButton: PropTypes.func,
   containerStyle: ViewPropTypes.style,
   primaryStyle: ViewPropTypes.style,
   accessoryStyle: ViewPropTypes.style,

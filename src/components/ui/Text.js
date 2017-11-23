@@ -4,7 +4,9 @@
      <Text h1>Hello World</Text>
  *
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import { Text } from 'react-native';
 
 // Consts and Libs
@@ -52,7 +54,6 @@ class CustomText extends Component {
     if (this.props.h3) props.style = [AppStyles.h3];
     if (this.props.h4) props.style = [AppStyles.h4];
     if (this.props.h5) props.style = [AppStyles.h5];
-    if (this.props.onPress) props.style.push(AppStyles.link);
 
     if (this.props.style) {
       props.style.push(this.props.style);

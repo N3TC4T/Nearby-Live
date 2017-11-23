@@ -4,7 +4,9 @@
  *  - Checking if user is logged in, and redirects from there
  *  - if logged in connect to websocket
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
 import {
     View,
     Image,

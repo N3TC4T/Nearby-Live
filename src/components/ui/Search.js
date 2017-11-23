@@ -7,6 +7,7 @@ import  {
     TextInput,
     View
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 // Consts and Libs
 import { AppStyles } from '@theme/';
@@ -51,13 +52,13 @@ Search.defaultProps = {
     border: false,
 }
 Search.propTypes = {
-    placeHolder: React.PropTypes.string,
-    backgroundColor: React.PropTypes.string,
-    innerBackground: React.PropTypes.string,
-    radius: React.PropTypes.number,
-    borderColor: React.PropTypes.string,
-    border: React.PropTypes.bool,
-    iconColor:  React.PropTypes.string,
+    placeHolder: PropTypes.string,
+    backgroundColor: PropTypes.string,
+    innerBackground: PropTypes.string,
+    radius: PropTypes.number,
+    borderColor: PropTypes.string,
+    border: PropTypes.bool,
+    iconColor:  PropTypes.string,
 }
 
 const styles = StyleSheet.create({

@@ -4,7 +4,8 @@
  * <WebView url={"http://google.com"} />
  *
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import {
   WebView,
   StyleSheet,

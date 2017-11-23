@@ -6,11 +6,14 @@
  */
 
 
-import React, { PropTypes } from 'react';
+import React from 'react';
 import {
     View,
     StyleSheet,
 } from 'react-native';
+
+import PropTypes from 'prop-types';
+
 
 // Components
 import { Text } from '@ui/';

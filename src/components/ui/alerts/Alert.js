@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react'
+import React, {Component} from 'react'
 import {
     Animated,
     InteractionManager,
@@ -10,6 +10,8 @@ import {
     View,
     ViewPropTypes
 } from 'react-native'
+
+import PropTypes from 'prop-types';
 
 import RootSiblings from 'react-native-root-siblings';
 
