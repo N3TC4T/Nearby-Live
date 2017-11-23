@@ -2,7 +2,7 @@
  * Main Tabs Screen
  *  - Shows tabs, which contain watched posts, stream and  messages listings
  */
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import {
     Animated,
     View,
@@ -26,7 +26,6 @@ import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
 
-import {Actions} from 'react-native-router-flux';
 
 
 /* Styles ==================================================================== */
@@ -89,10 +88,6 @@ class HomeTabs extends Component {
     componentDidMount ()  {
         InteractionManager.runAfterInteractions(() => {
             this.setTabs();
-            //
-            // Actions.userProfileView({
-            //     userID: 'EidkMM3HkT1lesFgX39y5Q',
-            // });
 
         });
     };
@@ -242,7 +237,7 @@ class HomeTabs extends Component {
 
     }
 
-    render () {
+    render() {
         if (this.state.loading || !this.state.navigation) return <Loading />;
         if (this.state.error) return <Error text={this.state.error} />;
 
@@ -251,8 +246,8 @@ class HomeTabs extends Component {
                 style={[styles.tabContainer]}
                 renderScene={this.renderScene}
                 renderHeader={this.renderHeader}
+                onIndexChange={this.handleChangeTab}
                 navigationState={this.state.navigation}
-                onRequestChangeTab={this.handleChangeTab}
             />
         );
     }
