@@ -51,6 +51,11 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFetchBlobPackage()
       );
     }
+
+    @Override
+    protected String getJSMainModuleName() {
+      return "index";
+    }
   };
 
   @Override
