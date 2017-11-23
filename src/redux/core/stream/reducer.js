@@ -49,7 +49,8 @@ export default function streamReducer(state = initialState, action) {
                         if (!Post.hasId(row.id)) {
                             Post.create(Object.assign(row, {section:[action.section]}))
                         }else {
-                            const post = Post.withId(row.id)
+                            const post = Post.withId(row.id);
+                            post != row ? post.update(row) : null;
                             !post.section.includes(action.section)? post.update({section: post.section.concat([action.section]) }) : null
                         }
                     }
