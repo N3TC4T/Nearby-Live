@@ -1,8 +1,7 @@
-'use strict';
 
 import uuid from 'uuid';
 
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import {
     CameraRoll,
@@ -16,27 +15,23 @@ import {
     TouchableWithoutFeedback,
     TouchableOpacity,
     Modal,
-    StatusBar,
     InteractionManager
 } from 'react-native';
 
 import PropTypes from 'prop-types';
 
-
-
-import RNFetchBlob from 'react-native-fetch-blob'
+import RNFetchBlob from 'react-native-fetch-blob';
 import * as Progress from 'react-native-progress';
 
-//components
-import { Icon } from '@ui/'
-import { Alert } from '@ui/alerts/'
+// components
+import {Icon} from '@ui/';
+import {Alert} from '@ui/alerts/';
 
 // consts
-import { AppSizes, AppStyles } from "@theme/"
+import {AppSizes, AppStyles} from '@theme/';
 
 // utils
-import { backgroundValueCalculation } from '@lib/util';
-
+import {backgroundValueCalculation} from '@lib/util';
 
 const AnimatedImage = Animated.createAnimatedComponent(ImageBackground);
 const DefaultIndicator = Progress.Circle;
@@ -53,22 +48,21 @@ const BACKGROUND_VALUES = {
 
 const DOUBLE_TAP_MILISECONDS = 200;
 
-
 const styles = StyleSheet.create({
     background: {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        width:AppSizes.screen.width,
-        height:AppSizes.screen.height,
-        bottom: 0,
+        width: AppSizes.screen.width,
+        height: AppSizes.screen.height,
+        bottom: 0
     },
-    imageContainer:{
+    imageContainer: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth:2,
-        borderColor:'transparent'
+        borderWidth: 2,
+        borderColor: 'transparent'
     }
 });
 
@@ -78,7 +72,7 @@ export default class ImageViewer extends Component {
         source: Image.propTypes.source,
         disabled: PropTypes.bool,
         imageStyle: Image.propTypes.style,
-        containerStyle:Image.propTypes.style,
+        containerStyle: Image.propTypes.style,
         doubleTapEnabled: PropTypes.bool,
 
         // required if it's a local image
@@ -97,18 +91,18 @@ export default class ImageViewer extends Component {
         threshold: PropTypes.number,
 
         // downloadable
-        downloadable:PropTypes.bool
+        downloadable: PropTypes.bool
     };
 
     static defaultProps = {
         doubleTapEnabled: true,
         imageStyle: {},
-        containerStyle:{},
+        containerStyle: {},
         imageWidth: AppSizes.screen.width,
         imageHeight: AppSizes.screen.height / 2,
         closeOnBack: true,
         threshold: 40,
-        downloadable:false
+        downloadable: false
     };
 
     constructor(props, context) {
@@ -117,12 +111,12 @@ export default class ImageViewer extends Component {
         this.state = {
             openModal: false,
             scale: new Animated.Value(1),
-            layout: new Animated.ValueXY({ x: 0, y: 0 }),
+            layout: new Animated.ValueXY({x: 0, y: 0}),
             backgroundOpacity: new Animated.Value(BACKGROUND_VALUES.MIN),
             mainImageOpacity: new Animated.Value(1),
             loading: false,
             progress: 0,
-            thresholdReached: !props.threshold,
+            thresholdReached: !props.threshold
         };
 
         this.panResponder = null;
@@ -130,7 +124,7 @@ export default class ImageViewer extends Component {
 
         this._imageSize = {
             width: typeof props.source !== 'object' ? props.imageWidth : null,
-            height: typeof props.source !== 'object' ? props.imageHeight : null,
+            height: typeof props.source !== 'object' ? props.imageHeight : null
         };
 
         this._layoutX = 0;
@@ -154,8 +148,8 @@ export default class ImageViewer extends Component {
     }
 
     componentWillMount() {
-        this.state.layout.x.addListener((animated) => this.handleLayoutChange(animated, LAYOUT_ENUM.X));
-        this.state.layout.y.addListener((animated) => this.handleLayoutChange(animated, LAYOUT_ENUM.Y));
+        this.state.layout.x.addListener(animated => this.handleLayoutChange(animated, LAYOUT_ENUM.X));
+        this.state.layout.y.addListener(animated => this.handleLayoutChange(animated, LAYOUT_ENUM.Y));
 
         this.panResponder = PanResponder.create({
             onStartShouldSetPanResponder: this.handleSetPanResponder,
@@ -164,18 +158,16 @@ export default class ImageViewer extends Component {
             onPanResponderRelease: this.handleRelease,
             onPanResponderTerminate: this.handleRelease
         });
-
-
     }
 
     componentDidMount() {
-        const { source } = this.props;
+        const {source} = this.props;
 
         this.mounted = true;
 
         if (this.props.threshold) {
             this._thresholdTimer = setTimeout(() => {
-                this.setState({ thresholdReached: true });
+                this.setState({thresholdReached: true});
                 this._thresholdTimer = null;
             }, this.props.threshold);
         }
@@ -183,10 +175,8 @@ export default class ImageViewer extends Component {
         if (typeof source === 'object' && typeof source.uri === 'string' && this.mounted) {
             Image.prefetch(source.uri);
             Image.getSize(source.uri, (width, height) => {
-                this._imageSize = { width, height };
+                this._imageSize = {width, height};
             });
-        }else {
-            return
         }
     }
 
@@ -194,7 +184,7 @@ export default class ImageViewer extends Component {
         if (!this.props.source || !props.source || this.props.source.uri !== props.source.uri) {
             this.setState({
                 loading: false,
-                progress: 0,
+                progress: 0
             });
         }
     }
@@ -210,7 +200,6 @@ export default class ImageViewer extends Component {
         this.mounted = false;
     }
 
-
     bubbleEvent(propertyName, event) {
         if (typeof this.props[propertyName] === 'function') {
             this.props[propertyName](event);
@@ -221,7 +210,7 @@ export default class ImageViewer extends Component {
         if (!this.state.loading && this.state.progress !== 1) {
             this.setState({
                 loading: true,
-                progress: 0,
+                progress: 0
             });
         }
         this.bubbleEvent('onLoadStart');
@@ -235,7 +224,7 @@ export default class ImageViewer extends Component {
         if (progress !== this.state.progress && this.state.progress !== 1) {
             this.setState({
                 loading: progress < 1,
-                progress: progress,
+                progress
             });
         }
         this.bubbleEvent('onProgress', e);
@@ -243,7 +232,7 @@ export default class ImageViewer extends Component {
 
     handleError = (event) => {
         this.setState({
-            loading: false,
+            loading: false
         });
         this.bubbleEvent('onError', event);
     };
@@ -252,52 +241,53 @@ export default class ImageViewer extends Component {
         if (this.state.progress !== 1) {
             this.setState({
                 loading: false,
-                progress: 1,
+                progress: 1
             });
         }
         this.bubbleEvent('onLoad', event);
     };
 
     handleDownloadImage = () => {
-        let uri = this.refs.originalImage.props.source.uri;
+        // Todo: Fix me
+        // eslint-disable-next-line react/no-string-refs
+        const uri = this.refs.originalImage.props.source.uri;
 
-        if (uri.endsWith('.gif')){
+        if (uri.endsWith('.gif')) {
             Alert.show('Unfortunately can not download GIF right now.', {
-                type:'error'
-            })
-            return
+                type: 'error'
+            });
+            return;
         }
 
-        if (Platform.OS === 'ios'){
-            let promise = CameraRoll.saveToCameraRoll(uri, 'photo');
-            promise.then(res => (
-                Alert.show('Photo saved successfully!','success', {
-                    type:'error'
+        if (Platform.OS === 'ios') {
+            const promise = CameraRoll.saveToCameraRoll(uri, 'photo');
+            promise.then(() => (
+                Alert.show('Photo saved successfully!', 'success', {
+                    type: 'error'
                 })
-            ))
-        }else {
+            ));
+        } else {
             const ret = RNFetchBlob.config({
-                fileCache : true,
-                path : `${RNFetchBlob.fs.dirs.DocumentDir}/${uuid.v4()}.jpg`
-            }).fetch('GET', uri)
+                fileCache: true,
+                path: `${RNFetchBlob.fs.dirs.DocumentDir}/${uuid.v4()}.jpg`
+            }).fetch('GET', uri);
 
             Alert.show('Downloading ...', {
-                type:'info',
-                duration:0
-            })
+                type: 'info',
+                duration: 0
+            });
 
-            ret.then(res => {
-                let promise = CameraRoll.saveToCameraRoll(`file://${res.path()}`, 'photo');
-                promise.then(cres => {
+            ret.then((res) => {
+                const promise = CameraRoll.saveToCameraRoll(`file://${res.path()}`, 'photo');
+                promise.then(() => {
                     // removed cache file
-                    res.flush()
+                    res.flush();
                     Alert.show('Photo saved successfully!', {
-                        type:'success',
-                    })
-                })
+                        type: 'success'
+                    });
+                });
             });
         }
-
     };
 
     handleMove(e, gestureState) {
@@ -305,10 +295,10 @@ export default class ImageViewer extends Component {
             this.props.onMove(e, gestureState);
         }
 
-        const currentScaleSizes = {
-            width: this._zoomedImageSize.width * 2,
-            height: this._zoomedImageSize.height * 2
-        };
+        // const currentScaleSizes = {
+        //     width: this._zoomedImageSize.width * 2,
+        //     height: this._zoomedImageSize.height * 2
+        // };
 
         const modifiedGestureState = Object.assign({}, gestureState, {
             dx: this._lastMovedX + gestureState.dx,
@@ -322,12 +312,14 @@ export default class ImageViewer extends Component {
     }
 
     handleLayoutChange(animated, axis) {
-        switch(axis) {
+        switch (axis) {
             case LAYOUT_ENUM.X:
                 this._layoutX = animated.value;
                 break;
             case LAYOUT_ENUM.Y:
                 this._layoutY = animated.value;
+                break;
+            default:
                 break;
         }
 
@@ -373,7 +365,7 @@ export default class ImageViewer extends Component {
     handleRelease() {
         const value = backgroundValueCalculation(this._layoutY, this._layoutX, BACKGROUND_VALUES);
         const resetAnimation = Animated.timing(this.state.layout, {
-            toValue: { x: 0, y: 0 },
+            toValue: {x: 0, y: 0},
             duration: 150
         });
 
@@ -383,10 +375,10 @@ export default class ImageViewer extends Component {
             return;
         }
 
-        const resetBackgroundAnimation = Animated.timing(this.state.backgroundOpacity, {
-            toValue: BACKGROUND_VALUES.MAX,
-            duration: 150
-        });
+        // const resetBackgroundAnimation = Animated.timing(this.state.backgroundOpacity, {
+        //     toValue: BACKGROUND_VALUES.MAX,
+        //     duration: 150
+        // });
 
         const cleanBackgroundAnimation = Animated.sequence([
             Animated.timing(this.state.backgroundOpacity, {
@@ -430,10 +422,10 @@ export default class ImageViewer extends Component {
         } else {
             this.state.backgroundOpacity.setValue(BACKGROUND_VALUES.MIN);
             // call prop
-            if(typeof this.props.onClose === 'function'){
-                this.props.onClose()
+            if (typeof this.props.onClose === 'function') {
+                this.props.onClose();
             }
-            this.setState({DownloadAlert:{}})
+            this.setState({DownloadAlert: {}});
         }
         this.state.mainImageOpacity.setValue(shouldOpen ? 0 : 1);
         this.setState({
@@ -446,7 +438,7 @@ export default class ImageViewer extends Component {
             source,
             downloadable,
             imageStyle,
-            containerStyle,
+            containerStyle
         } = this.props;
 
         const {
@@ -460,26 +452,25 @@ export default class ImageViewer extends Component {
 
         let content = this.props.children;
 
-
         // Check if height or width is so low then hide progress
         let hideProgress = false;
 
-        if ('width' && 'height' in containerStyle){
-            if (containerStyle.width < 200 || containerStyle.height < 200){
-               hideProgress = true
+        if ('width' && 'height' in containerStyle) {
+            if (containerStyle.width < 200 || containerStyle.height < 200) {
+                hideProgress = true;
             }
         }
 
-        if (!hideProgress){
-            if ((loading || progress < 1) && thresholdReached ) {
-                const IndicatorComponent = (typeof indicator === 'function' ? indicator : DefaultIndicator);
-                content = (<IndicatorComponent progress={progress}  indeterminate={!loading || !progress}/>);
+        if (!hideProgress) {
+            if ((loading || progress < 1) && thresholdReached) {
+                const IndicatorComponent = DefaultIndicator ;
+                content = (<IndicatorComponent progress={progress} indeterminate={!loading || !progress} />);
             }
         }
 
         if (this._imageSize.width / AppSizes.screen.width > this._imageSize.height / AppSizes.screen.height) {
             this._zoomedImageSize.width = AppSizes.screen.width;
-            this._zoomedImageSize.height = AppSizes.screen.width / this._imageSize.width * this._imageSize.height
+            this._zoomedImageSize.height = AppSizes.screen.width / this._imageSize.width * this._imageSize.height;
         } else {
             this._zoomedImageSize.height = AppSizes.screen.height;
             this._zoomedImageSize.width = AppSizes.screen.height / this._imageSize.width * this._imageSize.height;
@@ -487,18 +478,16 @@ export default class ImageViewer extends Component {
 
         const interpolatedOpacity = backgroundOpacity.interpolate({
             inputRange: [BACKGROUND_VALUES.MIN, BACKGROUND_VALUES.MAX],
-            outputRange: [0, 1],
+            outputRange: [0, 1]
         });
 
         const interpolatedColor = backgroundOpacity.interpolate({
             inputRange: [BACKGROUND_VALUES.MIN, BACKGROUND_VALUES.MAX],
             outputRange: ['rgba(0, 0, 0, 0)', 'rgba(0, 0, 0, 1)']
-        })
+        });
 
-
-        let width = this._imageSize.width * ( AppSizes.screen.width  / this._imageSize.width);
-        let height = this._imageSize.height * ( AppSizes.screen.height * 0.60/ this._imageSize.height);
-
+        const width = this._imageSize.width * (AppSizes.screen.width / this._imageSize.width);
+        const height = this._imageSize.height * (AppSizes.screen.height * 0.60 / this._imageSize.height);
 
         return (
             <View>
@@ -507,21 +496,23 @@ export default class ImageViewer extends Component {
                         onPress={this.toggleModal}
                     >
                         <AnimatedImage
-                            ref="originalImage"
+                            // Todo: Fix me
+                            // eslint-disable-next-line react/no-string-refs
+                            ref='originalImage'
                             source={source}
                             onLoadStart={this.handleLoadStart}
                             onProgress={this.handleProgress}
                             onError={this.handleError}
                             onLoad={this.handleLoad}
                             style={[
-                              {
-                                  opacity: this.state.mainImageOpacity ,
-                                  width:width,
-                                  height:height,
-                              },
-                              imageStyle,
+                                {
+                                    opacity: this.state.mainImageOpacity,
+                                    width,
+                                    height
+                                },
+                                imageStyle
                             ]}
-                            resizeMode={'contain'}
+                            resizeMode='contain'
                         >
                             {content}
                         </AnimatedImage>
@@ -529,39 +520,43 @@ export default class ImageViewer extends Component {
                 </Animated.View>
                 <Modal
                     visible={openModal}
-                    animationType={'slide'}
+                    animationType='slide'
                     onRequestClose={this.props.closeOnBack ? this.toggleModal : () => null}
-                    transparent={true}
+                    transparent
                 >
                     <Animated.View
                         style={{
-                          flex: 1,
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          backgroundColor: interpolatedColor
+                            flex: 1,
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            backgroundColor: interpolatedColor
                         }}
                     >
                         <Animated.View style={[AppStyles.overlayHeader, {opacity: interpolatedOpacity}]}>
-                            <View style={{flex:1, alignItems: 'flex-start'}}>
+                            <View style={{flex: 1, alignItems: 'flex-start'}}>
                                 <TouchableOpacity
-                                    onPress={() => { this.toggleModal() }}
+                                    onPress={() => { this.toggleModal(); }}
                                     activeOpacity={0.7}
-                                    style={{ top: 2, left:2}}
-                                    hitSlop={{ top: 7, right: 7, bottom: 7, left: 7 }}
+                                    style={{top: 2, left: 2}}
+                                    hitSlop={{
+                                        top: 7, right: 7, bottom: 7, left: 7
+                                    }}
                                 >
-                                    <Icon name={'arrow-back'} size={22} color={'#FFF'} />
+                                    <Icon name='arrow-back' size={22} color='#FFF' />
                                 </TouchableOpacity>
                             </View>
                             {downloadable &&
-                            <View style={{flex:1, alignItems: 'flex-end'}}>
+                            <View style={{flex: 1, alignItems: 'flex-end'}}>
                                 <TouchableOpacity
-                                    onPress={() => { this.handleDownloadImage() }}
+                                    onPress={() => { this.handleDownloadImage(); }}
                                     activeOpacity={0.7}
-                                    style={{ top: 2, right:10}}
-                                    hitSlop={{ top: 7, right: 7, bottom: 7, left: 7 }}
+                                    style={{top: 2, right: 10}}
+                                    hitSlop={{
+                                        top: 7, right: 7, bottom: 7, left: 7
+                                    }}
                                 >
-                                    <Icon name={'download'} type={'foundation'} size={22} color={'#FFF'} />
+                                    <Icon name='download' type='foundation' size={22} color='#FFF' />
                                 </TouchableOpacity>
                             </View>
                             }
@@ -575,10 +570,10 @@ export default class ImageViewer extends Component {
                                 {
                                     transform: [
                                         ...this.state.layout.getTranslateTransform(),
-                                        { scale }
-                                        ]
+                                        {scale}
+                                    ]
                                 }
-                                ]}
+                            ]}
                         />
                     </Animated.View>
 

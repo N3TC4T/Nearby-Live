@@ -1,29 +1,28 @@
-import React, {Component } from "react";
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
     View,
     Image,
     TextInput,
-    ScrollView,
     TouchableOpacity,
     Animated,
     Easing,
     StyleSheet,
-    AsyncStorage,
-} from "react-native";
+    AsyncStorage
+} from 'react-native';
 
-import Video  from 'react-native-video';
+import Video from 'react-native-video';
 
-import { Actions } from "react-native-router-flux";
+import {Actions} from 'react-native-router-flux';
 
 // Consts and Libs
-import { AppStyles, AppColors, AppSizes, AppFonts } from "@theme/";
+import {AppStyles, AppColors, AppSizes, AppFonts} from '@theme/';
 import AppAPI from '@lib/api';
 
 // Components
-import { LoginButton, AccessToken } from 'react-native-fbsdk'
-import {Spacer, Text, Icon } from "@ui/";
-import { Alert } from '@ui/alerts/'
+import {LoginButton, AccessToken} from 'react-native-fbsdk';
+import {Spacer, Text, Icon} from '@ui/';
+import {Alert} from '@ui/alerts/';
 
 // consts
 const MARGIN = 40;
@@ -35,16 +34,16 @@ const styles = StyleSheet.create({
         top: 0,
         left: 0,
         bottom: 0,
-        right: 0,
+        right: 0
     },
     logo: {
         width: AppSizes.screen.width * 0.55,
-        resizeMode: 'contain',
+        resizeMode: 'contain'
     },
     whiteText: {
-        color: '#F1F1F2',
+        color: '#F1F1F2'
     },
-    bottomAction:{
+    bottomAction: {
         flex: 1,
         position: 'absolute',
         backgroundColor: '#063852',
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
         height: 40,
         alignItems: 'center',
         justifyContent: 'center',
-        opacity:0.5
+        opacity: 0.5
     },
     input: {
         backgroundColor: '#FFF',
@@ -64,10 +63,10 @@ const styles = StyleSheet.create({
         color: '#5a5a5a',
         borderColor: '#eeeeee',
         borderWidth: 2.0,
-        borderRadius:3,
+        borderRadius: 3
     },
     inputWrapper: {
-        flex: 1,
+        flex: 1
     },
     inlineIcon: {
         position: 'absolute',
@@ -76,19 +75,19 @@ const styles = StyleSheet.create({
         height: 22,
         left: 10,
         top: 9,
-        opacity:0.5
+        opacity: 0.5
     },
-    googleButton:{
+    googleButton: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#dd4b39',
-        height: MARGIN,
+        height: MARGIN
     },
-    facebookButton:{
+    facebookButton: {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#3b5998',
-        height: MARGIN,
+        height: MARGIN
     },
     buttonSubmit: {
         alignItems: 'center',
@@ -96,7 +95,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#1B4B5A',
         height: MARGIN,
         zIndex: 100,
-        borderRadius:3,
+        borderRadius: 3
     },
     buttonSubmitCircle: {
         height: MARGIN,
@@ -107,20 +106,20 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         alignSelf: 'center',
         zIndex: 99,
-        backgroundColor: AppColors.brand.primary,
+        backgroundColor: AppColors.brand.primary
     },
     buttonSubmitText: {
         color: 'white',
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     },
-    socialButtonText:{
-        fontSize:AppFonts.base.size * 0.70,
-        color:'white',
+    socialButtonText: {
+        fontSize: AppFonts.base.size * 0.70,
+        color: 'white'
     },
     buttonSubmitImage: {
         width: 24,
-        height: 24,
-    },
+        height: 24
+    }
 });
 
 /* Component ==================================================================== */
@@ -129,7 +128,7 @@ class Authenticate extends Component {
 
     static propTypes = {
         emailLogin: PropTypes.func.isRequired,
-        facebookLogin: PropTypes.func.isRequired,
+        facebookLogin: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -137,130 +136,120 @@ class Authenticate extends Component {
 
         this.state = {
             isLoading: false,
-            email:'',
-            password:''
+            email: '',
+            password: ''
         };
 
         this.buttonAnimated = new Animated.Value(0);
         this.growAnimated = new Animated.Value(0);
     }
 
-    componentDidMount = async () => {
+    componentDidMount = async() => {
         // Get user email from AsyncStorage to populate fields
         const email = await AsyncStorage.getItem('api/credentials');
 
         if (email !== null) {
             this.setState({
-                email: email,
+                email
             });
         }
     };
 
-
-    _onPressLogin = () => {
-        const { email , password, isLoading } = this.state
-
-        // Scroll to top, to show message
-        if (this.scrollView) {
-            this.scrollView.scrollTo({ y: 0 });
-        }
-
-        if (isLoading) return;
-
-
-        if (email && password) {
-
-            this.setState({ isLoading: true });
-            Animated.timing(
-                this.buttonAnimated,
-                {
-                    toValue: 1,
-                    duration: 200,
-                    easing: Easing.linear
-                }
-            ).start();
-
-            this.props.emailLogin({
-                email: email,
-                password: password,
-            }, true).then(() => {
-                setTimeout(() => {
-                    this._onGrow();
-                }, 2000);
-                setTimeout(() => {
-                    Actions.app({ type: 'reset' })
-                }, 2300);
-
-            }).catch((err) => {
-                const error = AppAPI.handleError(err);
-                this.buttonAnimated.setValue(0);
-                this.setState({
-                    isLoading:false,
-                })
-
-                Alert.show(error, {
-                    type:'error'
-                })
-
-            });
-
-        }
-    }
-
-    _onFacebookLoginFinished = (error, result) => {
-        if (error) {
-            Alert.show(error, {
-                type:'error'
-            })
-        } else {
-
-            if (result.isCancelled){
-                return null
-            }
-
-            AccessToken.getCurrentAccessToken().then(
-                (data) => {
-
-                    this.setState({ isLoading: true });
-                    Animated.timing(
-                        this.buttonAnimated,
-                        {
-                            toValue: 1,
-                            duration: 200,
-                            easing: Easing.linear
-                        }
-                    ).start();
-
-                    this.props.facebookLogin(data.accessToken.toString()).then(() => {
-                        setTimeout(() => {
-                            this._onGrow();
-                        }, 2000);
-                        setTimeout(() => {
-                            Actions.app({ type: 'reset' })
-                        }, 2300);
-
-                    })
-                }
-            )
-
-        }
-    }
-
-    _onGrow = () => {
+    onGrow = () => {
         Animated.timing(
             this.growAnimated,
             {
                 toValue: 1,
                 duration: 200,
                 easing: Easing.linear
-            }
+            },
         ).start();
+    };
+
+    onFacebookLoginFinished = (error, result) => {
+        if (error) {
+            Alert.show(error, {
+                type: 'error'
+            });
+        } else {
+            if (result.isCancelled) {
+                return null;
+            }
+
+            AccessToken.getCurrentAccessToken().then((data) => {
+                this.setState({isLoading: true});
+                Animated.timing(
+                    this.buttonAnimated,
+                    {
+                        toValue: 1,
+                        duration: 200,
+                        easing: Easing.linear
+                    },
+                ).start();
+
+                this.props.facebookLogin(data.accessToken.toString()).then(() => {
+                    setTimeout(() => {
+                        this.onGrow();
+                    }, 2000);
+                    setTimeout(() => {
+                        Actions.app({type: 'reset'});
+                    }, 2300);
+                });
+            });
+        }
+
+        return null;
     }
 
+    onPressLogin = () => {
+        const {email, password, isLoading} = this.state;
+
+        // Scroll to top, to show message
+        if (this.scrollView) {
+            this.scrollView.scrollTo({y: 0});
+        }
+
+        if (isLoading) {return;}
+
+        if (email && password) {
+            this.setState({isLoading: true});
+            Animated.timing(
+                this.buttonAnimated,
+                {
+                    toValue: 1,
+                    duration: 200,
+                    easing: Easing.linear
+                },
+            ).start();
+
+            this.props.emailLogin({
+                email,
+                password
+            }, true).then(() => {
+                setTimeout(() => {
+                    this.onGrow();
+                }, 2000);
+                setTimeout(() => {
+                    Actions.app({type: 'reset'});
+                }, 2300);
+            }).catch((err) => {
+                const error = AppAPI.handleError(err);
+                this.buttonAnimated.setValue(0);
+                this.setState({
+                    isLoading: false
+                });
+
+                Alert.show(error, {
+                    type: 'error'
+                });
+            });
+        }
+    };
+    // Todo: Fix me
+    // eslint-disable-next-line react/no-string-refs
     focusNextField = (nextField) => { this.refs[nextField].focus(); };
 
-
-    render () {
+    render() {
         const changeWidth = this.buttonAnimated.interpolate({
             inputRange: [0, 1],
             outputRange: [AppSizes.screen.width - MARGIN, MARGIN]
@@ -273,36 +262,47 @@ class Authenticate extends Component {
         return (
             <View style={[AppStyles.container, AppStyles.windowSize]}>
 
-                <Video source={require('../../assets/video/background.mp4')}
-                       style={styles.backgroundVideo}
-                       rate={1} volume={1} muted={true}
-                       resizeMode="cover" repeat={true} key="video1" />
+                <Video
+                    source={require('../../assets/video/background.mp4')}
+                    style={styles.backgroundVideo}
+                    rate={1}
+                    volume={1}
+                    muted
+                    resizeMode='cover'
+                    repeat
+                    key='video1'
+                />
 
-
-                <Spacer size={50}/>
+                <Spacer size={50} />
 
                 <View style={[AppStyles.row, AppStyles.paddingHorizontal, AppStyles.centerAligned]}>
                     <Text style={{
-                                color:'#F8F5F2',
-                                fontSize:65,
-                                fontFamily: AppFonts.base.familyBold
-                            }}>N</Text>
+                        color: '#F8F5F2',
+                        fontSize: 65,
+                        fontFamily: AppFonts.base.familyBold
+                    }}
+                    >N
+                    </Text>
                     <Text style={{
-                                color:'#F8F5F2',
-                                fontSize:35,
-                                fontFamily: AppFonts.base.familyBold
-                            }}>earby</Text>
+                        color: '#F8F5F2',
+                        fontSize: 35,
+                        fontFamily: AppFonts.base.familyBold
+                    }}
+                    >earby
+                    </Text>
                 </View>
 
                 <View style={[AppStyles.row, AppStyles.paddingHorizontal, AppStyles.centerAligned]}>
                     <Text style={{
-                                color:'#F8F5F2',
-                                fontSize:10,
-                                fontFamily: AppFonts.base.familyBold
-                            }}>Meet Nearby People</Text>
+                        color: '#F8F5F2',
+                        fontSize: 10,
+                        fontFamily: AppFonts.base.familyBold
+                    }}
+                    >Meet Nearby People
+                    </Text>
                 </View>
 
-                <Spacer size={80}/>
+                <Spacer size={80} />
 
                 <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                     <View style={styles.inputWrapper}>
@@ -314,20 +314,21 @@ class Authenticate extends Component {
                                 size={20}
                             />
                         </View>
-                        <TextInput style={styles.input}
-                                   keyboardType="email-address"
-                                   placeholder={'Email'}
-                                   autoCorrect={false}
-                                   returnKeyType="next"
-                                   placeholderTextColor='#66A5AD'
-                                   underlineColorAndroid='transparent'
-                                   onSubmitEditing={() => this.focusNextField('password')}
-                                   onChangeText={(email) => {this.setState({email})}}
+                        <TextInput
+                            style={styles.input}
+                            keyboardType='email-address'
+                            placeholder='Email'
+                            autoCorrect={false}
+                            returnKeyType='next'
+                            placeholderTextColor='#66A5AD'
+                            underlineColorAndroid='transparent'
+                            onSubmitEditing={() => this.focusNextField('password')}
+                            onChangeText={(email) => { this.setState({email}); }}
                         />
                     </View>
                 </View>
 
-                <Spacer size={10}/>
+                <Spacer size={10} />
 
                 <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                     <View style={styles.inputWrapper}>
@@ -338,62 +339,74 @@ class Authenticate extends Component {
                                 size={20}
                             />
                         </View>
-                        <TextInput style={styles.input}
-                                   ref="password"
-                                   placeholder={'Password'}
-                                   secureTextEntry={true}
-                                   autoCorrect={false}
-                                   returnKeyType={'done'}
-                                   placeholderTextColor='#66A5AD'
-                                   underlineColorAndroid='transparent'
-                                   onChangeText={(password) => {this.setState({password})}}
+                        <TextInput
+                            style={styles.input}
+                            // Todo: Fix me
+                            // eslint-disable-next-line react/no-string-refs
+                            ref='password'
+                            placeholder='Password'
+                            secureTextEntry
+                            autoCorrect={false}
+                            returnKeyType='done'
+                            placeholderTextColor='#66A5AD'
+                            underlineColorAndroid='transparent'
+                            onChangeText={(password) => { this.setState({password}); }}
                         />
                     </View>
                 </View>
 
-                <Spacer size={10}/>
+                <Spacer size={10} />
 
                 <View style={[AppStyles.row, AppStyles.padding, AppStyles.centerAligned]}>
                     <Animated.View style={{width: changeWidth}}>
-                        <TouchableOpacity style={styles.buttonSubmit}
-                                          onPress={this._onPressLogin}
-                                          activeOpacity={1} >
-                            {this.state.isLoading ?
-                                <Image source={require('../../assets/image/loading.gif')} style={styles.buttonSubmitImage} />
-                                :
-                                <Text style={[styles.buttonSubmitText]}>Login to account</Text>
+                        <TouchableOpacity
+                            style={styles.buttonSubmit}
+                            onPress={this.onPressLogin}
+                            activeOpacity={1}
+                        >
+                            {this.state.isLoading
+                                ? <Image
+                                    source={require('../../assets/image/loading.gif')}
+                                    style={styles.buttonSubmitImage}
+                                />
+                                : <Text
+                                    style={[styles.buttonSubmitText]}
+                                >
+                                    Login to account
+                                </Text>
                             }
                         </TouchableOpacity>
-                        <Animated.View style={[ styles.buttonSubmitCircle, {transform: [{scale: changeScale}]} ]} />
+                        <Animated.View
+                            style={[styles.buttonSubmitCircle,
+                                {transform: [{scale: changeScale}]}]
+                            }
+                        />
                     </Animated.View>
                 </View>
-
 
                 <Text h5 style={[AppStyles.textCenterAligned, styles.whiteText]}>
                     - or -
                 </Text>
 
-                <Spacer size={20}/>
+                <Spacer size={20} />
 
                 <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                     <View style={[AppStyles.flex1, AppStyles.centerAligned]}>
                         <LoginButton
-                            onLoginFinished={this._onFacebookLoginFinished}
+                            onLoginFinished={this.onFacebookLoginFinished}
                         />
                     </View>
                 </View>
 
+                <Spacer size={30} />
 
-
-                <Spacer size={30}/>
-
-
-                {/*<View style={[AppStyles.row, styles.bottomAction]}>*/}
-                {/*<Text style={[styles.whiteText]} onPress={()=>{console.log('lost password')}}> Forget password ?</Text>*/}
-                {/*</View>*/}
+                {/* <View style={[AppStyles.row, styles.bottomAction]}> */}
+                {/* <Text style={[styles.whiteText]} onPress={()=>{console.log('lost password')}}>
+                 Forget password ?</Text> */}
+                {/* </View> */}
 
             </View>
-        )
+        );
     }
 }
 

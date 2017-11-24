@@ -1,7 +1,6 @@
-import { ORM } from "redux-orm";
-import { attr,fk , many, Model} from 'redux-orm';
+import {ORM} from 'redux-orm';
+import {attr, many, Model} from 'redux-orm';
 import uuid from 'uuid';
-
 
 /* Models  ==================================================================== */
 
@@ -12,13 +11,13 @@ export class Message extends Model {
 
     static get fields() {
         return {
-            body:attr(),
-            date:attr(),
-            dir:attr(),
-            id:attr({ getDefault: uuid.v4 }),
-            msgid:attr(),
-            sent:attr({ getDefault: () => {return true}}),
-            unread:attr({ getDefault: () => {return true}}),
+            body: attr(),
+            date: attr(),
+            dir: attr(),
+            id: attr({getDefault: uuid.v4}),
+            msgid: attr(),
+            sent: attr({getDefault: () => true}),
+            unread: attr({getDefault: () => true})
         };
     }
 
@@ -27,7 +26,7 @@ export class Message extends Model {
     }
 
     static get options() {
-        return{
+        return {
             idAttribute: 'id'
         };
     }
@@ -40,18 +39,18 @@ export class Conversation extends Model {
 
     static get fields() {
         return {
-            id : attr(),
-            messages:many('Message'),
-            gold : attr() ,
+            id: attr(),
+            messages: many('Message'),
+            gold: attr(),
             img: attr(),
-            last : attr(),
+            last: attr(),
             lastid: attr(),
-            msg : attr(),
-            name : attr(),
+            msg: attr(),
+            name: attr(),
             new: attr(),
             staff: attr(),
             total: attr(),
-            initialized:attr({ getDefault: false }),
+            initialized: attr({getDefault: false})
         };
     }
 
@@ -60,7 +59,7 @@ export class Conversation extends Model {
     }
 
     static get options() {
-        return{
+        return {
             idAttribute: 'id'
         };
     }

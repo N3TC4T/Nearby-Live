@@ -1,30 +1,30 @@
 /**
  * App Theme - Sizes
  */
-import { Dimensions, Platform } from 'react-native';
+import {Dimensions, Platform} from 'react-native';
 
-const { width, height } = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const screenHeight = width < height ? height : width;
 const screenWidth = width < height ? width : height;
 
 export default {
-  // Window Dimensions
-  screen: {
-    height: screenHeight,
-    width: screenWidth,
+    // Window Dimensions
+    screen: {
+        height: screenHeight,
+        width: screenWidth,
 
-    widthHalf: screenWidth * 0.5,
-    widthThird: screenWidth * 0.333,
-    widthTwoThirds: screenWidth * 0.666,
-    widthQuarter: screenWidth * 0.25,
-    widthThreeQuarters: screenWidth * 0.75,
-  },
-  navbarHeight: (Platform.OS === 'ios') ? 60 : 50,
-  statusBarHeight: (Platform.OS === 'ios') ? 16 : 0,
-  tabbarHeight: 50,
+        widthHalf: screenWidth * 0.5,
+        widthThird: screenWidth * 0.333,
+        widthTwoThirds: screenWidth * 0.666,
+        widthQuarter: screenWidth * 0.25,
+        widthThreeQuarters: screenWidth * 0.75
+    },
+    navbarHeight: (Platform.OS === 'ios') ? 60 : 50,
+    statusBarHeight: (Platform.OS === 'ios') ? 16 : 0,
+    tabbarHeight: 50,
 
-  padding: 20,
-  paddingSml: 10,
+    padding: 20,
+    paddingSml: 10,
 
-  borderRadius: 8,
+    borderRadius: 8
 };

@@ -2,37 +2,46 @@
  * Post View Screen
  *  - The individual post screen
  */
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {
-    Platform,
     StyleSheet,
     Text,
-    View,
+    View
 } from 'react-native';
+
+// Consts and Libs
+import {getImageURL} from '@lib/util';
+import {ErrorMessages} from '@constants/';
+import Error from '@components/general/Error';
+import AppAPI from '@lib/api';
 
 import {ChatRender, Actions, Bubble} from './Render';
 
-import Error from '@components/general/Error';
-import Loading from '@components/general/Loading';
-
-// Consts and Libs
-import AppAPI from '@lib/api';
-import { getImageURL } from '@lib/util'
-import { ErrorMessages } from '@constants/';
-
-// Consts and Libs
-import { AppSizes, AppColors, AppStyles, AppFonts } from '@theme/';
-
+/* Styles ==================================================================== */
+const styles = StyleSheet.create({
+    footerContainer: {
+        marginTop: 5,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 10
+    },
+    footerText: {
+        fontSize: 14,
+        color: '#aaa'
+    }
+});
 
 /* Component ==================================================================== */
 class ConversationView extends Component {
     static componentName = 'ConversationView';
 
     static propTypes = {
-        conversation:  PropTypes.object,
+        conversation: PropTypes.object.isRequired,
         user: PropTypes.object.isRequired,
+        sendMessage: PropTypes.func.isRequired,
+        getMessages: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -42,147 +51,135 @@ class ConversationView extends Component {
             typingText: null,
             isLoadingEarlier: false,
             isSendingTypingRequest: false,
-            error:null
+            error: null
         };
 
-        this._isMounted = false;
-        this._onSend = this._onSend.bind(this);
-        this._onLoadEarlier = this._onLoadEarlier.bind(this);
-        this._onInputTextChanged = this._onInputTextChanged.bind(this);
+        this.isMounted = false;
+        this.onSend = this.onSend.bind(this);
+        this.onLoadEarlier = this.onLoadEarlier.bind(this);
+        this.onInputTextChanged = this.onInputTextChanged.bind(this);
         this.renderBubble = this.renderBubble.bind(this);
         this.renderFooter = this.renderFooter.bind(this);
+        this.renderActions = this.renderActions(this);
 
-        this._isAlright = null;
+        this.isAlright = null;
     }
 
+    componentWillMount() {
+        this.isMounted = true;
+    }
 
     componentDidMount = () => {
         this.fetchMessages();
     }
 
-    /**
-     * Fetch Chats from API
-     */
-    fetchMessages = async () => {
-        const { getMessages, conversation } = this.props;
+    componentWillUnmount() {
+        this.isMounted = false;
+    }
+
+    onLoadEarlier = async() => {
+        this.setState({isLoadingEarlier: true});
+
+        await this.props.getMessages()
+            .then(() => {
+                this.setState({
+                    isLoadingEarlier: false,
+                    error: null
+                });
+            }).catch((err) => {
+                const error = AppAPI.handleError(err);
+                this.setState({
+                    isLoadingEarlier: false,
+                    error
+                });
+            });
+    };
+
+    onSend = (messages = []) => {
+        const {conversation} = this.props;
+
+        messages.map((message) => {
+            const tmpMessage = {
+                body: message.text,
+                date: message.date ? message.date : null,
+                dir: 1,
+                id: message.id ? message.id : null,
+                sent: false,
+                unread: true
+            };
+
+            this.props.sendMessage(Object.assign({}, tmpMessage), conversation.id);
+
+            return null;
+
+            // todo: need to catch error and give retry to user
+        });
+    };
+
+    onInputTextChanged = () => {
+        const {isSendingTypingRequest} = this.state;
+
+        const {conversation} = this.props;
+
+        if (!isSendingTypingRequest) {
+            this.setState({isSendingTypingRequest: true});
+        }
+
+        if (!isSendingTypingRequest) {
+            AppAPI.conversations.post({id: conversation.id, action: 'typing'})
+                .finally(() => {
+                    this.setState({
+                        isSendingTypingRequest: false
+                    });
+                });
+        }
+    };
+
+    loadEarlier = () => {
+        const {conversation} = this.props;
+
+        if (conversation.messages.length > 1) {
+            return conversation.messages.length < conversation.total;
+        }
+        return false;
+    };
+
+    fetchMessages = async() => {
+        const {getMessages, conversation} = this.props;
 
         // Forgot to pass conversation id?
         if (!conversation.id) {
             this.setState({
-                error: ErrorMessages.missingConversationID,
+                error: ErrorMessages.missingConversationID
             });
         }
 
         await getMessages()
             .then(() => {
                 this.setState({
-                    error: null,
+                    error: null
                 });
-
             })
             .catch((err) => {
                 const error = AppAPI.handleError(err);
                 this.setState({
-                    error,
+                    error
                 });
             });
     };
 
+    renderBubble = props => (
+        <Bubble
+            {...props}
+            wrapperStyle={{
+                left: {
+                    backgroundColor: '#e5e5ea'
+                }
+            }}
+        />
+    )
 
-
-    componentWillMount() {
-        this._isMounted = true;
-    }
-
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
-    _loadEarlier = () => {
-        const { conversation } = this.props;
-
-        if (conversation.messages.length > 1) {
-            return conversation.messages.length < conversation.total
-        } else {
-            return false
-        }
-
-
-    }
-
-    _onLoadEarlier = async() => {
-        this.setState({ isLoadingEarlier: true, });
-
-        await this.props.getMessages()
-            .then(() => {
-                this.setState({
-                    isLoadingEarlier: false,
-                    error: null,
-                });
-
-            }).catch((err) => {
-                const error = AppAPI.handleError(err);
-                this.setState({
-                    isLoadingEarlier: false,
-                    error,
-                });
-            });
-
-    }
-
-    _onSend = (messages = []) => {
-
-        const { conversation } = this.props;
-
-        messages.map((message) => {
-            let _message = {
-                body:message.text,
-                date:message.date ? message.date: null,
-                dir:1,
-                id:message.id ? message.id : null,
-                sent:false,
-                unread:true,
-            }
-
-            this.props.sendMessage(Object.assign({}, _message), conversation.id)
-
-            //todo: need to catch error and give retry to user
-        })
-    }
-
-
-    _onInputTextChanged = (text) => {
-        const { isSendingTypingRequest } = this.state
-
-        const { conversation } = this.props;
-
-        !isSendingTypingRequest ? this.setState({isSendingTypingRequest:true}): null
-
-        if (!isSendingTypingRequest) {
-            AppAPI.conversations.post({id:conversation.id, action:'typing'})
-                .finally(() => {
-                    this.setState({
-                        isSendingTypingRequest:false
-                    })
-                })
-        }
-
-    }
-
-    renderBubble = (props) => {
-        return (
-            <Bubble
-                {...props}
-                wrapperStyle={{
-          left: {
-            backgroundColor: '#e5e5ea',
-          }
-        }}
-            />
-        );
-    }
-
-    renderFooter(props) {
+    renderFooter() {
         if (this.state.typingText) {
             return (
                 <View style={styles.footerContainer}>
@@ -195,31 +192,32 @@ class ConversationView extends Component {
         return null;
     }
 
-
-    renderActions(props) {
-        return  <Actions
-            {...props}
-        />
+    renderActions() {
+        return (<Actions
+            {...this.props}
+        />);
     }
 
-
     render() {
+        const {error, isLoadingEarlier} = this.state;
 
-        const { error  , isLoadingEarlier} = this.state
+        const {conversation} = this.props;
 
-        const { conversation } = this.props ;
-
-        if ( conversation && error) return <Error text={error} tryAgain={this.fetchMessages} />;
+        if (conversation && error) {return <Error text={error} tryAgain={this.fetchMessages} />;}
 
         return (
             <ChatRender
                 messages={conversation.messages}
-                onSend={this._onSend}
-                loadEarlier={ this._loadEarlier() }
-                onLoadEarlier={this._onLoadEarlier}
-                onInputTextChanged={this._onInputTextChanged}
-                isLoadingEarlier={ isLoadingEarlier}
-                user={{_id: conversation.id, name:conversation.name, avatar:getImageURL(conversation.img, true)}}
+                onSend={this.onSend}
+                loadEarlier={this.loadEarlier()}
+                onLoadEarlier={this.onLoadEarlier}
+                onInputTextChanged={this.onInputTextChanged}
+                isLoadingEarlier={isLoadingEarlier}
+                user={{
+                    _id: conversation.id,
+                    name: conversation.name,
+                    avatar: getImageURL(conversation.img, true)
+                }}
                 renderBubble={this.renderBubble}
                 renderActions={this.renderActions}
                 renderFooter={this.renderFooter}
@@ -227,20 +225,6 @@ class ConversationView extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    footerContainer: {
-        marginTop: 5,
-        marginLeft: 10,
-        marginRight: 10,
-        marginBottom: 10,
-    },
-    footerText: {
-        fontSize: 14,
-        color: '#aaa',
-    },
-});
-
 
 /* Export Component ==================================================================== */
 export default ConversationView;

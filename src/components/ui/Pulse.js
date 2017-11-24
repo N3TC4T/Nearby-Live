@@ -1,13 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Animated, Easing, Dimensions } from 'react-native';
+import {View, StyleSheet, Animated, Easing, Dimensions} from 'react-native';
 import PropTypes from 'prop-types';
 
-
-
-const { height, width } = Dimensions.get('window');
+const {height, width} = Dimensions.get('window');
 
 class Pulse extends React.Component {
-
     constructor(props) {
         super(props);
 
@@ -18,45 +15,47 @@ class Pulse extends React.Component {
         Animated.timing(this.anim, {
             toValue: 1,
             duration: this.props.interval,
-            easing: Easing.in,
+            easing: Easing.in
         })
             .start();
     }
 
     render() {
-        const { size, pulseMaxSize, borderColor, backgroundColor, getStyle } = this.props;
+        const {
+            size, pulseMaxSize, borderColor, backgroundColor, getStyle
+        } = this.props;
 
         return (
             <View style={[styles.circleWrapper, {
-				width: pulseMaxSize,
-				height: pulseMaxSize,
-				marginLeft: -pulseMaxSize/2,
-				marginTop: -pulseMaxSize/2,
-			}]}>
+                width: pulseMaxSize,
+                height: pulseMaxSize,
+                marginLeft: -pulseMaxSize / 2,
+                marginTop: -pulseMaxSize / 2
+            }]}
+            >
                 <Animated.View
                     style={[styles.circle, {
-						borderColor,
-						backgroundColor,
-						width: this.anim.interpolate({
-							inputRange: [0, 1],
-							outputRange: [size, pulseMaxSize]
-						}),
-						height: this.anim.interpolate({
-							inputRange: [0, 1],
-							outputRange: [size, pulseMaxSize]
-						}),
-						borderRadius: pulseMaxSize/2,
-						opacity: this.anim.interpolate({
-							inputRange: [0, 1],
-							outputRange: [1, 0]
-						})
-					}, getStyle && getStyle(this.anim)]}
+                        borderColor,
+                        backgroundColor,
+                        width: this.anim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [size, pulseMaxSize]
+                        }),
+                        height: this.anim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [size, pulseMaxSize]
+                        }),
+                        borderRadius: pulseMaxSize / 2,
+                        opacity: this.anim.interpolate({
+                            inputRange: [0, 1],
+                            outputRange: [1, 0]
+                        })
+                    }, getStyle && getStyle(this.anim)]}
                 />
             </View>
         );
     }
 }
-
 
 Pulse.propTypes = {
     interval: PropTypes.number,
@@ -64,7 +63,7 @@ Pulse.propTypes = {
     pulseMaxSize: PropTypes.number,
     borderColor: PropTypes.string,
     backgroundColor: PropTypes.string,
-    getStyle: PropTypes.func,
+    getStyle: PropTypes.func
 };
 
 Pulse.defaultProps = {
@@ -73,7 +72,7 @@ Pulse.defaultProps = {
     pulseMaxSize: 250,
     borderColor: '#CB0000',
     backgroundColor: '#ED225B55',
-    getStyle: undefined,
+    getStyle: null
 };
 
 const styles = StyleSheet.create({
@@ -81,15 +80,13 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
-        left: width/2,
-        top: height/2,
+        left: width / 2,
+        top: height / 2
     },
     circle: {
-        borderWidth: 4 * StyleSheet.hairlineWidth,
-    },
+        borderWidth: 4 * StyleSheet.hairlineWidth
+    }
 });
-
-
 
 /* Export Component ==================================================================== */
 export default Pulse;

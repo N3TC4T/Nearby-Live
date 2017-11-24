@@ -1,21 +1,20 @@
 /**
  * Stream Container
  */
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 // Actions
 import * as StreamActions from '@redux/core/stream/actions';
 
 // Selectors
-import { streamSelector } from '@redux/core/stream/selectors';
+import {streamSelector} from '@redux/core/stream/selectors';
 
 import PostsListingRender from './StreamView';
 
 /* Redux ==================================================================== */
 const mapStateToProps = state => ({
     user: state.user,
-    postsListing: streamSelector(state),
+    postsListing: streamSelector(state)
 });
 
 // Any actions to map to the component?
@@ -27,7 +26,7 @@ const mapDispatchToProps = {
     featurePost: StreamActions.featurePost,
     deletePost: StreamActions.deletePost,
     reportPost: StreamActions.reportPost,
-    updateSectionIndex:StreamActions.updateSectionIndex,
-}
+    updateSectionIndex: StreamActions.updateSectionIndex
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostsListingRender);

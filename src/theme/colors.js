@@ -5,26 +5,26 @@
 const app = {
     background: '#E9EBEE',
     cardBackground: '#FFFFFF',
-    listItemBackground: '#FFFFFF',
+    listItemBackground: '#FFFFFF'
 };
 
 const brand = {
     brand: {
         primary: '#232F3A',
-        secondary: '#818F92',
-    },
+        secondary: '#818F92'
+    }
 };
 
 const text = {
     textPrimary: '#222222',
     textSecondary: '#777777',
-    textCard:'#222222',
+    textCard: '#222222',
     headingPrimary: brand.brand.primary,
-    headingSecondary: brand.brand.primary,
+    headingSecondary: brand.brand.primary
 };
 
 const borders = {
-    border: '#dedfe3',
+    border: '#dedfe3'
 };
 
 const tabbar = {
@@ -32,22 +32,22 @@ const tabbar = {
         background: '#232F3A',
         iconDefault: '#818F92',
         iconSelected: '#FFFFFF',
-        iconNew:'#008DCB'
+        iconNew: '#008DCB'
     },
-    tabbarTop:{
+    tabbarTop: {
         background: '#232F3A',
         indicator: '#CB0000',
-        icon: '#D0E1F9',
+        icon: '#D0E1F9'
     }
 };
 
 const segment = {
-    segmentButton:{
+    segmentButton: {
         selectedTextColor: '#364150',
-        textColor:'#364150',
+        textColor: '#364150',
         background: '#FCFCFA',
-        selectedBackground:'#dedfe3',
-        borderColor:'#b3c1c4',
+        selectedBackground: '#dedfe3',
+        borderColor: '#b3c1c4'
     }
 };
 
@@ -57,5 +57,5 @@ export default {
     ...text,
     ...borders,
     ...tabbar,
-    ...segment,
+    ...segment
 };

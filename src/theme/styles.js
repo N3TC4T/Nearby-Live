@@ -8,7 +8,7 @@ import Sizes from './sizes';
 
 export default {
     appContainer: {
-        backgroundColor: '#000',
+        backgroundColor: '#000'
     },
 
     // Default
@@ -16,34 +16,34 @@ export default {
         position: 'relative',
         flex: 1,
         flexDirection: 'column',
-        backgroundColor: Colors.background,
+        backgroundColor: Colors.background
     },
     containerCentered: {
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     windowSize: {
         height: Sizes.screen.height,
-        width: Sizes.screen.width,
+        width: Sizes.screen.width
     },
 
     // Aligning items
     leftAligned: {
-        alignItems: 'flex-start',
+        alignItems: 'flex-start'
     },
     centerAligned: {
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     rightAligned: {
-        alignItems: 'flex-end',
+        alignItems: 'flex-end'
     },
 
     // Text Styles
     baseText: {
         fontFamily: Fonts.base.family,
         fontSize: Fonts.base.size,
-        color: Colors.textPrimary,
+        color: Colors.textPrimary
     },
     p: {
         fontFamily: Fonts.base.family,
@@ -51,7 +51,7 @@ export default {
         lineHeight: Fonts.base.lineHeight,
         color: Colors.textPrimary,
         fontWeight: '500',
-        marginBottom: 8,
+        marginBottom: 8
     },
     h1: {
         fontFamily: Fonts.h1.family,
@@ -62,7 +62,7 @@ export default {
         margin: 0,
         marginBottom: 4,
         left: 0,
-        right: 0,
+        right: 0
     },
     h2: {
         fontFamily: Fonts.h2.family,
@@ -73,7 +73,7 @@ export default {
         margin: 0,
         marginBottom: 4,
         left: 0,
-        right: 0,
+        right: 0
     },
     h3: {
         fontFamily: Fonts.h3.family,
@@ -84,7 +84,7 @@ export default {
         margin: 0,
         marginBottom: 4,
         left: 0,
-        right: 0,
+        right: 0
     },
     h4: {
         fontFamily: Fonts.h4.family,
@@ -95,7 +95,7 @@ export default {
         margin: 0,
         marginBottom: 4,
         left: 0,
-        right: 0,
+        right: 0
     },
     h5: {
         fontFamily: Fonts.h5.family,
@@ -107,78 +107,78 @@ export default {
         marginTop: 4,
         marginBottom: 4,
         left: 0,
-        right: 0,
+        right: 0
     },
     strong: {
-        fontWeight: '900',
+        fontWeight: '900'
     },
     link: {
         textDecorationLine: 'underline',
-        color: Colors.brand.primary,
+        color: Colors.brand.primary
     },
     subtext: {
         fontFamily: Fonts.base.family,
         fontSize: Fonts.base.size * 0.8,
         lineHeight: parseInt(Fonts.base.lineHeight * 0.8, 10),
         color: Colors.textSecondary,
-        fontWeight: '500',
+        fontWeight: '500'
     },
 
     // Helper Text Styles
     textLeftAligned: {
-        textAlign: 'center',
+        textAlign: 'center'
     },
     textCenterAligned: {
-        textAlign: 'center',
+        textAlign: 'center'
     },
     textRightAligned: {
-        textAlign: 'right',
+        textAlign: 'right'
     },
 
     // Give me padding
     padding: {
         paddingVertical: Sizes.padding,
-        paddingHorizontal: Sizes.padding,
+        paddingHorizontal: Sizes.padding
     },
     paddingHorizontal: {
-        paddingHorizontal: Sizes.padding,
+        paddingHorizontal: Sizes.padding
     },
     paddingLeft: {
-        paddingLeft: Sizes.padding,
+        paddingLeft: Sizes.padding
     },
     paddingRight: {
-        paddingRight: Sizes.padding,
+        paddingRight: Sizes.padding
     },
     paddingVertical: {
-        paddingVertical: Sizes.padding,
+        paddingVertical: Sizes.padding
     },
     paddingTop: {
-        paddingTop: Sizes.padding,
+        paddingTop: Sizes.padding
     },
     paddingBottom: {
-        paddingBottom: Sizes.padding,
+        paddingBottom: Sizes.padding
     },
     paddingSml: {
         paddingVertical: Sizes.paddingSml,
-        paddingHorizontal: Sizes.paddingSml,
+        paddingHorizontal: Sizes.paddingSml
     },
     paddingHorizontalSml: {
-        paddingHorizontal: Sizes.paddingSml,
+        paddingHorizontal: Sizes.paddingSml
     },
     paddingLeftSml: {
-        paddingLeft: Sizes.paddingSml,
+        paddingLeft: Sizes.paddingSml
     },
     paddingRightSml: {
-        paddingRight: Sizes.paddingSml,
+        paddingRight: Sizes.paddingSml
     },
     paddingVerticalSml: {
-        paddingVertical: Sizes.paddingSml,
+        paddingVertical: Sizes.paddingSml
     },
     paddingTopSml: {
-        paddingTop: Sizes.paddingSml,
+        paddingTop: Sizes.paddingSml
     },
     paddingBottomSml: {
-        paddingBottom: Sizes.paddingSml,
+        paddingBottom: Sizes.paddingSml
     },
 
     // General HTML-like Elements
@@ -188,80 +188,79 @@ export default {
         borderBottomWidth: 1,
         borderBottomColor: '#cbd9dc',
         height: 1,
-        backgroundColor: 'transparent',
+        backgroundColor: 'transparent'
     },
 
     // Grid
     row: {
         left: 0,
         right: 0,
-        flexDirection: 'row',
+        flexDirection: 'row'
     },
     flex1: {
-        flex: 1,
+        flex: 1
     },
     flex2: {
-        flex: 2,
+        flex: 2
     },
     flex3: {
-        flex: 3,
+        flex: 3
     },
     flex4: {
-        flex: 4,
+        flex: 4
     },
     flex5: {
-        flex: 5,
+        flex: 5
     },
     flex6: {
-        flex: 6,
+        flex: 6
     },
 
     // Navbar
     navbar: {
         backgroundColor: '#FCFCFA',
         borderBottomWidth: 0,
-        height:Sizes.navbarHeight,
+        height: Sizes.navbarHeight
     },
     navbarTitle: {
         color: '#364150',
         fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size * 1.1,
+        fontSize: Fonts.base.size * 1.1
     },
     navbarButton: {
-        tintColor: '#ffffff',
+        tintColor: '#ffffff'
     },
 
     // TabBar
     tabbar: {
-        backgroundColor: Colors.tabbar.background,
+        backgroundColor: Colors.tabbar.background
         // borderTopColor: Colors.border,
         // borderTopWidth: 1,
     },
 
-
-    fullImage:{
+    fullImage: {
         width: Sizes.screen.width,
-        height:Sizes.screen.height,
-        resizeMode: 'cover',
+        height: Sizes.screen.height,
+        resizeMode: 'cover'
     },
 
-    overlayImage:{
-        flex:1,
+    overlayImage: {
+        flex: 1,
         width: Sizes.screen.width,
         maxHeight: Sizes.screen.height - 60,
-        marginTop:50,
-        resizeMode: 'contain',
+        marginTop: 50,
+        resizeMode: 'contain'
     },
 
     overlayHeader: {
-        flex:1,
-        flexDirection:'row',
+        flex: 1,
+        flexDirection: 'row',
         position: 'absolute',
-        zIndex:2,
+        zIndex: 2,
         top: 0,
         left: 0,
         width: Sizes.screen.width,
-        padding:10,
-    },
+        padding: 10
+    }
 
 };

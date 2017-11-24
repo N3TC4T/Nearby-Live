@@ -2,10 +2,10 @@
  * App Navigation
  */
 import React from 'react';
-import { Actions, Scene, ActionConst } from 'react-native-router-flux';
+import {Actions, Scene, ActionConst} from 'react-native-router-flux';
 
 // Consts and Libs
-import { AppConfig } from '@constants/';
+import {AppConfig} from '@constants/';
 
 // Containers
 import AppLaunch from '@containers/launch/LaunchContainer';
@@ -16,20 +16,20 @@ import TabsScenes from './tabs';
 import SubScenes from './sub-scenes';
 
 /* Routes ==================================================================== */
-export default Actions.create(
-    <Scene key={'root'} {...AppConfig.navbarProps}>
+const route = () => (
+    <Scene key='root' {...AppConfig.navbarProps}>
         <Scene
             hideNavBar
-            key={'splash'}
+            key='splash'
             component={AppLaunch}
-            analyticsDesc={'AppLaunch: Launching App'}
+            analyticsDesc='AppLaunch: Launching App'
         />
 
         {/* Auth */}
         {AuthScenes}
 
         {/* Main App */}
-        <Scene key={'app'} {...AppConfig.navbarProps} hideNavBar type={ActionConst.RESET}>
+        <Scene key='app' {...AppConfig.navbarProps} hideNavBar type={ActionConst.RESET}>
             {/* Tabbar */}
             {TabsScenes}
 
@@ -37,5 +37,7 @@ export default Actions.create(
             {SubScenes}
         </Scene>
 
-    </Scene>,
+    </Scene>
 );
+
+export default Actions.create(route());

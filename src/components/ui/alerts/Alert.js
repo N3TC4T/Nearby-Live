@@ -1,28 +1,20 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import {
     Animated,
-    InteractionManager,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableHighlight,
     TouchableOpacity,
-    View,
     ViewPropTypes
-} from 'react-native'
+} from 'react-native';
 
 import PropTypes from 'prop-types';
 
 import RootSiblings from 'react-native-root-siblings';
 
-
-
-let BAR_HEIGHT = 18
-let BACKGROUND_COLOR = '#3DD84C'
-let TOUCHABLE_BACKGROUND_COLOR = '#3DD84C'
-const SLIDE_DURATION = 300
-const ACTIVE_OPACITY = 0.6
-const SATURATION = 0.9
+const BAR_HEIGHT = 18;
+let BACKGROUND_COLOR = '#3DD84C';
+let TOUCHABLE_BACKGROUND_COLOR = '#3DD84C';
+const SLIDE_DURATION = 300;
+const ACTIVE_OPACITY = 0.6;
+const SATURATION = 0.9;
 
 const durations = {
     LONG: 3500,
@@ -30,10 +22,10 @@ const durations = {
 };
 
 const types = {
-    ERROR:'error',
-    SUCCESS:'success',
-    INFO:'info'
-}
+    ERROR: 'error',
+    SUCCESS: 'success',
+    INFO: 'info'
+};
 
 const styles = {
     view: {
@@ -41,11 +33,11 @@ const styles = {
         bottom: 0,
         right: 0,
         left: 0,
-        position:'absolute'
+        position: 'absolute'
     },
     touchableOpacity: {
         flex: 1,
-        justifyContent: 'flex-end',
+        justifyContent: 'flex-end'
     },
     text: {
         height: BAR_HEIGHT,
@@ -55,64 +47,61 @@ const styles = {
         fontWeight: '400',
         lineHeight: 15,
         textAlign: 'center',
-        color: 'white',
+        color: 'white'
     }
-}
-
+};
 
 function saturate(color, percent) {
-    let R = parseInt(color.substring(1, 3), 16)
-    let G = parseInt(color.substring(3, 5), 16)
-    let B = parseInt(color.substring(5, 7), 16)
-    R = parseInt(R * percent)
-    G = parseInt(G * percent)
-    B = parseInt(B * percent)
-    R = (R < 255) ? R : 255
-    G = (G < 255) ? G : 255
-    B = (B < 255) ? B : 255
-    let r = ((R.toString(16).length == 1) ? '0' + R.toString(16) : R.toString(16))
-    let g = ((G.toString(16).length == 1) ? '0' + G.toString(16) : G.toString(16))
-    let b = ((B.toString(16).length == 1) ? '0' + B.toString(16) : B.toString(16))
-    return `#${r + g + b}`
+    let R = parseInt(color.substring(1, 3), 16);
+    let G = parseInt(color.substring(3, 5), 16);
+    let B = parseInt(color.substring(5, 7), 16);
+    R = parseInt(R * percent);
+    G = parseInt(G * percent);
+    B = parseInt(B * percent);
+    R = (R < 255) ? R : 255;
+    G = (G < 255) ? G : 255;
+    B = (B < 255) ? B : 255;
+    const r = ((R.toString(16).length === 1) ? `0${R.toString(16)}` : R.toString(16));
+    const g = ((G.toString(16).length === 1) ? `0${G.toString(16)}` : G.toString(16));
+    const b = ((B.toString(16).length === 1) ? `0${B.toString(16)}` : B.toString(16));
+    return `#${r + g + b}`;
 }
 
-
-
+// Todo: Move component to another file
 class AlertContainer extends Component {
-
     static propTypes = {
         ...ViewPropTypes,
         duration: PropTypes.number,
         delay: PropTypes.number,
         visible: PropTypes.bool,
-        type: PropTypes.string,
+        type: PropTypes.string
     };
 
     static defaultProps = {
         visible: false,
         duration: durations.LONG,
-        type: types.SUCCESS,
+        type: types.SUCCESS
     };
 
     constructor(props) {
-        super(props)
+        super(props);
 
         this.state = {
             visible: this.props.visible,
             height: new Animated.Value(0),
-            opacity: new Animated.Value(0),
-        }
+            opacity: new Animated.Value(0)
+        };
 
-        this.timer = null
+        this.timer = null;
     }
 
-    componentDidMount () {
+    componentDidMount() {
         if (this.state.visible) {
             this._showTimeout = setTimeout(() => this._show(), this.props.delay);
         }
     }
 
-    componentWillReceiveProps = nextProps => {
+    componentWillReceiveProps = (nextProps) => {
         if (nextProps.visible !== this.props.visible) {
             if (nextProps.visible) {
                 clearTimeout(this._showTimeout);
@@ -128,15 +117,11 @@ class AlertContainer extends Component {
         }
     };
 
-
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._hide();
-    };
+    }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        return this.state.visible !== nextState.visible;
-    };
-
+    shouldComponentUpdate = (nextProps, nextState) => this.state.visible !== nextState.visible;
 
     _animating = false;
     _root = null;
@@ -151,6 +136,8 @@ class AlertContainer extends Component {
             this._root.setNativeProps({
                 pointerEvents: 'auto'
             });
+            // requestAnimationFrame is a global function
+            // eslint-disable-next-line no-undef
             requestAnimationFrame(() => {
                 Animated.parallel([
                     Animated.timing(
@@ -158,14 +145,14 @@ class AlertContainer extends Component {
                         {
                             toValue: BAR_HEIGHT * 2,
                             duration: SLIDE_DURATION
-                        }
+                        },
                     ),
                     Animated.timing(
                         this.state.opacity,
                         {
                             toValue: 1,
                             duration: SLIDE_DURATION
-                        }
+                        },
                     )
                 ]).start(({finished}) => {
                     if (finished) {
@@ -175,11 +162,9 @@ class AlertContainer extends Component {
                         }
                     }
                 });
-            })
-
+            });
         }
     };
-
 
     _hide = () => {
         clearTimeout(this._showTimeout);
@@ -189,6 +174,8 @@ class AlertContainer extends Component {
                 pointerEvents: 'none'
             });
 
+            // requestAnimationFrame is a global function
+            // eslint-disable-next-line no-undef
             requestAnimationFrame(() => {
                 Animated.parallel([
                     Animated.timing(
@@ -196,62 +183,60 @@ class AlertContainer extends Component {
                         {
                             toValue: 0,
                             duration: SLIDE_DURATION
-                        }
+                        },
                     ),
                     Animated.timing(
                         this.state.opacity,
                         {
                             toValue: 0,
                             duration: SLIDE_DURATION
-                        }
+                        },
                     )
                 ]).start(({finished}) => {
                     if (finished) {
                         this._animating = false;
                     }
                 });
-            })
+            });
         }
     };
 
-
     render() {
-        let {props} =  this;
-        let alertType = props.type;
-
+        const {props} = this;
+        const alertType = props.type;
 
         if (alertType === 'error') {
-            BACKGROUND_COLOR = '#C02827'
-            TOUCHABLE_BACKGROUND_COLOR = '#FB6567'
+            BACKGROUND_COLOR = '#C02827';
+            TOUCHABLE_BACKGROUND_COLOR = '#FB6567';
         } else if (alertType === 'success') {
-            BACKGROUND_COLOR = '#3CC29E'
-            TOUCHABLE_BACKGROUND_COLOR = '#59DC9A'
+            BACKGROUND_COLOR = '#3CC29E';
+            TOUCHABLE_BACKGROUND_COLOR = '#59DC9A';
         } else if (alertType === 'info') {
-            BACKGROUND_COLOR = '#3b6976'
-            TOUCHABLE_BACKGROUND_COLOR = '#8EDBE5'
+            BACKGROUND_COLOR = '#3b6976';
+            TOUCHABLE_BACKGROUND_COLOR = '#8EDBE5';
         }
 
         return (this.state.visible || this._animating) ? <Animated.View
             style={[styles.view, {
-                            height: this.state.height,
-                            opacity: this.state.opacity,
-                            backgroundColor: saturate(BACKGROUND_COLOR, SATURATION)
-              }]}
-            pointerEvents="none"
-            ref={ele => this._root = ele}
+                height: this.state.height,
+                opacity: this.state.opacity,
+                backgroundColor: saturate(BACKGROUND_COLOR, SATURATION)
+            }]}
+            pointerEvents='none'
+            ref={ (ele) => {this._root = ele;}}
         >
             <TouchableOpacity
                 style={[styles.touchableOpacity, {
-                               backgroundColor: saturate(TOUCHABLE_BACKGROUND_COLOR, SATURATION)
-                             }]}
+                    backgroundColor: saturate(TOUCHABLE_BACKGROUND_COLOR, SATURATION)
+                }]}
                 onPress={this.props.onPress}
                 activeOpacity={ACTIVE_OPACITY}
             >
                 <Animated.Text
                     style={[styles.text, {
-                                     color: styles.text.color,
-                                     opacity: 1
-                                }]}
+                        color: styles.text.color,
+                        opacity: 1
+                    }]}
                     allowFontScaling={false}
                 >
                     {this.props.children}
@@ -259,10 +244,7 @@ class AlertContainer extends Component {
             </TouchableOpacity>
         </Animated.View> : null;
     }
-
-
 }
-
 
 class Alert extends Component {
     static displayName = 'Alert';
@@ -270,48 +252,46 @@ class Alert extends Component {
     static types = types;
     static durations = durations;
 
-    static show = (message, options = {type: types.SUCCESS, duration: durations.LONG}) => {
-        return new RootSiblings(<AlertContainer
+    static show = (message, options = {type: types.SUCCESS, duration: durations.LONG}) =>
+        new RootSiblings(<AlertContainer
             {...options}
-            visible={true}
+            visible
         >
             {message}
         </AlertContainer>);
-    };
 
-    static hide = toast => {
+    static hide = (alert) => {
         if (alert instanceof RootSiblings) {
             alert.destroy();
         } else {
-            console.warn(`Alert.hide expected a \`RootSiblings\` instance as argument.\nBut got \`${typeof alert}\` instead.`);
+            console.warn('Alert.hide expected a `RootSiblings` instance as argument.');
         }
     };
 
-    _alert = null;
-
-    componentWillMount () {
+    componentWillMount() {
         this._alert = new RootSiblings(<AlertContainer
             {...this.props}
             duration={0}
         />);
-    };
+    }
 
-    componentWillReceiveProps = nextProps => {
+    componentWillReceiveProps = (nextProps) => {
         this._toast.update(<AlertContainer
             {...nextProps}
             duration={0}
         />);
     };
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._alert.destroy();
-    };
+    }
+
+    _alert = null;
 
     render() {
         return null;
     }
 }
-
 
 export default Alert;
 

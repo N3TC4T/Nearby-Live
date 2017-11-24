@@ -15,10 +15,10 @@ export default {
     missingStreamSection: 'Missing Stream section',
     missingPostID: 'Missing post id',
 
-    //Conversations
+    // Conversations
     missingConversationID: 'Missing conversation id',
 
-    //Notifications
-    notifications404: 'There are no notification to show.',
+    // Notifications
+    notifications404: 'There are no notification to show.'
 
 };

@@ -4,23 +4,21 @@
 
 import AppAPI from '@lib/api';
 
-
-export function getSystemNotifications(startFrom) {
+export default function getSystemNotifications(startFrom) {
     return (dispatch) => {
-        let latest = false
+        let latest = false;
 
-        startFrom == -1 ? latest = true: null
+        if (startFrom === -1) {
+            latest = true;
+        }
 
-        return AppAPI.notifications.get({last: startFrom, latest: latest})
+        return AppAPI.notifications.get({last: startFrom, latest})
             .then((res) => {
                 dispatch({
                     type: 'SYSTEM_NOTIFICATIONS_UPDATE',
-                    data: res,
+                    data: res
                 });
-
-            })
+            });
     };
 }
-
-
 

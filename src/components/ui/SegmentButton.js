@@ -6,13 +6,13 @@ import {
     StyleSheet,
     ViewPropTypes,
     TouchableHighlight,
-    Platform,
+    Platform
 } from 'react-native';
 
-import { Text } from '@ui/'
-import { AppColors } from '@theme/';
+import {Text} from '@ui/';
+import {AppColors} from '@theme/';
 
-const ButtonGroup = props => {
+const ButtonGroup = (props) => {
     const {
         component,
         buttons,
@@ -40,69 +40,67 @@ const ButtonGroup = props => {
             style={[styles.container, containerStyle && containerStyle]}
             {...attributes}
         >
-            {buttons.map((button, i) => {
-                return (
-                    <Component
-                        activeOpacity={activeOpacity}
-                        setOpacityTo={setOpacityTo}
-                        onHideUnderlay={onHideUnderlay}
-                        onShowUnderlay={onShowUnderlay}
-                        underlayColor={underlayColor || '#ffffff'}
-                        onPress={onPress ? () => onPress(i) : () => {}}
-                        key={i}
-                        style={[
-              styles.button,
-              i < buttons.length - 1 && {
-                borderRightWidth: (innerBorderStyle &&
+            {buttons.map((button, i) => (
+                <Component
+                    activeOpacity={activeOpacity}
+                    setOpacityTo={setOpacityTo}
+                    onHideUnderlay={onHideUnderlay}
+                    onShowUnderlay={onShowUnderlay}
+                    underlayColor={underlayColor || '#ffffff'}
+                    onPress={onPress ? () => onPress(i) : () => {}}
+                    key={i}
+                    style={[
+                        styles.button,
+                        i < buttons.length - 1 && {
+                            borderRightWidth: (innerBorderStyle &&
                   innerBorderStyle.width) ||
                   1,
-                borderRightColor: (innerBorderStyle &&
+                            borderRightColor: (innerBorderStyle &&
                   innerBorderStyle.color) ||
-                  AppColors.segmentButton.borderColor,
-              },
-              i === buttons.length - 1 && {
-                ...lastBorderStyle,
-                borderTopRightRadius: containerBorderRadius || 3,
-                borderBottomRightRadius: containerBorderRadius || 3,
-              },
-              i === 0 && {
-                borderTopLeftRadius: containerBorderRadius || 3,
-                borderBottomLeftRadius: containerBorderRadius || 3,
-              },
-              selectedIndex === i && {
-                backgroundColor: selectedBackgroundColor || AppColors.segmentButton.selectedBackground,
-              },
-            ]}
-                    >
-                        <View style={[styles.textContainer, buttonStyle && buttonStyle]}>
-                            {button.element
-                                ? <button.element />
-                                : <Text
-                                style={[
-                      styles.buttonText,
-                      textStyle && textStyle,
-                      selectedIndex === i && { color: AppColors.segmentButton.selectedTextColor },
-                      selectedIndex === i && selectedTextStyle,
+                  AppColors.segmentButton.borderColor
+                        },
+                        i === buttons.length - 1 && {
+                            ...lastBorderStyle,
+                            borderTopRightRadius: containerBorderRadius || 3,
+                            borderBottomRightRadius: containerBorderRadius || 3
+                        },
+                        i === 0 && {
+                            borderTopLeftRadius: containerBorderRadius || 3,
+                            borderBottomLeftRadius: containerBorderRadius || 3
+                        },
+                        selectedIndex === i && {
+                            backgroundColor: selectedBackgroundColor || AppColors.segmentButton.selectedBackground
+                        }
                     ]}
+                >
+                    <View style={[styles.textContainer, buttonStyle && buttonStyle]}>
+                        {button.element
+                            ? <button.element />
+                            : <Text
+                                style={[
+                                    styles.buttonText,
+                                    textStyle && textStyle,
+                                    selectedIndex === i && {color: AppColors.segmentButton.selectedTextColor},
+                                    selectedIndex === i && selectedTextStyle
+                                ]}
                             >
                                 {button}
                             </Text>}
-                        </View>
-                    </Component>
-                );
-            })}
+                    </View>
+                </Component>
+            ))}
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     button: {
-        flex: 1,
+        flex: 1
     },
     textContainer: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     container: {
         marginLeft: 10,
@@ -115,17 +113,17 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         overflow: 'hidden',
         backgroundColor: AppColors.segmentButton.background,
-        height: 25,
+        height: 25
     },
     buttonText: {
         fontSize: 11,
         color: AppColors.segmentButton.textColor,
         ...Platform.select({
             ios: {
-                fontWeight: '500',
-            },
-        }),
-    },
+                fontWeight: '500'
+            }
+        })
+    }
 });
 
 ButtonGroup.propTypes = {
@@ -144,15 +142,15 @@ ButtonGroup.propTypes = {
     setOpacityTo: PropTypes.any,
     innerBorderStyle: PropTypes.shape({
         color: PropTypes.string,
-        width: PropTypes.number,
+        width: PropTypes.number
     }),
     lastBorderStyle: PropTypes.oneOfType([
         ViewPropTypes.style,
-        NativeText.propTypes.style,
+        NativeText.propTypes.style
     ]),
     buttonStyle: ViewPropTypes.style,
     selectedBackgroundColor: PropTypes.string,
-    containerBorderRadius: PropTypes.number,
+    containerBorderRadius: PropTypes.number
 };
 
 export default ButtonGroup;

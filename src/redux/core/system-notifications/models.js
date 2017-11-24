@@ -1,24 +1,21 @@
-import { ORM } from "redux-orm";
-import { attr , Model} from 'redux-orm';
-
+import {ORM, attr, Model} from 'redux-orm';
 
 /* Models  ==================================================================== */
 
 export class Notification extends Model {
-
     toString() {
         return `Notification : ${this.txt}`;
     }
 
     static get fields() {
         return {
-            id:attr(),
-            type:attr(),
-            new:attr(),
-            param:attr(),
-            date:attr(),
-            txt:attr(),
-            img:attr(),
+            id: attr(),
+            type: attr(),
+            new: attr(),
+            param: attr(),
+            date: attr(),
+            txt: attr(),
+            img: attr()
         };
     }
 
@@ -27,7 +24,7 @@ export class Notification extends Model {
     }
 
     static get options() {
-        return{
+        return {
             idAttribute: 'id'
         };
     }

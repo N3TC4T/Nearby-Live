@@ -1,5 +1,5 @@
 const initialState = {
-    connectionStatus:'DISCONNECTED',
+    connectionStatus: 'DISCONNECTED'
 };
 
 export default function socketReducer(state = initialState, action) {
@@ -7,12 +7,12 @@ export default function socketReducer(state = initialState, action) {
         case 'SOCKET_CONNECTED':
             return {
                 ...state,
-                connectionStatus:'CONNECTED'
+                connectionStatus: 'CONNECTED'
             };
         case 'SOCKET_DISCONNECTED':
             return {
                 ...state,
-                connectionStatus:'DISCONNECTED'
+                connectionStatus: 'DISCONNECTED'
             };
         default:
             return state;

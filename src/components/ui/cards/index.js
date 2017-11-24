@@ -5,4 +5,4 @@
 import PostCard from './PostCard';
 import CommentCard from './CommentCard';
 
-export { PostCard, CommentCard };
+export {PostCard, CommentCard};

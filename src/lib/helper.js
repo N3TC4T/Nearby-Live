@@ -1,23 +1,22 @@
-import { AsyncStorage } from 'react-native';
-import RNFetchBlob from 'react-native-fetch-blob'
+/* eslint no-undef: "off" */
 
-import { APIConfig } from '@constants/'
+import RNFetchBlob from 'react-native-fetch-blob';
 
+import {APIConfig} from '@constants/';
 
-
-
-export const imageUploader = (imageUri) => {
-    AsyncStorage.getItem('api/token').then((res) => {const apiToken = res});
+export default function imageUploader(imageUri) {
+    const apiToken = AsyncStorage.getItem('api/token').then(res => res);
 
     RNFetchBlob.fs.exists(imageUri)
         .then((exist) => {
-            !exist || !apiToken ?  reject() : null
+            if (!exist || !apiToken) {
+                reject();
+            }
         })
-        .catch(() => { return reject()})
+        .catch(() => reject());
 
-    return RNFetchBlob.fetch('POST', APIConfig.apiUrl + '/upload-image.ashx', {
+    return RNFetchBlob.fetch('POST', `${APIConfig.apiUrl}/upload-image.ashx`, {
         'Content-Type': 'jpg/jpeg',
-        'X-AUTH-TOKEN' : apiToken
-    }, RNFetchBlob.wrap(imageUri))
-
+        'X-AUTH-TOKEN': apiToken
+    }, RNFetchBlob.wrap(imageUri));
 }

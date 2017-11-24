@@ -2,48 +2,50 @@
  * Post View Screen
  *  - The individual post screen
  */
-import moment from "moment";
+import moment from 'moment';
 
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
     StyleSheet,
+    ViewPropTypes,
     TouchableWithoutFeedback,
     Animated,
-    PanResponder,
-    Image,
     View,
     TouchableOpacity,
     Clipboard
-} from "react-native";
+} from 'react-native';
 
 // Actions
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 
 // Consts and Libs
-import {AppSizes, AppColors, AppStyles, AppFonts} from "@theme/";
-import { AppConfig } from '@constants/'
-import { getImageURL } from "@lib/util";
+import {AppSizes, AppColors, AppStyles, AppFonts} from '@theme/';
+import {AppConfig} from '@constants/';
+import {getImageURL} from '@lib/util';
 
 // Components
-import {Image as ImageViewer, Avatar, Badge, Text, Icon} from "@ui/";
-import { Toast } from "@ui/alerts/";
+import {Image as ImageViewer, Avatar, Badge, Text, Icon} from '@ui/';
+import {Toast} from '@ui/alerts/';
 
+// Todo: Move component to another file
 /* Component ==================================================================== */
 class AnimatedLike extends Component {
     static propTypes = {
         onPress: PropTypes.func,
-        liked : PropTypes.bool,
-        count: PropTypes.number
+        liked: PropTypes.bool,
+        count: PropTypes.number,
+        style: ViewPropTypes.style
     };
 
     static defaultProps = {
         liked: false,
-        count: 0
+        count: 0,
+        style: {}
     };
 
-    constructor (props) {
-        super( props);
+    constructor(props) {
+        super(props);
 
         this.state = {
             scale: new Animated.Value(1),
@@ -54,9 +56,9 @@ class AnimatedLike extends Component {
 
     _onPress = () => {
         this.setState({
-            liked:true,
-            count : this.state.liked ? this.state.count : this.state.count + 1
-        })
+            liked: true,
+            count: this.state.liked ? this.state.count : this.state.count + 1
+        });
 
         Animated.timing(
             this.state.scale,
@@ -76,157 +78,162 @@ class AnimatedLike extends Component {
                     duration: 200
                 },
             ).start();
-        }, 50)
+        }, 50);
 
         if (this.props.onPress) {
             this.props.onPress();
         }
     }
 
-    render () {
+    render() {
         return (
 
-                <TouchableWithoutFeedback onPress={this._onPress}>
-                    <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                        <Animated.View
-                            style={[{transform: [ {scale: this.state.scale }]}, this.props.style]}
-                        >
-                            <Icon size={20} color={this.state.liked ? '#E05641' : '#A9AFB5'} type={'material-icons'} name={this.state.liked ? 'favorite' : 'favorite-border'} />
-                        </Animated.View>
-                    </View>
-                </TouchableWithoutFeedback>
+            <TouchableWithoutFeedback onPress={this._onPress}>
+                <View style={[AppStyles.row, AppStyles.centerAligned]}>
+                    <Animated.View
+                        style={[{transform: [{scale: this.state.scale}]}, this.props.style]}
+                    >
+                        <Icon size={20} color={this.state.liked ? '#E05641' : '#A9AFB5'} type='material-icons' name={this.state.liked ? 'favorite' : 'favorite-border'} />
+                    </Animated.View>
+                </View>
+            </TouchableWithoutFeedback>
 
         );
     }
 }
 
-
-
-
 /* Component ==================================================================== */
 class PostCard extends Component {
     static componentName = 'PostCard';
 
-
     static contextTypes= {
-        actionSheet: PropTypes.func,
+        actionSheet: PropTypes.func
     };
-
 
     static propTypes = {
         post: PropTypes.object.isRequired,
         reportable: PropTypes.bool.isRequired,
         deletable: PropTypes.bool.isRequired,
-        featureAble:PropTypes.bool.isRequired,
+        featureAble: PropTypes.bool.isRequired,
         onPressLike: PropTypes.func.isRequired,
         onPressDelete: PropTypes.func.isRequired,
         onPressFeature: PropTypes.func.isRequired,
         onPressReport: PropTypes.func.isRequired,
         onPressWatch: PropTypes.func.isRequired,
-        onPressUnWatch: PropTypes.func.isRequired,
+        onPressUnWatch: PropTypes.func.isRequired
     };
 
-
-    shouldComponentUpdate(nextProps, nextState){
-        return this.props.post != nextProps.post
+    shouldComponentUpdate(nextProps) {
+        return this.props.post !== nextProps.post;
     }
 
     _onPressWatch = () => {
-        const { post, onPressWatch, onPressUnWatch } = this.props
+        const {post, onPressWatch, onPressUnWatch} = this.props;
 
         if (post.w) {
-            onPressUnWatch(post.id)
+            onPressUnWatch(post.id);
             Toast.show('Post Unwatched!', {
                 shadow: true,
                 animation: true,
-                hideOnPress: true,
-            })
-        }else {
+                hideOnPress: true
+            });
+        } else {
             Toast.show('Post Watched!', {
                 shadow: true,
                 animation: true,
-                hideOnPress: true,
-            })
-            onPressWatch(post.id)
+                hideOnPress: true
+            });
+            onPressWatch(post.id);
         }
-
     }
 
     _onPressFeature = () => {
-        const  {post, featureAble,  onPressFeature } = this.props
+        const {post, featureAble, onPressFeature} = this.props;
 
-        if ( !featureAble ){
+        if (!featureAble) {
             Toast.show('You need at least one point to feature this posts', {
                 shadow: true,
                 animation: true,
-                hideOnPress: true,
-            })
-        }else{
-            onPressFeature(post.id)
+                hideOnPress: true
+            });
+        } else {
+            onPressFeature(post.id);
         }
-
     }
 
     _onPressLike = async() => {
-        const { post , onPressLike} = this.props;
+        const {post, onPressLike} = this.props;
 
-        if (!post.gp){
-            onPressLike(post.id, post.pid)
+        if (!post.gp) {
+            onPressLike(post.id, post.pid);
         }
     };
 
-
     _onPressComments = () => {
-        const { post } = this.props;
+        const {post} = this.props;
 
         Actions.commentsView({
-            postID: post.id,
+            postID: post.id
         });
-
     };
 
     _onCopyPostURL= () => {
-        const { post } = this.props;
-        Clipboard.setString(AppConfig.urls.baseURL + 'post/' + post.id);
+        const {post} = this.props;
+        Clipboard.setString(`${AppConfig.urls.baseURL}post/${post.id}`);
 
         Toast.show('Success copied to clipboard', {
             shadow: true,
             animation: true,
-            hideOnPress: true,
+            hideOnPress: true
         });
-
     }
 
-
     _onPressAvatar = () => {
-        const { post } = this.props;
+        const {post} = this.props;
 
         Actions.userProfileView({
-            userID: post.pid,
+            userID: post.pid
         });
-
     };
 
     _onPressOption = () => {
+        const {
+            post, reportable, deletable, onPressDelete, onPressReport
+        } = this.props;
 
-        const { post , reportable, deletable, onPressDelete, onPressReport}  = this.props;
+        const options = ['Copy Post URL'];
 
-        let options = ['Copy Post URL'];
+        let watchIndex = 0;
+        let deleteIndex = 0;
+        let reportIndex = 0;
+        let featureIndex = 0;
+        let copyIndex = 0;
 
-        let watchIndex, deleteIndex , reportIndex, featureIndex, copyIndex = 0;
+        if (!post.featured) {
+            options[options.length] = 'Feature';
+            featureIndex = options.length - 1;
+        }
 
-        !post.featured ?  ( options[options.length] = 'Feature',  featureIndex = options.length - 1): null;
+        if (deletable) {
+            options[options.length] = 'Delete';
+            deleteIndex = options.length - 1;
+        }
 
-        deletable ? ( options[options.length] = 'Delete',  deleteIndex = options.length - 1) : null;
+        if (reportable) {
+            options[options.length] = 'Report';
+            reportIndex = options.length - 1;
+        }
 
-        reportable ? (options[options.length] = 'Report', reportIndex = options.length - 1) : null;
+        if (!post.w) {
+            options[options.length] = 'Turn On Post Notifications ';
+            watchIndex = options.length - 1;
+        } else {
+            options[options.length] = 'Turn Off Post Notifications' ;
+            watchIndex = options.length - 1;
+        }
 
-        !post.w ?
-            ( options[options.length] = 'Turn On Post Notifications ',  watchIndex = options.length - 1):
-            ( options[options.length] = 'Turn Off Post Notifications ',  watchIndex = options.length - 1);
-
-
-        this.context.actionSheet().showActionSheetWithOptions({
+        this.context.actionSheet().showActionSheetWithOptions(
+            {
                 options
             },
             (buttonIndex) => {
@@ -244,28 +251,29 @@ class PostCard extends Component {
                         onPressReport(post.id);
                         break;
                     case watchIndex:
-                        this._onPressWatch()
+                        this._onPressWatch();
+                        break;
+                    default:
+                        break;
                 }
-            });
+            },
+        );
     };
 
-
-
     renderContent = () => {
-        const { post } = this.props
+        const {post} = this.props;
 
-        let isGIF = false
+        let isGIF = false;
 
         // check if post content is gif
-        if (post.txt.split(/\n/)[0].endsWith('.gif') || ( post.txt.split(/\n/)[0].startsWith('http') && post.txt.split(/\n/)[0].startsWith('https')) ){
-            isGIF = true
-            this.gifURL = post.txt.split(/\n/)[0]
-            this.cleanText = post.txt.split(/\n/)[2]
+        if (post.txt.split(/\n/)[0].endsWith('.gif') || (post.txt.split(/\n/)[0].startsWith('http') && post.txt.split(/\n/)[0].startsWith('https'))) {
+            isGIF = true;
+            this.gifURL = post.txt.split(/\n/)[0];
+            this.cleanText = post.txt.split(/\n/)[2];
         }
 
-
-        if (isGIF){
-            return(
+        if (isGIF) {
+            return (
                 <View style={[styles.cardContent]}>
                     {!!this.cleanText &&
                     <View style={[AppStyles.row, styles.cardText]}>
@@ -274,78 +282,74 @@ class PostCard extends Component {
                     }
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
-                            containerStyle={{height:200}}
+                            containerStyle={{height: 200}}
                             disabled={false}
-                            source={{ uri: this.gifURL   }}
-                            doubleTapEnabled={true}
-                            onMove={(e, gestureState) => null}
-                            downloadable={true}
+                            source={{uri: this.gifURL}}
+                            doubleTapEnabled
+                            downloadable
                         />
                     </View>
                 </View>
-            )
-        }else{
-            return(
-                <View style={[styles.cardContent]}>
-                    {!!post.txt &&
-                        <View style={[AppStyles.row, styles.cardText]}>
-                            <Text style={[styles.postText]}>{post.txt}</Text>
-                        </View>
-                    }
-                    {!!post.img &&
+            );
+        }
+        return (
+            <View style={[styles.cardContent]}>
+                {!!post.txt &&
+                <View style={[AppStyles.row, styles.cardText]}>
+                    <Text style={[styles.postText]}>{post.txt}</Text>
+                </View>
+                }
+                {!!post.img &&
                     <View style={[AppStyles.row, styles.cardImage]}>
                         <ImageViewer
-                            containerStyle={{height:200}}
+                            containerStyle={{height: 200}}
                             disabled={false}
-                            source={{ uri: getImageURL(post.img)  }}
-                            doubleTapEnabled={true}
-                            onMove={(e, gestureState) => null}
-                            downloadable={true}
+                            source={{uri: getImageURL(post.img)}}
+                            doubleTapEnabled
+                            downloadable
                         />
                     </View>
-                    }
-                </View>
-            )
-        }
-
+                }
+            </View>
+        );
     }
 
     render = () => {
-        const { post } = this.props;
+        const {post} = this.props;
 
         return (
             <View style={[styles.container, styles.card]}>
                 {!post.reported ? (
                     <View>
                         <View style={[styles.cardHeader, AppStyles.row]}>
-                            {!!post.pImg ? (
+                            {post.pImg ? (
                                 <Avatar
-                                    source={{ uri: getImageURL(post.pImg, true) }}
+                                    source={{uri: getImageURL(post.pImg, true)}}
                                     imgKey={post.pImg}
                                     onPress={this._onPressAvatar}
                                 />
                             ) : (
                                 <Avatar
-                                    source={{ uri: getImageURL() }}
+                                    source={{uri: getImageURL()}}
                                     onPress={this._onPressAvatar}
                                 />
                             )}
 
                             <View style={[styles.postHeaderContainer]}>
                                 <View style={[AppStyles.row]}>
-                                    {/*user name*/}
+                                    {/* user name */}
                                     <Text style={[styles.usernameText]} onPress={this._onPressAvatar}>{post.name}</Text>
 
-                                    {/*user badge*/}
-                                    {!!post.ul && <Badge type={post.ul}/> }
+                                    {/* user badge */}
+                                    {!!post.ul && <Badge type={post.ul} /> }
 
-                                    {/*user rank*/}
-                                    {post.ur != -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
+                                    {/* user rank */}
+                                    {post.ur !== -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
 
-                                    {/*post options right*/}
+                                    {/* post options right */}
                                     <View style={styles.postOptions}>
-                                        <TouchableOpacity  onPress={this._onPressOption}>
-                                            <Icon  size={20} color={'#bbbbbb'} name="dots-vertical" type="material-community"/>
+                                        <TouchableOpacity onPress={this._onPressOption}>
+                                            <Icon size={20} color='#bbbbbb' name='dots-vertical' type='material-community' />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -360,20 +364,20 @@ class PostCard extends Component {
 
                             <View style={[AppStyles.flex4]}>
                                 <View style={[AppStyles.row]}>
-                                        {post.pc !== 0 &&
-                                            <Text style={[AppStyles.paddingLeftSml,styles.cardActionText]}>{post.pc} Likes</Text>
-                                        }
-                                        {post.cc !== 0 &&
-                                            <Text style={[AppStyles.paddingLeftSml , styles.cardActionText]}>{post.cc} Comments</Text>
-                                        }
+                                    {post.pc !== 0 &&
+                                    <Text style={[AppStyles.paddingLeftSml, styles.cardActionText]}>{post.pc} Likes</Text>
+                                    }
+                                    {post.cc !== 0 &&
+                                    <Text style={[AppStyles.paddingLeftSml, styles.cardActionText]}>{post.cc} Comments</Text>
+                                    }
                                 </View>
                             </View>
 
                             <View style={AppStyles.flex1}>
-                                <View style={[AppStyles.row, {right:0}]}>
-                                    <TouchableOpacity  style={AppStyles.paddingRight} onPress={this._onPressComments}>
+                                <View style={[AppStyles.row, {right: 0}]}>
+                                    <TouchableOpacity style={AppStyles.paddingRight} onPress={this._onPressComments}>
                                         <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                                            <Icon size={18} color={'#A9AFB5'} type={'font-awesome'} name={'comment-o'}/>
+                                            <Icon size={18} color='#A9AFB5' type='font-awesome' name='comment-o' />
                                         </View>
                                     </TouchableOpacity>
 
@@ -385,12 +389,11 @@ class PostCard extends Component {
                                 </View>
                             </View>
 
-
                         </View>
                     </View>
                 ) : (
                     <View style={[AppStyles.row, styles.reportContainer]}>
-                        <Icon  size={40} color={'#FB6567'} name="info-outline"/>
+                        <Icon size={40} color='#FB6567' name='info-outline' />
                         <Text h5>Thanks for reporting this post !</Text>
                     </View>
                 )}
@@ -400,105 +403,103 @@ class PostCard extends Component {
     }
 }
 
-
 /* Component Styles ==================================================================== */
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
-        margin: 5,
+        margin: 5
     },
-    reportContainer:{
-        paddingTop:10,
-        paddingBottom:10,
-        paddingLeft:5,
+    reportContainer: {
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 5,
         justifyContent: 'flex-start',
         alignItems: 'center'
     },
     card: {
-        backgroundColor: "#fff",
+        backgroundColor: '#fff',
         borderRadius: 3,
-        shadowColor: "#000000",
+        shadowColor: '#000000',
         shadowOpacity: 0.3,
         shadowRadius: 1,
         shadowOffset: {
             height: 5,
-            width: 0.3,
+            width: 0.3
         }
     },
-    usernameText:{
-        color:AppColors.textCard,
+    usernameText: {
+        color: AppColors.textCard,
         fontFamily: AppFonts.base.familyBold,
-        fontSize:AppFonts.base.size * 0.9,
+        fontSize: AppFonts.base.size * 0.9
     },
     cardHeader: {
         padding: 10
     },
-    cardImage:{
+    cardImage: {
         alignItems: 'center',
         justifyContent: 'center',
-        borderWidth:0.5,
-        borderColor:'#e2e2e2',
-        backgroundColor:'#E9EBEE'
+        borderWidth: 0.5,
+        borderColor: '#e2e2e2',
+        backgroundColor: '#E9EBEE'
     },
     cardContent: {
-        paddingTop: 6,
+        paddingTop: 6
     },
     cardText: {
         paddingRight: 10,
         paddingLeft: 10,
-        paddingBottom: 20,
+        paddingBottom: 20
 
     },
     cardAction: {
-        padding:8,
-        paddingRight:3,
-        paddingLeft:5,
+        padding: 8,
+        paddingRight: 3,
+        paddingLeft: 5,
         flexDirection: 'row',
         alignItems: 'center',
-        borderWidth:0.3,
-        borderTopRightRadius:0,
-        borderTopLeftRadius:0,
-        borderRadius:5,
-        borderColor:'#b9b9b9'
+        borderWidth: 0.3,
+        borderTopRightRadius: 0,
+        borderTopLeftRadius: 0,
+        borderRadius: 5,
+        borderColor: '#b9b9b9'
 
     },
-    cardActionText:{
+    cardActionText: {
         color: AppColors.textSecondary,
-        fontSize: AppSizes.base * 0.9,
+        fontSize: AppSizes.base * 0.9
     },
     separator: {
         flex: 1,
         height: 1,
         backgroundColor: '#E9E9E9'
     },
-    posterLocation:{
-        color:'gray',
-        fontSize:10,
+    posterLocation: {
+        color: 'gray',
+        fontSize: 10
     },
-    posterRank:{
-        marginLeft:5,
-        color:'#828282',
-        fontSize:12,
-        paddingTop:2
+    posterRank: {
+        marginLeft: 5,
+        color: '#828282',
+        fontSize: 12,
+        paddingTop: 2
     },
-    postText:{
+    postText: {
         fontFamily: AppFonts.base.family,
         fontSize: AppFonts.base.size,
-        color:AppColors.textCard,
+        color: AppColors.textCard
     },
-    postOptions:{
+    postOptions: {
         position: 'absolute',
         top: 2,
-        bottom:2,
-        left: AppSizes.screen.width * 0.75,
+        bottom: 2,
+        left: AppSizes.screen.width * 0.75
     },
-    postHeaderContainer:{
-        paddingLeft:8
-    },
+    postHeaderContainer: {
+        paddingLeft: 8
+    }
 });
-
 
 /* Export Component ==================================================================== */
 export default PostCard;

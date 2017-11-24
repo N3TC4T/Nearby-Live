@@ -1,24 +1,20 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
     View,
     SectionList,
-    RefreshControl,
-    InteractionManager,
+    InteractionManager
 } from 'react-native';
 
 import ActionSheet from '@expo/react-native-action-sheet';
 
-
 // Consts and Libs
-import { AppColors, AppStyles, AppSizes } from '@theme/';
-import { ErrorMessages } from '@constants/';
+import {AppStyles} from '@theme/';
+import {ErrorMessages} from '@constants/';
 import AppAPI from '@lib/api';
 
-
 // Components
-import { PostCard } from '@ui/cards'
-import { SegmentButton } from '@ui/'
+import {PostCard} from '@ui/cards';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 
@@ -27,144 +23,149 @@ class PostsListing extends Component {
     static componentName = 'PostsListing';
 
     static propTypes = {
+        pid: PropTypes.string.isRequired,
         postsListing: PropTypes.array.isRequired,
-        getUserPosts: PropTypes.func,
+        getUserPosts: PropTypes.func.isRequired,
+        likePost: PropTypes.func.isRequired,
+        watchPost: PropTypes.func.isRequired,
+        unwatchPost: PropTypes.func.isRequired,
+        featurePost: PropTypes.func.isRequired,
+        deletePost: PropTypes.func.isRequired,
+        reportPost: PropTypes.func.isRequired,
+        user: PropTypes.object.isRequired
     };
 
     static childContextTypes = {
-        actionSheet: PropTypes.func,
+        actionSheet: PropTypes.func
     }
 
     constructor(props) {
         super(props);
 
         this.state = {
-            isRefreshing:true,
-            isLoadingMore:false,
-            sectionIndex:0,
-            error:null,
-            dataSource:null,
+            isRefreshing: true,
+            isLoadingMore: false,
+            sectionIndex: 0,
+            error: null,
+            dataSource: null
         };
 
-        this.state.dataSource = props.postsListing
-
+        this.state.dataSource = props.postsListing;
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.postsListing !== this.props.postsListing) {
-            this.setState({
-                dataSource: nextProps.postsListing,
-            })
-        }
+    getChildContext() {
+        return {
+            actionSheet: () => this.actionSheetRef
+        };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.fetchPosts(true, true);
         });
     }
 
-    getChildContext() {
-        return {
-            actionSheet: () => this._actionSheetRef,
-        };
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.postsListing !== this.props.postsListing) {
+            this.setState({
+                dataSource: nextProps.postsListing
+            });
+        }
     }
 
-    fetchPosts = async (reFetch = false, firstInit = false) => {
+    fetchPosts = async() => {
+        const {pid} = this.props;
 
-        const { pid } = this.props
+        const startFrom = -1;
 
-        reFetch ? startFrom = -1 : null
-
-        this.setState({ isRefreshing:true, error: null })
+        this.setState({isRefreshing: true, error: null});
 
         await this.props.getUserPosts(pid, startFrom)
             .then(() => {
                 this.setState({
                     isRefreshing: false,
-                    error: null,
+                    error: null
                 });
             }).catch((err) => {
                 const error = AppAPI.handleError(err);
                 this.setState({
                     isRefreshing: false,
-                    error,
+                    error
                 });
             });
     }
 
-    LoadMore =  () => {
+    LoadMore = () => {
+        const {isLoadingMore} = this.state;
 
-        const { isLoadingMore } = this.state ;
+        if (isLoadingMore) {return;} this.setState({isLoadingMore: true});
 
-        if ( isLoadingMore ) return; else this.setState({ isLoadingMore: true })
+        const {pid, postsListing} = this.props;
 
-        const { pid , postsListing } = this.props
+        const startFrom = postsListing[postsListing.length - 1].id;
 
-        let startFrom = postsListing[postsListing.length -1 ].id
-
-        this.props.getUserPosts(pid , startFrom)
+        this.props.getUserPosts(pid, startFrom)
             .then(() => {
                 this.setState({
-                    isLoadingMore: false ,
+                    isLoadingMore: false
                 });
             });
-
     }
 
-    renderItem = ({item})  => {
-        const { user ,likePost, watchPost , unwatchPost, featurePost, deletePost, reportPost } = this.props
+    renderItem = ({item}) => {
+        const {
+            user, likePost, watchPost, unwatchPost, featurePost, deletePost, reportPost
+        } = this.props;
         return (
             <PostCard
                 post={item}
-                reportable={ item.pid !== user.profile.id }
-                deletable={ item.pid == user.profile.id }
-                featureAble={ user.points.AvailablePoints > 0 }
-                onPressLike={ likePost }
-                onPressDelete={ deletePost }
-                onPressFeature={ featurePost }
-                onPressReport={ reportPost }
-                onPressWatch={ watchPost }
-                onPressUnWatch={ unwatchPost }
+                reportable={item.pid !== user.profile.id}
+                deletable={item.pid === user.profile.id}
+                featureAble={user.points.AvailablePoints > 0}
+                onPressLike={likePost}
+                onPressDelete={deletePost}
+                onPressFeature={featurePost}
+                onPressReport={reportPost}
+                onPressWatch={watchPost}
+                onPressUnWatch={unwatchPost}
             />
-        )
+        );
     }
 
-
     render = () => {
-        const { postsListing,  } = this.props;
-        const { isRefreshing, dataSource, sectionIndex } = this.state;
-
-        const sections = ['Recent', 'Following', 'Trending']
+        const {postsListing} = this.props;
+        const {
+            isRefreshing, dataSource, sectionIndex, error
+        } = this.state;
 
         if (isRefreshing && (!postsListing || postsListing.length < 1)) {
-            return <Loading text={'Loading User Posts...'} />
+            return <Loading text='Loading User Posts...' />;
         }
-
-
 
         // show error on empty feed
-        if (!isRefreshing && (!postsListing || postsListing.length < 1)) {
+        if ((!isRefreshing && (!postsListing || postsListing.length < 1)) || error) {
             return (
                 <View style={[AppStyles.container]}>
-                    <Error text={ErrorMessages.posts404} tryAgain={() => { this.fetchPosts(true) } }  />
+                    <Error
+                        text={ErrorMessages.posts404}
+                        tryAgain={() => { this.fetchPosts(true); }}
+                    />
                 </View>
-            )
+            );
         }
 
-
         return (
-            <ActionSheet ref={component => this._actionSheetRef = component}>
+            <ActionSheet ref={(component) => { this.actionSheetRef = component; }}>
                 <View style={[AppStyles.container]}>
                     <SectionList
-                        ref={(ref) => { this._sectionList = ref }}
+                        ref={(ref) => { this.sectionList = ref; }}
                         renderItem={this.renderItem}
                         sections={[
-                                {key: sectionIndex, data: dataSource},
-                              ]}
+                            {key: sectionIndex, data: dataSource}
+                        ]}
                         refreshing={isRefreshing}
                         initialNumToRender={5}
-                        onRefresh={() => {this.fetchPosts(true)}}
+                        onRefresh={() => { this.fetchPosts(true); }}
                         onEndReached={this.LoadMore}
                         onEndReachedThreshold={100}
                         keyExtractor={item => item.id}

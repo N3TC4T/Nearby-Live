@@ -4,31 +4,29 @@
  *  - Checking if user is logged in, and redirects from there
  *  - if logged in connect to websocket
  */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {
     View,
     Image,
     StatusBar,
-    StyleSheet,
-    ActivityIndicator,
+    StyleSheet
 } from 'react-native';
 
-import { Actions } from 'react-native-router-flux';
+import {Actions} from 'react-native-router-flux';
 
 // Consts and Libs
-import { AppStyles, AppSizes } from '@theme/';
-import { Text, Spacer } from '@ui/'
+import {AppStyles, AppSizes} from '@theme/';
 
 /* Styles ==================================================================== */
 const styles = StyleSheet.create({
     logo: {
         width: AppSizes.screen.width * 0.55,
-        resizeMode: 'contain',
+        resizeMode: 'contain'
     },
-    loadingText:{
-        color:'#fff'
+    loadingText: {
+        color: '#fff'
     }
 });
 
@@ -37,11 +35,10 @@ class AppLaunch extends Component {
     static componentName = 'AppLaunch';
 
     static propTypes = {
-        getLoginStatus: PropTypes.func.isRequired,
+        getLoginStatus: PropTypes.func.isRequired
     };
 
-
-    componentDidMount () {
+    componentDidMount() {
         // Show status bar on app launch
         StatusBar.setHidden(false, true);
 
@@ -49,16 +46,16 @@ class AppLaunch extends Component {
         this.props.getLoginStatus()
         // Logged in, show index screen
             .then((token) => {
-                Actions.app({ type: 'reset' })
+                Actions.app({type: 'reset'});
                 // connect to websocket
-                Actions.app({ type: 'CONNECT' , token:token})
+                Actions.app({type: 'CONNECT', token});
             })
             // Not Logged in, show Login screen
-            .catch(() => Actions.authenticate({ type: 'reset' }));
+            .catch(() => Actions.authenticate({type: 'reset'}));
     }
 
     render = () => (
-        <View style={[AppStyles.container,  AppStyles.containerCentered, {backgroundColor:'#232F3A'}]}>
+        <View style={[AppStyles.container, AppStyles.containerCentered, {backgroundColor: '#232F3A'}]}>
             <View style={[AppStyles.row, AppStyles.paddingHorizontal]}>
                 <View style={[AppStyles.flex1, AppStyles.containerCentered]}>
                     <Image

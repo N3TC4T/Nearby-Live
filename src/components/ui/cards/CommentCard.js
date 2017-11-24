@@ -1,20 +1,19 @@
-import moment from "moment";
+import moment from 'moment';
 
-import React, {Component} from "react";
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {
     StyleSheet,
-    Image,
-    View,
-} from 'react-native'
+    View
+} from 'react-native';
 
 // Consts and Libs
-import { AppSizes, AppColors, AppStyles, AppFonts } from '@theme/';
-import {  getImageURL } from "@lib/util";
+import {AppSizes, AppColors, AppStyles, AppFonts} from '@theme/';
+import {getImageURL} from '@lib/util';
 
 // Components
-import {Image as ImageViewer, Avatar, Badge, Text} from "@ui/"
+import {Image as ImageViewer, Avatar, Badge, Text} from '@ui/';
 
 /* Component ==================================================================== */
 class CommentCard extends Component {
@@ -22,25 +21,25 @@ class CommentCard extends Component {
 
     static propTypes = {
         comment: PropTypes.object.isRequired,
-        ownerId:PropTypes.string.isRequired,
+        ownerId: PropTypes.string.isRequired,
         onPressAvatar: PropTypes.func
     };
 
     render = () => {
-        const { comment, ownerId, onPressAvatar } = this.props;
+        const {comment, ownerId} = this.props;
 
         return (
             <View>
                 <View style={[AppStyles.flex1, styles.container]}>
                     <View style={[AppStyles.row]}>
-                        {!!comment.pImg ? (
+                        {comment.pImg ? (
                             <Avatar
-                                source={{ uri: getImageURL(comment.pImg, true) }}
+                                source={{uri: getImageURL(comment.pImg, true)}}
                                 imgKey={comment.pImg}
                             />
                         ) : (
                             <Avatar
-                                source={{ uri: getImageURL() }}
+                                source={{uri: getImageURL()}}
                             />
                         )}
 
@@ -48,8 +47,8 @@ class CommentCard extends Component {
                             <View style={[AppStyles.row]}>
                                 <Text style={[styles.commenterName]}>{comment.name}</Text>
                                 {comment.pid === ownerId &&
-                                <View style={{marginTop:-3}}>
-                                    <Badge type={'owner'}/>
+                                <View style={{marginTop: -3}}>
+                                    <Badge type='owner' />
                                 </View>
                                 }
                             </View>
@@ -59,15 +58,14 @@ class CommentCard extends Component {
                     </View>
 
                     <View style={[styles.commentContent, AppStyles.leftAligned]}>
-                        {!!comment.img ? (
+                        {comment.img ? (
                             <View style={[AppStyles.row, styles.commentImage]}>
                                 <ImageViewer
                                     disabled={false}
-                                    source={{ uri: getImageURL(comment.img)  }}
-                                    doubleTapEnabled={true}
-                                    onMove={(e, gestureState) => null}
-                                    downloadable={true}
-                                    containerStyle={{width:200, height:200}}
+                                    source={{uri: getImageURL(comment.img)}}
+                                    doubleTapEnabled
+                                    downloadable
+                                    containerStyle={{width: 200, height: 200}}
                                 />
 
                             </View>
@@ -86,45 +84,43 @@ class CommentCard extends Component {
     }
 }
 
-
 /* Component Styles ==================================================================== */
 
 const styles = StyleSheet.create({
     container: {
         marginLeft: AppSizes.paddingSml,
         marginRight: AppSizes.paddingSml,
-        marginTop:AppSizes.paddingSml,
+        marginTop: AppSizes.paddingSml
     },
     commentHeader: {
-        paddingTop:10
+        paddingTop: 10
 
     },
-    commentHeaderContainer:{
-        paddingLeft:8
+    commentHeaderContainer: {
+        paddingLeft: 8
     },
     commentContent: {
-        marginTop:2,
-        marginBottom:8,
-        marginLeft:42,
+        marginTop: 2,
+        marginBottom: 8,
+        marginLeft: 42
     },
-    commentImage:{
-        paddingTop:10
+    commentImage: {
+        paddingTop: 10
     },
-    commenterLocation:{
-        color:'gray',
-        fontSize:AppFonts.base.size * 0.65,
+    commenterLocation: {
+        color: 'gray',
+        fontSize: AppFonts.base.size * 0.65
     },
-    commenterName:{
+    commenterName: {
         fontFamily: AppFonts.base.familyBold,
-        fontSize: AppFonts.base.size * 0.75,
+        fontSize: AppFonts.base.size * 0.75
     },
-    commentText:{
+    commentText: {
         fontFamily: AppFonts.base.family,
         fontSize: AppFonts.base.size * 0.90,
-        color:AppColors.textPrimary,
+        color: AppColors.textPrimary
     }
 });
-
 
 /* Export Component ==================================================================== */
 export default CommentCard;

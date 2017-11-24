@@ -1,14 +1,14 @@
+/* eslint-disable */
 /**
  * API Functions
  */
 /* global fetch console */
 import DeviceInfo from 'react-native-device-info';
 
-import { AsyncStorage } from "react-native";
-
+import {AsyncStorage} from 'react-native';
 
 // Consts and Libs
-import { AppConfig, ErrorMessages, APIConfig } from '@constants/';
+import {AppConfig, ErrorMessages, APIConfig} from '@constants/';
 
 // Config
 const APIURL = APIConfig.apiUrl;
@@ -31,28 +31,25 @@ const DEBUG_MODE = AppConfig.DEV;
 // Number each API request (used for debugging)
 let requestCounter = 0;
 
-
 /* Helper Functions ==================================================================== */
 
 /**
  * Retrieves Token from Storage
  */
-const getStoredToken = async () => {
-    if (!this.apiToken) this.apiToken = await AsyncStorage.getItem('api/token');
+const getStoredToken = async() => {
+    if (!this.apiToken) {this.apiToken = await AsyncStorage.getItem('api/token');}
     return this.apiToken;
 };
-
 
 /**
  * Deletes Token and saved credentials
  * Used for logout
  */
-const deleteToken = async () => {
+const deleteToken = async() => {
     await AsyncStorage.setItem('api/token', '');
     await AsyncStorage.setItem('api/credentials', '');
     this.apiToken = '';
 };
-
 
 /**
  * Debug or not to debug
@@ -74,10 +71,10 @@ function debug(str, title) {
  */
 function handleError(err) {
     let error = '';
-    if (typeof err === 'string') error = err;
-    else if (err.message) error = err.message;
+    if (typeof err === 'string') {error = err;}
+    else if (err.message) {error = err.message;}
 
-    if (!err) error = ErrorMessages.default;
+    if (!err) {error = ErrorMessages.default;}
     return error;
 }
 
@@ -94,9 +91,9 @@ function serialize(obj, prefix) {
         const k = prefix ? `${prefix}[${p}]` : p;
         const v = obj[p];
 
-        str.push((v !== null && typeof v === 'object') ?
-            serialize(v, k) :
-            `${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
+        str.push((v !== null && typeof v === 'object')
+            ? serialize(v, k)
+            : `${encodeURIComponent(k)}=${encodeURIComponent(v)}`);
     });
 
     return str.join('&');
@@ -106,7 +103,7 @@ function serialize(obj, prefix) {
  * Sends requests to the API
  */
 function fetcher(method, endpoint, params, body) {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
         requestCounter += 1;
         const requestNum = requestCounter;
 
@@ -116,7 +113,7 @@ function fetcher(method, endpoint, params, body) {
             reject(ErrorMessages.timeout)
         ), timeoutAfter * 1000);
 
-        if (!method || !endpoint) return reject('Missing params (AppAPI.fetcher).');
+        if (!method || !endpoint) {return reject(new Error('Missing params (AppAPI.fetcher).'));}
 
         // Build request
         const req = {
@@ -124,11 +121,11 @@ function fetcher(method, endpoint, params, body) {
             headers: {
                 'User-Agent': USER_AGENT,
                 'X-BADGES': 'X',
-                'X-SOFTWARE-VERSION' : '1.0' ,
-                'X-DEVICE-TYPE' :  'Android' ,
-                'X-UNIT-MEASUREMENT' : 'false',
-                'X-Requested-With' : 'XMLHttpRequest'
-            },
+                'X-SOFTWARE-VERSION': '1.0',
+                'X-DEVICE-TYPE': 'Android',
+                'X-UNIT-MEASUREMENT': 'false',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
         };
 
         // Add Token
@@ -136,7 +133,7 @@ function fetcher(method, endpoint, params, body) {
         if (getStoredToken && endpoint !== APIConfig.endpoints.get(APIConfig.tokenKey)) {
             const apiToken = await getStoredToken();
             if (apiToken) {
-                req.headers['X-AUTH-TOKEN'] =  apiToken;
+                req.headers['X-AUTH-TOKEN'] = apiToken;
             }
         }
 
@@ -145,9 +142,8 @@ function fetcher(method, endpoint, params, body) {
         if (params) {
             // Object - eg. /token?username=this&password=0
             if (typeof params === 'object') {
-
                 // Replace matching params in API routes eg. /recipes/{param}/foo
-                for (let param in params) {
+                for (const param in params) {
                     if (endpoint.includes(`{${param}}`)) {
                         endpoint = endpoint.split(`{${param}}`).join(params[param]);
                         delete params[param];
@@ -163,7 +159,7 @@ function fetcher(method, endpoint, params, body) {
                 }
 
                 // Check if there's still an 'action' prop, /{id}/{action}?
-                if (params.action !== undefined) {
+                if (typeof params.action !== 'undefined') {
                     if (typeof params.action === 'string') {
                         urlParams += `/${params.action}`;
                         delete params.action;
@@ -171,7 +167,7 @@ function fetcher(method, endpoint, params, body) {
                 }
 
                 // Add the rest of the params as a query string if any left
-                Object.keys(params).length > 0 ? urlParams += `?${serialize(params)}` : null
+                Object.keys(params).length > 0 ? urlParams += `?${serialize(params)}` : null;
 
                 // String or Number - eg. /recipes/23
             } else if (typeof params === 'string' || typeof params === 'number') {
@@ -185,10 +181,13 @@ function fetcher(method, endpoint, params, body) {
 
         // Add Body
         if (body) {
-            typeof( body) == 'object' ? req.body = JSON.stringify(body) : req.body = body
-            req.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            if (typeof (body) === 'object') {
+                req.body = JSON.stringify(body);
+            } else {
+                req.body = body;
+            }
+            req.headers['Content-Type'] = 'application/x-www-form-urlencoded';
         }
-
 
         const thisUrl = APIURL + endpoint + urlParams;
 
@@ -196,7 +195,7 @@ function fetcher(method, endpoint, params, body) {
 
         // Make the request
         return fetch(thisUrl, req)
-            .then(async (rawRes) => {
+            .then(async(rawRes) => {
                 // API got back to us, clear the timeout
                 clearTimeout(apiTimedOut);
 
@@ -207,13 +206,13 @@ function fetcher(method, endpoint, params, body) {
                     type: 'API_SUCCESS_RESPONSE',
                     headers: rawRes.headers
 
-                })
+                });
 
                 try {
                     jsonRes = await rawRes.json();
                 } catch (error) {
-                    const err = { message: ErrorMessages.invalidJson };
-                    debug(err)
+                    const err = {message: ErrorMessages.invalidJson};
+                    debug(err);
                 }
 
                 // Only continue if the header is successful
@@ -242,7 +241,7 @@ function fetcher(method, endpoint, params, body) {
 const AppAPI = {
     handleError,
     getToken: getStoredToken,
-    deleteToken: deleteToken,
+    deleteToken
 };
 
 ENDPOINTS.forEach((endpoint, key) => {
@@ -251,7 +250,7 @@ ENDPOINTS.forEach((endpoint, key) => {
         post: (params, payload) => fetcher('POST', endpoint, params, payload),
         patch: (params, payload) => fetcher('PATCH', endpoint, params, payload),
         put: (params, payload) => fetcher('PUT', endpoint, params, payload),
-        delete: (params, payload) => fetcher('DELETE', endpoint, params, payload),
+        delete: (params, payload) => fetcher('DELETE', endpoint, params, payload)
     };
 });
 

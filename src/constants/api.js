@@ -18,7 +18,7 @@ export default {
         ['oauth', '/external/token'],
         ['connect', '/account/connect'],
 
-        ['stream' , '/stream/world/{section}'],
+        ['stream', '/stream/world/{section}'],
         ['livestream', '/livestream/{pid}/{section}'],
 
         ['conversations', '/conversations'],
@@ -31,5 +31,5 @@ export default {
         ['upload_image', '/upload-image.ashx']
     ]),
 
-    tokenKey: 'token',
+    tokenKey: 'token'
 };

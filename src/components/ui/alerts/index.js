@@ -3,6 +3,6 @@
  */
 
 import Alert from './Alert';
-import Toast from './Toast'
+import Toast from './Toast';
 
-export { Alert , Toast };
+export {Alert, Toast};

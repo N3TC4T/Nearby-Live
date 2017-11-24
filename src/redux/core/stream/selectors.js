@@ -1,7 +1,6 @@
-import schema from './models'
-import { createSelector } from 'reselect';
-import { createSelector as ormCreateSelector } from 'redux-orm';
-
+import {createSelector} from 'reselect';
+import {createSelector as ormCreateSelector} from 'redux-orm';
+import schema from './models';
 
 export const ormSelector = state => state.stream;
 
@@ -9,39 +8,35 @@ export const streamSelector = createSelector(
     ormSelector,
     state => state.stream.selectedSectionIndex,
     ormCreateSelector(schema, (session, selectedIndex) => {
-        !selectedIndex? selectedIndex = 0 : null
+        let Index = selectedIndex ;
 
-        if (selectedIndex !== 2 ){
-            return session.Post.all().filter(post => post.section.includes(selectedIndex)).orderBy(['date'], 'desc').toRefArray()
-        }else {
-            return session.Post.all().filter(post => post.section.includes(selectedIndex)).toRefArray()
+        if (!Index) {
+            Index = 0;
         }
 
-
-    })
+        if (Index !== 2) {
+            return session.Post.all().filter(post => post.section.includes(Index)).orderBy(['date'], 'desc').toRefArray();
+        }
+        return session.Post.all().filter(post => post.section.includes(Index)).toRefArray();
+    }),
 );
-
-
 
 export const postSelector = createSelector(
     ormSelector,
     (state, props) => props,
     ormCreateSelector(schema, (session, props) => {
-        const post = session.Post.withId(props.postID)
+        const post = session.Post.withId(props.postID);
 
-        let obj = Object.assign({}, post.ref);
+        const obj = Object.assign({}, post.ref);
 
         return Object.assign({}, obj, {
-            comments: post.comments.orderBy(['date'], 'desc').toRefArray(),
+            comments: post.comments.orderBy(['date'], 'desc').toRefArray()
         });
-
-    })
+    }),
 );
 
 export const userPostsSelector = createSelector(
     ormSelector,
     (state, props) => props,
-    ormCreateSelector(schema, (session, props) => {
-        return session.Post.filter(post => post.pid === props.pid).orderBy(['date'], 'desc').toRefArray()
-    })
+    ormCreateSelector(schema, (session, props) => session.Post.filter(post => post.pid === props.pid).orderBy(['date'], 'desc').toRefArray()),
 );

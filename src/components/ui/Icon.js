@@ -6,7 +6,7 @@ import {
     View,
     StyleSheet,
     ViewPropTypes,
-    Text as NativeText,
+    Text as NativeText
 } from 'react-native';
 
 import ZocialIcon from 'react-native-vector-icons/Zocial';
@@ -20,7 +20,7 @@ import EntypoIcon from 'react-native-vector-icons/Entypo';
 import FAIcon from 'react-native-vector-icons/FontAwesome';
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons';
 
-getIconType = (type) => {
+const getIconType = (type) => {
     switch (type) {
         case 'zocial':
             return ZocialIcon;
@@ -47,9 +47,26 @@ getIconType = (type) => {
     }
 };
 
+const styles = StyleSheet.create({
+    button: {
+        margin: 7
+    },
+    raised: {
+        ...Platform.select({
+            ios: {
+                shadowColor: 'rgba(0,0,0, .4)',
+                shadowOffset: {height: 1, width: 1},
+                shadowOpacity: 1,
+                shadowRadius: 1
+            },
+            android: {
+                elevation: 2
+            }
+        })
+    }
+});
 
-
-const Icon = props => {
+const Icon = (props) => {
     const {
         type,
         name,
@@ -73,35 +90,35 @@ const Icon = props => {
     if (component) {
         Component = component;
     }
-    let Icon;
-    if (!type) {
-        Icon = getIconType('material');
-    } else {
-        Icon = getIconType(type);
-    }
+
+    // Todo: Fix me
+    // eslint-disable-next-line no-shadow
+    const Icon = getIconType(type);
+
     return (
         <Component
             underlayColor={reverse ? color : underlayColor || color}
             style={[
-        (reverse || raised) && styles.button,
-        (reverse || raised) && {
-          borderRadius: size + 4,
-          height: size * 2 + 4,
-          width: size * 2 + 4,
-        },
-        raised && styles.raised,
-        {
-          backgroundColor: reverse ? color : raised ? 'white' : 'transparent',
-          alignItems: 'center',
-          justifyContent: 'center',
-        },
-        containerStyle && containerStyle,
-      ]}
+                (reverse || raised) && styles.button,
+                (reverse || raised) && {
+                    borderRadius: size + 4,
+                    height: (size * 2) + 4,
+                    width: (size * 2) + 4
+                },
+                raised && styles.raised,
+                {
+                    // Todo: Fix me
+                    // eslint-disable-next-line no-nested-ternary
+                    backgroundColor: reverse ? color : raised ? 'white' : 'transparent',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                },
+                containerStyle && containerStyle
+            ]}
             onPress={onPress}
-            {...attributes}
-        >
+            {...attributes}>
             <Icon
-                style={[{ backgroundColor: 'transparent' }, iconStyle && iconStyle]}
+                style={[{backgroundColor: 'transparent'}, iconStyle && iconStyle]}
                 size={size}
                 name={name}
                 color={reverse ? reverseColor : color}
@@ -112,7 +129,7 @@ const Icon = props => {
 
 Icon.propTypes = {
     type: PropTypes.string,
-    name: PropTypes.string,
+    name: PropTypes.string.isRequired,
     size: PropTypes.number,
     color: PropTypes.string,
     component: PropTypes.element,
@@ -122,35 +139,21 @@ Icon.propTypes = {
     containerStyle: ViewPropTypes.style,
     iconStyle: NativeText.propTypes.style,
     onPress: PropTypes.func,
-    reverseColor: PropTypes.string,
+    reverseColor: PropTypes.string
 };
 
 Icon.defaultProps = {
+    type: 'material',
     underlayColor: 'white',
     reverse: false,
     raised: false,
     size: 24,
     color: 'black',
     reverseColor: 'white',
+    component: null,
+    containerStyle: null,
+    iconStyle: null,
+    onPress: null
 };
-
-const styles = StyleSheet.create({
-    button: {
-        margin: 7,
-    },
-    raised: {
-        ...Platform.select({
-            ios: {
-                shadowColor: 'rgba(0,0,0, .4)',
-                shadowOffset: { height: 1, width: 1 },
-                shadowOpacity: 1,
-                shadowRadius: 1,
-            },
-            android: {
-                elevation: 2,
-            },
-        }),
-    },
-});
 
 export default Icon;

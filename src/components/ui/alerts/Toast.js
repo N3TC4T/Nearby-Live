@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component} from 'react';
 import {
     StyleSheet,
     View,
@@ -13,7 +13,6 @@ import {
 import PropTypes from 'prop-types';
 
 import RootSiblings from 'react-native-root-siblings';
-
 
 const TOAST_MAX_WIDTH = 0.8;
 const TOAST_ANIMATION_DURATION = 200;
@@ -30,12 +29,12 @@ const durations = {
     SHORT: 2000
 };
 
-let styles = StyleSheet.create({
+const styles = StyleSheet.create({
     defaultStyle: {
         position: 'absolute',
         width: WINDOW_WIDTH,
         justifyContent: 'center',
-        alignItems: 'center',
+        alignItems: 'center'
     },
     containerStyle: {
         padding: 10,
@@ -61,8 +60,7 @@ let styles = StyleSheet.create({
     }
 });
 
-
-
+// Todo: move component to another file
 class ToastContainer extends Component {
     static displayName = 'ToastContainer';
 
@@ -77,7 +75,7 @@ class ToastContainer extends Component {
         shadowColor: PropTypes.string,
         textColor: PropTypes.string,
         delay: PropTypes.number,
-        hideOnPress: PropTypes.bool,
+        hideOnPress: PropTypes.bool
     };
 
     static defaultProps = {
@@ -98,13 +96,13 @@ class ToastContainer extends Component {
         };
     }
 
-    componentDidMount () {
+    componentDidMount() {
         if (this.state.visible) {
             this._showTimeout = setTimeout(() => this._show(), this.props.delay);
         }
-    };
+    }
 
-    componentWillReceiveProps = nextProps => {
+    componentWillReceiveProps = (nextProps) => {
         if (nextProps.visible !== this.props.visible) {
             if (nextProps.visible) {
                 clearTimeout(this._showTimeout);
@@ -120,13 +118,11 @@ class ToastContainer extends Component {
         }
     };
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._hide();
-    };
+    }
 
-    shouldComponentUpdate = (nextProps, nextState) => {
-        return this.state.visible !== nextState.visible;
-    };
+    shouldComponentUpdate = (nextProps, nextState) => this.state.visible !== nextState.visible;
 
     _animating = false;
     _root = null;
@@ -176,9 +172,9 @@ class ToastContainer extends Component {
     };
 
     render() {
-        let {props} =  this;
-        let offset = props.position;
-        let position = offset ? {
+        const {props} = this;
+        const offset = props.position;
+        const position = offset ? {
             [offset < 0 ? 'bottom' : 'top']: Math.abs(offset)
         } : {
             top: 0,
@@ -189,7 +185,7 @@ class ToastContainer extends Component {
                 styles.defaultStyle,
                 position
             ]}
-            pointerEvents="box-none"
+            pointerEvents='box-none'
         >
             <TouchableWithoutFeedback
                 onPress={this.props.hideOnPress ? this._hide : null}
@@ -204,13 +200,14 @@ class ToastContainer extends Component {
                         props.shadow && styles.shadowStyle,
                         props.shadowColor && {shadowColor: props.shadowColor}
                     ]}
-                    pointerEvents="none"
-                    ref={ele => this._root = ele}
+                    pointerEvents='none'
+                    ref={ (ele) => { this._root = ele;}}
                 >
                     <Text style={[
                         styles.textStyle,
                         props.textColor && {color: props.textColor}
-                    ]}>
+                    ]}
+                    >
                         {this.props.children}
                     </Text>
                 </Animated.View>
@@ -225,16 +222,14 @@ class Toast extends Component {
     static positions = positions;
     static durations = durations;
 
-    static show = (message, options = {position: positions.BOTTOM, duration: durations.SHORT}) => {
-        return new RootSiblings(<ToastContainer
-            {...options}
-            visible={true}
-        >
-            {message}
-        </ToastContainer>);
-    };
+    static show = (message, options = {position: positions.BOTTOM, duration: durations.SHORT}) => new RootSiblings(<ToastContainer
+        {...options}
+        visible
+    >
+        {message}
+    </ToastContainer>);
 
-    static hide = toast => {
+    static hide = (toast) => {
         if (toast instanceof RootSiblings) {
             toast.destroy();
         } else {
@@ -244,28 +239,27 @@ class Toast extends Component {
 
     _toast = null;
 
-    componentWillMount () {
+    componentWillMount() {
         this._toast = new RootSiblings(<ToastContainer
             {...this.props}
             duration={0}
         />);
-    };
+    }
 
-    componentWillReceiveProps = nextProps => {
+    componentWillReceiveProps = (nextProps) => {
         this._toast.update(<ToastContainer
             {...nextProps}
             duration={0}
         />);
     };
 
-    componentWillUnmount () {
+    componentWillUnmount() {
         this._toast.destroy();
-    };
+    }
 
     render() {
         return null;
     }
 }
-
 
 export default Toast;

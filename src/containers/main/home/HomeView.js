@@ -2,47 +2,44 @@
  * Main Tabs Screen
  *  - Shows tabs, which contain watched posts, stream and  messages listings
  */
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {
     Animated,
     View,
     StyleSheet,
-    InteractionManager,
+    InteractionManager
 } from 'react-native';
 
+import PropTypes from 'prop-types';
 
 // Consts and Libs
-import { AppColors } from '@theme/';
+import {AppColors} from '@theme/';
 
 // Containers
 import StreamListing from '@containers/main/home/stream/StreamContainer';
 import ConversationsListing from '@containers/main/home/conversations/ConversationsListingContainer';
 
 // Components
-import { TabViewAnimated, TabBar } from 'react-native-tab-view';
-import { Text, NavIcon } from '@ui/';
+import {TabViewAnimated, TabBar} from 'react-native-tab-view';
 import Placeholder from '@components/general/Placeholder';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
-
-
-
 
 /* Styles ==================================================================== */
 const styles = StyleSheet.create({
     // Tab Styles
     tabContainer: {
-        flex: 1,
+        flex: 1
     },
     tabbar: {
-        backgroundColor: AppColors.tabbarTop.background,
+        backgroundColor: AppColors.tabbarTop.background
     },
     tabbarIndicator: {
-        backgroundColor: AppColors.tabbarTop.indicator,
+        backgroundColor: AppColors.tabbarTop.indicator
     },
-    tabbarLabel:{
-        paddingTop:4,
-        paddingBottom:4
+    tabbarLabel: {
+        paddingTop: 4,
+        paddingBottom: 4
     },
     rightNotify: {
         marginTop: 15,
@@ -51,11 +48,11 @@ const styles = StyleSheet.create({
         height: 5,
         width: 5,
         borderRadius: 12,
-        borderColor:'black',
-        borderWidth:0.2,
+        borderColor: 'black',
+        borderWidth: 0.2,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 4,
+        elevation: 4
     },
     leftNotify: {
         marginTop: 15,
@@ -64,38 +61,43 @@ const styles = StyleSheet.create({
         height: 5,
         width: 5,
         borderRadius: 12,
-        borderColor:'black',
-        borderWidth:0.2,
+        borderColor: 'black',
+        borderWidth: 0.2,
         alignItems: 'center',
         justifyContent: 'center',
-        elevation: 4,
-    },
+        elevation: 4
+    }
 });
 
 /* Component ==================================================================== */
 class HomeTabs extends Component {
     static componentName = 'HomeTabs';
 
+    static propTypes = {
+        UnseenWatchedCount: PropTypes.number.isRequired,
+        UnreadMessagesCount: PropTypes.number.isRequired
+    };
+
     constructor(props) {
         super(props);
 
         this.state = {
             loading: true,
-            visitedRoutes: [],
+            visitedRoutes: []
         };
     }
 
-    componentDidMount ()  {
+    componentDidMount() {
         InteractionManager.runAfterInteractions(() => {
             this.setTabs();
-
         });
-    };
+    }
 
-    componentWillReceiveProps (nextProps){
-        if(nextProps.UnseenWatchedCount != this.props.UnseenWatchedCount || nextProps.UnreadMessagesCount != this.props.UnreadMessagesCount){
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.UnseenWatchedCount !== this.props.UnseenWatchedCount ||
+            nextProps.UnreadMessagesCount !== this.props.UnreadMessagesCount) {
             this.setState({
-                navigation: { ...this.state.navigation, needUpdate:true },
+                navigation: {...this.state.navigation, needUpdate: true}
             });
         }
     }
@@ -105,16 +107,16 @@ class HomeTabs extends Component {
             {
                 key: '0',
                 id: 'watched',
-                title:'WATCHED',
-            },{
+                title: 'WATCHED'
+            }, {
                 key: '1',
                 id: 'stream',
-                title:'STREAM',
+                title: 'STREAM'
 
-            },{
+            }, {
                 key: '2',
                 id: 'messages',
-                title:'MESSAGES',
+                title: 'MESSAGES'
             }
         ];
 
@@ -122,56 +124,52 @@ class HomeTabs extends Component {
             navigation: {
                 index: 1,
                 routes,
-                needUpdate:false,
-            },
+                needUpdate: false
+            }
         }, () => {
             this.setState({
-                loading: false,
+                loading: false
             });
         });
     };
-
 
     /**
      * On Change Tab
      */
     handleChangeTab = (index) => {
         this.setState({
-            navigation: { ...this.state.navigation, index },
+            navigation: {...this.state.navigation, index}
         });
     };
 
-
     renderBadge = (route) => {
-        const { UnreadMessagesCount, UnseenWatchedCount } = this.props
+        const {UnreadMessagesCount, UnseenWatchedCount} = this.props;
 
-        if (route.index === 2 && UnreadMessagesCount != 0 ) {
+        if (route.index === 2 && UnreadMessagesCount !== 0) {
             return (
-                <View style={styles.rightNotify}/>
+                <View style={styles.rightNotify} />
             );
         }
 
-        if (route.index === 0 && UnseenWatchedCount != 0 ) {
+        if (route.index === 0 && UnseenWatchedCount !== 0) {
             return (
-                <View style={styles.leftNotify}/>
+                <View style={styles.leftNotify} />
             );
         }
 
-        return null
+        return null;
     };
 
-    renderLabel = props => ({ route, index }) => {
+    renderLabel = props => ({route, index}) => {
         const inputRange = props.navigationState.routes.map((x, i) => i);
-        const outputRange = inputRange.map(
-            inputIndex => (inputIndex === index ? '#FFFFFF' : '#818F92'),
-        );
+        const outputRange = inputRange.map(inputIndex => (inputIndex === index ? '#FFFFFF' : '#818F92'));
         const color = props.position.interpolate({
             inputRange,
-            outputRange,
+            outputRange
         });
 
         return (
-            <Animated.Text style={[styles.tabbarLabel, { color }]}>
+            <Animated.Text style={[styles.tabbarLabel, {color}]}>
                 {route.title}
             </Animated.Text>
         );
@@ -194,7 +192,7 @@ class HomeTabs extends Component {
     /**
      * Which component to show
      */
-    renderScene = ({ route }) => {
+    renderScene = ({route}) => {
         // For performance, only render if it's this route, or I've visited before
         if (
             parseInt(route.key, 0) !== parseInt(this.state.navigation.index, 0) &&
@@ -216,7 +214,7 @@ class HomeTabs extends Component {
                         <Placeholder />
                     </View>
                 );
-            case 'stream' :
+            case 'stream':
                 return (
                     <View style={styles.tabContainer}>
                         <StreamListing />
@@ -228,18 +226,16 @@ class HomeTabs extends Component {
                         <ConversationsListing />
                     </View>
                 );
-            default :
+            default:
                 return (
                     <View />
                 );
-
         }
-
     }
 
     render() {
-        if (this.state.loading || !this.state.navigation) return <Loading />;
-        if (this.state.error) return <Error text={this.state.error} />;
+        if (this.state.loading || !this.state.navigation) {return <Loading />;}
+        if (this.state.error) {return <Error text={this.state.error} />;}
 
         return (
             <TabViewAnimated

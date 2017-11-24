@@ -1,3 +1,5 @@
+/* eslint-disable */
+// Todo : Need to normalize
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -11,16 +13,16 @@ import {
 } from 'react-native';
 
 // components
-import { BackButton } from '@components/ui'
+import Icon from 'react-native-vector-icons/Octicons';
+
+// components
+import { BackButton } from '@components/ui';
 
 // const and libs
-import { AppSizes, AppStyles } from '@theme/'
+import { AppStyles } from '@theme/';
 import AppAPI from '@lib/api';
 import _drawerImage from './menu_burger.png';
 import _backButtonImage from './back_chevron.png';
-
-// components
-import Icon from 'react-native-vector-icons/Octicons';
 
 
 const styles = StyleSheet.create({
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
         width: 180,
         alignSelf: 'center',
     },
-    statusText :{
+    statusText: {
         textAlign: 'left',
         color: '#364150',
         fontSize: 10,
@@ -136,9 +138,6 @@ const styles = StyleSheet.create({
     },
 });
 
-const propTypes = {
-    initDetails: PropTypes.object,
-};
 
 const contextTypes = {
     drawer: PropTypes.object,
@@ -150,7 +149,6 @@ const defaultProps = {
 };
 
 class NavBar extends React.Component {
-
     constructor(props) {
         super(props);
 
@@ -160,52 +158,50 @@ class NavBar extends React.Component {
         this.renderTitle = this.renderTitle.bind(this);
 
         this.state = {
-            isCheckingOnline:true,
-            isOnline:null
-        }
+            isCheckingOnline: true,
+            isOnline: null,
+        };
+    }
+
+
+    componentWillMount() {
+        this.isMounted = false;
     }
 
     componentDidMount = () => {
         this.getOnlineStatus();
 
-        this._isMounted = true
-    }
-
-
-    componentWillMount() {
-        this._isMounted = false;
-    }
+        this.isMounted = true;
+    };
 
 
     getName = () => {
-
-        const { pid } = this.props
+        const { pid } = this.props;
 
         AppAPI.people.post('status', pid)
             .then((res) => {
-                if (this._isMounted){
+                if (this.isMounted) {
                     this.setState({
-                        isCheckingOnline:false,
-                        isOnline: !!res[0].IsOnline
-                    })
+                        isCheckingOnline: false,
+                        isOnline: !!res[0].IsOnline,
+                    });
                 }
-            })
-    }
+            });
+    };
 
     getOnlineStatus = () => {
-
-        const { pid } = this.props
+        const { pid } = this.props;
 
         AppAPI.people.post('status', pid)
             .then((res) => {
-                if (this._isMounted){
+                if (this.isMounted) {
                     this.setState({
-                        isCheckingOnline:false,
-                        isOnline: !!res[0].IsOnline
-                    })
+                        isCheckingOnline: false,
+                        isOnline: !!res[0].IsOnline,
+                    });
                 }
-            })
-    }
+            });
+    };
 
     renderBackButton() {
         const state = this.props.navigationState;
@@ -239,12 +235,12 @@ class NavBar extends React.Component {
                 }
                 return (
                     <Button
-                        {...self.props}
-                        {...state}
-                        key={'rightNavBarBtn'}
-                        testID="rightNavButton"
-                        style={style}
-                        textButtonStyle={textStyle}
+                      {...self.props}
+                      {...state}
+                      key="rightNavBarBtn"
+                      testID="rightNavButton"
+                      style={style}
+                      textButtonStyle={textStyle}
                     />
                 );
             }
@@ -252,11 +248,12 @@ class NavBar extends React.Component {
                 const onPress = state.onRight.bind(null, state);
                 return (
                     <TouchableOpacity
-                        key={'rightNavBarBtn'}
-                        testID="rightNavButton"
-                        style={style}
-                        onPress={onPress}
-                    >
+                      key="rightNavBarBtn"
+                      testID="rightNavButton"
+                      style={style}
+                        /* eslint react/jsx-no-bind: "off" */
+                        // Todo: Fix jsx-no-bind
+                      onPress={onPress}>
                         {rightTitle &&
                         <Text style={textStyle}>
                             {rightTitle}
@@ -265,8 +262,8 @@ class NavBar extends React.Component {
                         {state.rightButtonImage &&
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
                             <Image
-                                source={state.rightButtonImage}
-                                style={state.rightButtonIconStyle}
+                              source={state.rightButtonImage}
+                              style={state.rightButtonIconStyle}
                             />
                         </View>
                         }
@@ -275,10 +272,8 @@ class NavBar extends React.Component {
             }
             if ((!!state.onRight ^ (typeof (rightTitle) !== 'undefined'
                 || typeof (state.rightButtonImage) !== 'undefined'))) {
-                console.warn(
-                    `Both onRight and rightTitle/rightButtonImage
-            must be specified for the scene: ${state.name}`,
-                );
+                console.warn(`Both onRight and rightTitle/rightButtonImage
+            must be specified for the scene: ${state.name}`);
             }
             return null;
         }
@@ -305,12 +300,12 @@ class NavBar extends React.Component {
                 }
                 return (
                     <Button
-                        {...self.props}
-                        {...state}
-                        key={'leftNavBarBtn'}
-                        testID="leftNavButton"
-                        style={style}
-                        textStyle={textStyle}
+                      {...self.props}
+                      {...state}
+                      key="leftNavBarBtn"
+                      testID="leftNavButton"
+                      style={style}
+                      textStyle={textStyle}
                     />
                 );
             }
@@ -323,8 +318,8 @@ class NavBar extends React.Component {
                 if (!menuIcon) {
                     menuIcon = (
                         <Image
-                            source={buttonImage}
-                            style={leftButtonStyle}
+                          source={buttonImage}
+                          style={leftButtonStyle}
                         />
                     );
                 }
@@ -334,11 +329,10 @@ class NavBar extends React.Component {
                 onPress = onPress.bind(null, state);
                 return (
                     <TouchableOpacity
-                        key={'leftNavBarBtn'}
-                        testID="leftNavButton"
-                        style={style}
-                        onPress={onPress}
-                    >
+                      key="leftNavBarBtn"
+                      testID="leftNavButton"
+                      style={style}
+                      onPress={onPress}>
                         {leftTitle &&
                         <Text style={textStyle}>
                             {leftTitle}
@@ -347,8 +341,8 @@ class NavBar extends React.Component {
                         {buttonImage &&
                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-start' }}>
                             {menuIcon || <Image
-                                source={buttonImage}
-                                style={state.leftButtonIconStyle || styles.defaultImageStyle}
+                              source={buttonImage}
+                              style={state.leftButtonIconStyle || styles.defaultImageStyle}
                             />
                             }
                         </View>
@@ -357,10 +351,8 @@ class NavBar extends React.Component {
                 );
             }
             if ((!!state.onLeft ^ !!(leftTitle || buttonImage))) {
-                console.warn(
-                    `Both onLeft and leftTitle/leftButtonImage
-            must be specified for the scene: ${state.name}`,
-                );
+                console.warn(`Both onLeft and leftTitle/leftButtonImage
+            must be specified for the scene: ${state.name}`);
             }
             return null;
         }
@@ -373,29 +365,26 @@ class NavBar extends React.Component {
         Animated.timing(this.anim, {
             toValue: 1,
             duration: 3000,
-            easing: Easing.in
+            easing: Easing.in,
         })
             .start(this.animate.bind(this));
     }
 
     renderTitle(childState, index:number) {
+        const title = this.props.name ? this.props.name : null;
 
-
-        let title = this.props.name ? this.props.name : null;
-
-        const { isOnline , isCheckingOnline } = this.state
+        const { isOnline, isCheckingOnline } = this.state;
 
         return (
             <Animated.View
-                key={childState.key}
-                style={[
-                    styles.titleWrapper
-                ]}
-            >
+              key={childState.key}
+              style={[
+                    styles.titleWrapper,
+                ]}>
                 <Animated.Text
-                    lineBreakMode="tail"
-                    numberOfLines={1}
-                    style={[
+                  lineBreakMode="tail"
+                  numberOfLines={1}
+                  style={[
                         styles.title,
                         {
                           opacity: this.props.position.interpolate({
@@ -411,14 +400,13 @@ class NavBar extends React.Component {
                             outputRange: [-200, 200],
                           }),
                         },
-                      ]}
-                >
+                      ]}>
                     {title}
                 </Animated.Text>
                 <Animated.View
-                    lineBreakMode="tail"
-                    numberOfLines={1}
-                    style={[
+                  lineBreakMode="tail"
+                  numberOfLines={1}
+                  style={[
                         AppStyles.leftAligned,
                     {
                       opacity: this.props.position.interpolate({
@@ -434,8 +422,7 @@ class NavBar extends React.Component {
                         outputRange: [-200, 200],
                       }),
                     },
-                  ]}
-                >
+                  ]}>
                     {!! isCheckingOnline &&
                         <View style={[AppStyles.row, AppStyles.centerAligned]}>
                             <Icon name="primitive-dot" size={20} color="grey" />
@@ -445,12 +432,12 @@ class NavBar extends React.Component {
 
                     {!! isOnline && ! isCheckingOnline ? (
                         <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                            <Icon  name="primitive-dot" size={20} color="#008B45" />
+                            <Icon name="primitive-dot" size={20} color="#008B45" />
                             <Text style={[styles.statusText]}>Online</Text>
                         </View>
                     ) : (
                         <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                            <Icon  name="primitive-dot" size={20} color="red" />
+                            <Icon name="primitive-dot" size={20} color="red" />
                             <Text style={[styles.statusText]}>Offline</Text>
                         </View>
                     )}
@@ -501,13 +488,12 @@ class NavBar extends React.Component {
         );
         return (
             <Animated.View
-                style={[
+              style={[
           styles.header,
           this.props.navigationBarStyle,
           state.navigationBarStyle,
           selected.navigationBarStyle,
-        ]}
-            >
+        ]}>
                 {navigationBarBackgroundImage ? (
                     <Image source={navigationBarBackgroundImage}>
                         {contents}
