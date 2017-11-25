@@ -117,17 +117,21 @@ android {
             include "armeabi-v7a", "x86"
         }
     }
+    /**
+    * For Release you need to make your release key
     signingConfigs {
          release {
-             storeFile file("my-release-key.keystore")
+             storeFile file("test-release-key.keystore")
              storePassword "123456"
              keyAlias "my-key-alias"
              keyPassword "123456"
              }
          }
+    */
     buildTypes {
         release {
-            signingConfig signingConfigs.release
+            // Also for release uncomment like below
+            // signingConfig signingConfigs.release
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
