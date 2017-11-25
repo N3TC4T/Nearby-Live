@@ -4,7 +4,7 @@
 
 import AppAPI from '@lib/api';
 
-export default function getSystemNotifications(startFrom) {
+export function getSystemNotifications(startFrom) {
     return (dispatch) => {
         let latest = false;
 

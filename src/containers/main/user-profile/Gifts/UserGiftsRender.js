@@ -1,3 +1,4 @@
+// Todo : Need to get Gifts of profile from another api
 import React, {Component} from 'react';
 import {
     ListView,
@@ -14,6 +15,8 @@ import {Actions} from 'react-native-router-flux';
 
 // Consts and libs
 import {AppStyles, AppSizes, AppFonts} from '@theme/';
+import Error from '@components/general/Error';
+import {ErrorMessages} from '@constants/';
 
 // Components
 import {Text} from '@ui/';
@@ -28,6 +31,7 @@ const styles = StyleSheet.create({
 
 // Todo: Move component to another file
 /* Component ==================================================================== */
+// eslint-disable-next-line no-unused-vars
 class GiftGrid extends Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
@@ -90,14 +94,14 @@ class GiftGrid extends Component {
 
 class UserGiftsRender extends Component {
     static propTypes = {
-        gifts: PropTypes.array.isRequired
+        pid: PropTypes.string.isRequired
     };
 
     constructor(props) {
         super(props);
-        this.state = {
-            items: this.props.gifts
-        };
+        // this.state = {
+        //     items: this.props.gifts
+        // };
     }
 
     renderItem = (item, itemSize) => (
@@ -133,16 +137,16 @@ class UserGiftsRender extends Component {
         </TouchableOpacity>
 
     )
+    // <GiftGrid
+    //     data={this.state.items}
+    //     itemsPerRow={3}
+    //     itemMargin={1}
+    //     renderItem={this.renderItem}
+    // />
 
     render() {
         return (
-            <GiftGrid
-                data={this.state.items}
-                itemsPerRow={3}
-                itemMargin={1}
-                renderItem={this.renderItem}
-            />
-
+            <Error text={ErrorMessages.notImplemented} />
         );
     }
 }

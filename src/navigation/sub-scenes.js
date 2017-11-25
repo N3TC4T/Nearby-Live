@@ -9,7 +9,6 @@ import {AppConfig} from '@constants/';
 
 // Components
 import {BackButton} from '@components/ui';
-import {ChatNavBar} from '@containers/main/home/conversations/conversation/Render';
 
 // Containers
 import UserProfileContainer from '@containers/main/user-profile/UserProfileContainer';
@@ -42,7 +41,6 @@ const scenes = ([
         renderBackButton={() => (<BackButton />)}
         key='conversationView'
         component={ConversationContainer}
-        navBar={ChatNavBar}
         analyticsDesc='ConversationView: Chat View Someone'
     />
 

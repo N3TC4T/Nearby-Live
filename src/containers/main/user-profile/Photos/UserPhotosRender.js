@@ -1,6 +1,7 @@
+// Todo : Need to get Photo of profile from another api
 import React, {Component} from 'react';
 import {
-    InteractionManager,
+    // InteractionManager,
     ListView,
     StyleSheet,
     View
@@ -12,6 +13,8 @@ import {AppStyles, AppSizes} from '@theme/';
 
 import {Image, Text} from '@ui/';
 import Loading from '@components/general/Loading';
+import Error from '@components/general/Error';
+import {ErrorMessages} from '@constants/';
 
 import {getImageURL} from '@lib/util';
 import AppAPI from '@lib/api';
@@ -25,6 +28,7 @@ const styles = StyleSheet.create({
 });
 
 // Todo: Move component to another file
+// eslint-disable-next-line no-unused-vars
 class PhotoGrid extends React.Component {
     static propTypes = {
         data: PropTypes.array.isRequired,
@@ -76,8 +80,6 @@ class PhotoGrid extends React.Component {
             <ListView
                 {...this.props}
                 dataSource={this.state.data.cloneWithRows(rows)}
-                /* eslint react/jsx-no-bind: "off" */
-                // Todo: Fix me
                 renderRow={this.renderRow.bind(this)}
                 style={{flex: 1}}
             />
@@ -98,11 +100,11 @@ class UserPhotosRender extends Component {
         };
     }
 
-    componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.fetchUserPhotos();
-        });
-    }
+    // componentDidMount() {
+    //     InteractionManager.runAfterInteractions(() => {
+    //         this.fetchUserPhotos();
+    //     });
+    // }
 
     fetchUserPhotos = () => {
         this.setState({isLoading: true, error: null});
@@ -140,7 +142,7 @@ class UserPhotosRender extends Component {
     render() {
         const {isLoading, photos, error} = this.state;
 
-        if (isLoading || !photos) {
+        if (isLoading && !photos) {
             return <Loading text='Loading Photos...' />;
         }
 
@@ -149,14 +151,16 @@ class UserPhotosRender extends Component {
             return <Text>Cant Load Photos</Text>;
         }
 
-        return (
-            <PhotoGrid
-                data={this.state.photos}
-                itemsPerRow={3}
-                itemMargin={1}
-                renderItem={this.renderItem}
-            />
+        // <PhotoGrid
+        //     data={this.state.photos}
+        //     itemsPerRow={3}
+        //     itemMargin={1}
+        //     renderItem={this.renderItem}
+        // />
 
+
+        return (
+            <Error text={ErrorMessages.notImplemented} />
         );
     }
 }

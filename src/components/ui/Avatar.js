@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 
 export default class AvatarImage extends Component {
     static propTypes = {
-        source: Image.propTypes.source.isRequired,
+        source: Image.propTypes.source,
         imgKey: PropTypes.string,
         size: PropTypes.number,
         onPress: PropTypes.func
