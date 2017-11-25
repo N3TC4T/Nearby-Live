@@ -91,7 +91,7 @@ class SystemNotificationsListingRender extends Component {
 
     static propTypes = {
         systemNotificationsListing: PropTypes.array.isRequired,
-        getSystemNotifications: PropTypes.fun.isRequired
+        getSystemNotifications: PropTypes.func.isRequired
     };
 
     constructor(props) {

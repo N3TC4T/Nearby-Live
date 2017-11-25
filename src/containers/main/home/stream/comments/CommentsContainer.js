@@ -26,7 +26,7 @@ const mapDispatchToProps = {
 const mergeProps = (stateProps, dispatchProps, ownProps) => ({
     user: stateProps.user,
     post: stateProps.post,
-    getComments: dispatchProps.getComments(ownProps.postID),
+    getComments: () => dispatchProps.getComments(ownProps.postID),
     leaveComment: dispatchProps.leaveComment
 });
 

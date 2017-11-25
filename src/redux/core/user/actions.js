@@ -9,7 +9,9 @@ import {APIConfig} from '@constants/';
 
 // check if there is any token or user logged in
 export function getLoginStatus() {
-    return new Promise(async(resolve, reject) => {
+    // Todo: Fix me
+    // eslint-disable-next-line no-unused-vars
+    return dispatch => new Promise(async(resolve, reject) => {
         let apiToken;
 
         if (AppAPI.getToken) {apiToken = await AppAPI.getToken();}
