@@ -30,9 +30,6 @@ matrix:
         - echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
         - travis_retry sudo apt-get update -qq
         - travis_retry sudo apt-get install -y -qq yarn
-        - mkdir "$ANDROID_HOME/licenses" || true
-        - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55" > "$ANDROID_HOME/licenses/android-sdk-license"
-        - echo -e "\n84831b9409646a918e30573bab4c9c91346d8abd" > "$ANDROID_HOME/licenses/android-sdk-preview-license"
       install:
         - yarn
       android:
@@ -47,11 +44,14 @@ matrix:
           - extra-google-google_play_services
           - extra-google-m2repository
           - addon-google_apis-google-16
+        licenses:
+          - 'android-sdk-preview-license-.+'
+          - 'android-sdk-license-.+'
       script:
         - cd android && ./gradlew assembleDebug && ./gradlew assembleRelease
     - language: objective-c
       os: osx
-      osx_image: xcode8.2
+      osx_image: xcode7.3
       node_js: false
       before_install:
         - nvm install 7
