@@ -7,6 +7,7 @@ export default {
     default: 'Hmm, an unknown error occured',
     timeout: 'Server Timed Out. Check your internet connection',
     invalidJson: 'Response returned is not valid JSON',
+    notImplemented: 'Not Implemented Yet!',
 
     // Stream
     post404: 'Post not found.',
