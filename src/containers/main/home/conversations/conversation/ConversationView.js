@@ -1,37 +1,10 @@
-/**
- * Post View Screen
- *  - The individual post screen
- */
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import {
-    StyleSheet,
-    Text,
-    View
-} from 'react-native';
-
 // Consts and Libs
-import {getImageURL} from '@lib/util';
 import {ErrorMessages} from '@constants/';
 import Error from '@components/general/Error';
 import AppAPI from '@lib/api';
-
-import {ChatRender, Actions, Bubble} from './Render';
-
-/* Styles ==================================================================== */
-const styles = StyleSheet.create({
-    footerContainer: {
-        marginTop: 5,
-        marginLeft: 10,
-        marginRight: 10,
-        marginBottom: 10
-    },
-    footerText: {
-        fontSize: 14,
-        color: '#aaa'
-    }
-});
 
 /* Component ==================================================================== */
 class ConversationView extends Component {
@@ -58,9 +31,6 @@ class ConversationView extends Component {
         this.onSend = this.onSend.bind(this);
         this.onLoadEarlier = this.onLoadEarlier.bind(this);
         this.onInputTextChanged = this.onInputTextChanged.bind(this);
-        this.renderBubble = this.renderBubble.bind(this);
-        this.renderFooter = this.renderFooter.bind(this);
-        this.renderActions = this.renderActions(this);
 
         this.isAlright = null;
     }
@@ -168,60 +138,15 @@ class ConversationView extends Component {
             });
     };
 
-    renderBubble = props => (
-        <Bubble
-            {...props}
-            wrapperStyle={{
-                left: {
-                    backgroundColor: '#e5e5ea'
-                }
-            }}
-        />
-    )
-
-    renderFooter() {
-        if (this.state.typingText) {
-            return (
-                <View style={styles.footerContainer}>
-                    <Text style={styles.footerText}>
-                        {this.state.typingText}
-                    </Text>
-                </View>
-            );
-        }
-        return null;
-    }
-
-    renderActions() {
-        return (<Actions
-            {...this.props}
-        />);
-    }
-
     render() {
-        const {error, isLoadingEarlier} = this.state;
+        const {error} = this.state;
 
         const {conversation} = this.props;
 
         if (conversation && error) {return <Error text={error} tryAgain={this.fetchMessages} />;}
 
         return (
-            <ChatRender
-                messages={conversation.messages}
-                onSend={this.onSend}
-                loadEarlier={this.loadEarlier()}
-                onLoadEarlier={this.onLoadEarlier}
-                onInputTextChanged={this.onInputTextChanged}
-                isLoadingEarlier={isLoadingEarlier}
-                user={{
-                    _id: conversation.id,
-                    name: conversation.name,
-                    avatar: getImageURL(conversation.img, true)
-                }}
-                renderBubble={this.renderBubble}
-                renderActions={this.renderActions}
-                renderFooter={this.renderFooter}
-            />
+            <Error text={ErrorMessages.notImplemented} />
         );
     }
 }

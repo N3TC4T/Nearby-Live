@@ -23,7 +23,7 @@ const mapDispatchToProps = {
 const mergeProps = (stateProps, dispatchProps) => ({
     user: stateProps.user,
     conversation: stateProps.conversation,
-    getMessages: dispatchProps.getMessages(stateProps.conversation.lessParams),
+    getMessages: () => dispatchProps.getMessages(stateProps.conversation.lessParams),
     sendMessage: dispatchProps.sendMessage
 });
 
