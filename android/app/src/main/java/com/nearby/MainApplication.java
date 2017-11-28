@@ -4,7 +4,6 @@ import android.app.Application;
 
 import com.facebook.react.ReactApplication;
 import com.cmcewen.blurview.BlurViewPackage;
-import com.learnium.RNDeviceInfo.RNDeviceInfo;
 import com.brentvatne.react.ReactVideoPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -43,7 +42,6 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new FBSDKPackage(mCallbackManager),
             new BlurViewPackage(),
-            new RNDeviceInfo(),
             new ReactVideoPackage(),
             new VectorIconsPackage(),
             new ImagePickerPackage(),

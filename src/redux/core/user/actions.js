@@ -63,7 +63,7 @@ export function emailLogin(credentials, freshLogin) {
             return reject();
         }
 
-        return reject();
+
     });
 }
 
