@@ -1,4 +1,4 @@
-<p align="center"><img width=12.5% src="http://cdn.marketplaceimages.windowsphone.com/v8/images/6d1e3666-d488-4f6b-9fb0-3287a793cc1b?imageType=ws_icon_large"></p>
+<p align="center"><img width=12.5% src="https://user-images.githubusercontent.com/6250203/33339853-afbfa50c-d48f-11e7-8fc6-40ce3bcac338.png"></p>
 
 <br>
 <br>
@@ -19,9 +19,7 @@ An iOS and Android client for http://wnmlive.com/ written in [React Native](http
 
 
 ## Screenshots
-<img width=30% src="https://user-images.githubusercontent.com/6250203/33338954-e72d46dc-d48c-11e7-9336-c5e36d4d6b5e.png">
-<img width=30% src="https://user-images.githubusercontent.com/6250203/33338956-e77a8f96-d48c-11e7-8c25-985d67359c3c.png">
-<img width=30% src="https://user-images.githubusercontent.com/6250203/33338957-e7f34fe4-d48c-11e7-8024-d8d6ef872769.png">
+<p align="center"><img width=30% src="https://user-images.githubusercontent.com/6250203/33338954-e72d46dc-d48c-11e7-9336-c5e36d4d6b5e.png"> <img width=30% src="https://user-images.githubusercontent.com/6250203/33338956-e77a8f96-d48c-11e7-8c25-985d67359c3c.png"> <img width=30% src="https://user-images.githubusercontent.com/6250203/33338957-e7f34fe4-d48c-11e7-8024-d8d6ef872769.png"></p>
 
 
 ## Existing functionalities
@@ -35,9 +33,9 @@ An iOS and Android client for http://wnmlive.com/ written in [React Native](http
 - [ ] Post
   - [x] Watch Post & Unwatch
   - [x] View post detail and comments
+  - [x] Report objectionable content
   - [ ] Publish Post
   - [ ] Upload images & GIF
-  - [ ] Report objectionable content
 - [ ] Conversation
   - [x] Conversations List
   - [ ] View Conversation detail
@@ -75,7 +73,14 @@ yarn
 ### iOS development
 Providing Xcode is setup correctly, Follow link bellow for running in Xcode :
 
-[Running on IOS Devices](http://facebook.github.io/react-native/docs/running-on-device.html#running-your-app-on-ios-devices) 
+[Running on IOS Devices](http://facebook.github.io/react-native/docs/running-on-device.html#running-your-app-on-ios-devices)
+ 
+Also don't forget to install Pod dependencies 
+```shell
+pod install
+```
+
+- for opening project in Xcode use `Nearby.xcworkspace`
 
 
 ### Android development
