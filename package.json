@@ -4,7 +4,10 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start:android": "react-native run-android",
+    "start:ios": "react-native run-ios",
     "bundle:ios": "node ./node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.js --bundle-output ios/Nearby/main.jsbundle --dev=false --verbose",
+    "bundle:android": "node ./node_modules/react-native/local-cli/cli.js bundle --platform android --dev false --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res",
     "pretest": "./node_modules/.bin/eslint -c .eslintrc --ext .js src",
     "test": "jest"
   },
@@ -27,7 +30,6 @@
     "react": "16.0.0",
     "react-native": "0.50.3",
     "react-native-blur": "^3.2.2",
-    "react-native-device-info": "^0.12.1",
     "react-native-fbsdk": "^0.6.3",
     "react-native-fetch-blob": "^0.10.8",
     "react-native-google-analytics-bridge": "^5.3.3",

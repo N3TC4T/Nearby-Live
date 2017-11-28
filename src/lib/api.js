@@ -3,7 +3,6 @@
  * API Functions
  */
 /* global fetch console */
-import DeviceInfo from 'react-native-device-info';
 
 import {AsyncStorage} from 'react-native';
 
@@ -14,16 +13,8 @@ import {AppConfig, ErrorMessages, APIConfig} from '@constants/';
 const APIURL = APIConfig.apiUrl;
 const ENDPOINTS = APIConfig.endpoints;
 
-let USER_AGENT;
-try {
-    // Build user agent string
-    USER_AGENT = `${AppConfig.appName} ` +
-        `${DeviceInfo.getVersion()}; ${DeviceInfo.getSystemName()}  ` +
-        `${DeviceInfo.getSystemVersion()}; ${DeviceInfo.getBrand()} ` +
-        `${DeviceInfo.getDeviceId()}`;
-} catch (e) {
-    USER_AGENT = `${AppConfig.appName}`;
-}
+let  USER_AGENT = `${AppConfig.appName}`;
+
 
 // Enable debug output when in Debug mode
 const DEBUG_MODE = AppConfig.DEV;

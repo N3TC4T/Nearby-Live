@@ -4112,10 +4112,6 @@ react-native-blur@^3.2.2:
   dependencies:
     prop-types "^15.5.10"
 
-react-native-device-info@^0.12.1:
-  version "0.12.1"
-  resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-0.12.1.tgz#659ed145caa5a86a4815904381b25e9ebe0c24f6"
-
 react-native-experimental-navigation@^0.29.1:
   version "0.29.1"
   resolved "https://registry.yarnpkg.com/react-native-experimental-navigation/-/react-native-experimental-navigation-0.29.1.tgz#fa14ec95ee5471cfb37f917316073b300f884e48"
