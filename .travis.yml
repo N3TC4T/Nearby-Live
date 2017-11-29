@@ -5,6 +5,8 @@ node_js:
 sudo: false
 cache:
   directories:
+    - node_modules
+    - ios/Pods
     - $HOME/.yarn-cache
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/

@@ -6,7 +6,7 @@
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 [![React-Native](https://img.shields.io/badge/react--native-0.50.3-green.svg)](https://facebook.github.io/react-native)
-[![Build Status](https://travis-ci.org/N3TC4T/Nearby-Live.svg?branch=master)](https://travis-ci.org/anfederico/Clairvoyant)
+[![Build Status](https://travis-ci.org/N3TC4T/Nearby-Live.svg?branch=master)](https://travis-ci.org/N3TC4T/Nearby-Live)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen.svg)
 [![GitHub Issues](https://img.shields.io/github/issues/N3TC4T/Nearby-Live.svg)](https://github.com/N3TC4T/Nearby-Live/issues)
 ![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)

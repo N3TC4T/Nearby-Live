@@ -26,6 +26,7 @@ export function getLoginStatus() {
  * Login to Nearby with email and password and receive Token
  */
 export function emailLogin(credentials, freshLogin) {
+    // eslint-disable-next-line
     return dispatch => new Promise(async(resolve, reject) => {
         const userCredentials = credentials || null;
 
