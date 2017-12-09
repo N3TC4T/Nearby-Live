@@ -10,7 +10,7 @@ if hash adb 2>/dev/null; then
     do
       device=`echo $line | awk '{print $1}'`
       echo -e "[+] trying to install on device $device ..."
-      adb -s $device install -r app/build/outputs/apk/app-debug.apk
+      adb -s $device install -r app/build/outputs/apk/app-release.apk
     done
 else
     echo "\n[!] ADB is not installed , please install it and try again ."
