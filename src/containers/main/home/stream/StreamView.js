@@ -111,7 +111,7 @@ class PostsListing extends Component {
             animated: false,
             sectionIndex: 0,
             itemIndex: 0
-        })
+        });
     };
 
     LoadMore = () => {

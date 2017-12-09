@@ -20,7 +20,7 @@ import {
 import {Actions} from 'react-native-router-flux';
 
 // Consts and Libs
-import {AppSizes, AppColors, AppStyles, AppFonts} from '@theme/';
+import {AppSizes, AppStyles} from '@theme/';
 import {AppConfig} from '@constants/';
 import {getImageURL} from '@lib/util';
 
