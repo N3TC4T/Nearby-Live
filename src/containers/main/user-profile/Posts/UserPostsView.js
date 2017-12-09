@@ -14,7 +14,7 @@ import {ErrorMessages} from '@constants/';
 import AppAPI from '@lib/api';
 
 // Components
-import {PostCard} from '@ui/cards';
+import {PostCard} from '@ui';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
 

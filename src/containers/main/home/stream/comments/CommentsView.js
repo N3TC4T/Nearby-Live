@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
@@ -12,16 +14,54 @@ import {
 
 // Consts and Libs
 import AppAPI from '@lib/api';
-import {AppStyles, AppSizes} from '@theme/';
+import {getImageURL} from '@lib/util';
+import {AppStyles, AppSizes, AppFonts, AppColors} from '@theme/';
 
 // Components
 import Error from '@components/general/Error';
-import {Icon} from '@ui/';
-import {CommentCard} from '@ui/cards';
+import {Image as ImageViewer, Icon, Avatar, Badge, Text} from '@ui/';
 
 /* Component Styles ==================================================================== */
 
 const styles = StyleSheet.create({
+    container: {
+        marginLeft: AppSizes.paddingSml,
+        marginRight: AppSizes.paddingSml,
+        marginTop: AppSizes.paddingSml
+    },
+    commentHeader: {
+        paddingTop: 10
+
+    },
+    commentHeaderContainer: {
+        paddingLeft: 8
+    },
+    commentContent: {
+        marginTop: 2,
+        marginBottom: 8,
+        marginLeft: 42,
+        paddingTop: 7
+    },
+    commentImage: {
+        paddingTop: 10
+    },
+    commenterLocation: {
+        color: 'gray',
+        fontSize: AppFonts.base.size * 0.55
+    },
+    commenterName: {
+        fontFamily: AppFonts.base.familyBold,
+        fontSize: AppFonts.base.size * 0.75
+    },
+    commentText: {
+        fontFamily: AppFonts.base.family,
+        fontSize: AppFonts.base.size * 0.90,
+        color: AppColors.textPrimary
+    },
+    separator: {
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#f2f2f2'
+    },
     inputContainer: {
         borderTopWidth: StyleSheet.hairlineWidth,
         borderTopColor: '#b2b2b2',
@@ -192,18 +232,68 @@ class CommentsListing extends Component {
         );
     };
 
+    renderItem = (comment) => {
+        const {post} = this.props;
+
+        const obj = comment.item;
+
+        return (
+            <View>
+                <View style={[AppStyles.flex1, styles.container]}>
+                    <View style={[AppStyles.row]}>
+
+                        <Avatar source={{uri: getImageURL(obj.pImg, true)}} />
+
+                        <View style={[styles.commentHeaderContainer]}>
+                            <View style={[AppStyles.row]}>
+                                <Text h5>{obj.name}</Text>
+                                {obj.pid === post.pid &&
+                                    <Badge type='owner' />
+                                }
+                            </View>
+
+                            <Text style={[styles.commenterLocation]}>
+                                {moment(obj.date).fromNow()}  @ {obj.loc}
+                            </Text>
+                        </View>
+                    </View>
+
+                    <View style={[styles.commentContent, AppStyles.leftAligned]}>
+                        {obj.img ? (
+                            <View style={[AppStyles.row, styles.commentImage]}>
+                                <ImageViewer
+                                    disabled={false}
+                                    source={{uri: getImageURL(obj.img)}}
+                                    doubleTapEnabled
+                                    downloadable
+                                    containerStyle={{width: 200, height: 200}}
+                                />
+
+                            </View>
+                        ) : (
+                            <View style={[AppStyles.row]}>
+                                <Text p>{obj.txt}</Text>
+                            </View>
+                        )}
+
+                    </View>
+                </View>
+
+            </View>
+
+        );
+    }
+
     render = () => {
         const {isRefreshing, dataSource, error} = this.state;
-
-        const {post} = this.props;
 
         if (error) {return <Error text={error} tryAgain={() => { this.fetchComments(); }} />;}
 
         return (
-            <View style={[AppStyles.container, {paddingTop: AppSizes.paddingSml}]}>
+            <View style={[AppStyles.container]}>
                 <FlatList
-                    renderItem={comment => <CommentCard comment={comment.item} ownerId={post.pid} />}
-                    ItemSeparatorComponent={() => (<View style={AppStyles.hr} />)}
+                    renderItem={comment => this.renderItem(comment)}
+                    ItemSeparatorComponent={() => (<View style={styles.separator}/>)}
                     data={dataSource}
                     refreshing={isRefreshing}
                     onRefresh={() => { this.fetchComments(true); }}

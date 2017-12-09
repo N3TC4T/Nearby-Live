@@ -3,31 +3,36 @@
  */
 import {Platform} from 'react-native';
 
-function lineHeight(fontSize) {
-    const multiplier = (fontSize > 20) ? 0.1 : 0.33;
-    return parseInt(fontSize + (fontSize * multiplier), 10);
-}
+import Sizes from './sizes';
+
+const guidelineBaseWidth = 350;
+
+const scale = size => Sizes.screen.width / guidelineBaseWidth * size;
 
 const base = {
-    size: 14,
-    lineHeight: lineHeight(16),
+    size: scale(18),
+    lineHeight: 18,
     ...Platform.select({
         ios: {
-            family: 'HelveticaNeue',
-            familyBold: 'HelveticaNeue'
+            family: 'Roboto-Regular',
+            familyLight: 'Roboto-Light',
+            familyBold: 'Roboto-Medium'
         },
         android: {
-            family: 'OpenSans-Reqular',
-            familyBold: 'OpenSans-Bold'
+            family: 'Roboto-Regular',
+            familyLight: 'Roboto-Light',
+            familyBold: 'Roboto-Medium'
         }
     })
 };
 
 export default {
     base: {...base},
-    h1: {...base, size: base.size * 1.75, lineHeight: lineHeight(base.size * 2)},
-    h2: {...base, size: base.size * 1.5, lineHeight: lineHeight(base.size * 1.75)},
-    h3: {...base, size: base.size * 1.25, lineHeight: lineHeight(base.size * 1.5)},
-    h4: {...base, size: base.size * 1.1, lineHeight: lineHeight(base.size * 1.25)},
-    h5: {...base}
+    subtext: {size: scale(13), family: base.familyLight},
+    p: {...base, size: scale(15), family: base.familyLight},
+    h1: {...base, size: scale(26), family: base.familyBold},
+    h2: {...base, size: scale(24), family: base.familyBold},
+    h3: {...base, size: scale(20), family: base.familyBold},
+    h4: {...base, size: scale(18), family: base.familyBold},
+    h5: {...base, size: scale(15), family: base.familyBold}
 };

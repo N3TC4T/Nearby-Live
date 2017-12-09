@@ -16,7 +16,7 @@ export default class AvatarImage extends Component {
     };
 
     static defaultProps = {
-        size: 35,
+        size: 36,
         imgKey: null,
         onPress: null
     };
@@ -50,14 +50,14 @@ export default class AvatarImage extends Component {
         return (
             <TouchableWithoutFeedback
                 onPress={this.props.onPress ? this.props.onPress : null}>
-                <View>
+                <View style={[{alignItems: 'center',flexDirection: 'row'}]}>
                     <Animated.Image
                         resizeMode='contain'
                         key={this.props.imgKey}
                         style={{
                             height: this.props.size,
                             width: this.props.size,
-                            borderRadius: 50
+                            borderRadius: 20
                         }}
                         source={this.props.source ? this.props.source : require('../../assets/image/placeholder.user.png')}
                         onLoad={event => this.onLoad(event)}

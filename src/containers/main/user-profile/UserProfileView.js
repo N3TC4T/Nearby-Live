@@ -15,7 +15,6 @@ import {
     Animated
 } from 'react-native';
 
-import {BlurView} from 'react-native-blur';
 import {TabViewAnimated, TabBar} from 'react-native-tab-view';
 import ActionSheet from '@expo/react-native-action-sheet';
 import {Actions} from 'react-native-router-flux';
@@ -102,7 +101,17 @@ const styles = StyleSheet.create({
         opacity: 0,
         backgroundColor: '#232F3A',
         zIndex: -997
+    },
+    overlayBlurImage: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        zIndex: -998,
+        backgroundColor: 'rgba(0,0,0,.7)'
     }
+
 });
 
 /* Component ==================================================================== */
@@ -503,18 +512,12 @@ class UserProfileRender extends Component {
                     ref={(img) => { this.backgroundImage = img; }}
                     source={{uri: getImageURL(profile.img)}}
                     style={[styles.headerBlurImage]}
-                    /* eslint react/jsx-no-bind: "off" */
-                    // Todo: Fix me
+                    blurRadius={1}
                     onLoadEnd={this.headerImageLoaded.bind(this)}
                 />
 
-                <BlurView
-                    style={{
-                        position: 'absolute', top: 0, left: 0, bottom: 0, right: 0, zIndex: -998
-                    }}
-                    viewRef={this.state.viewRef}
-                    blurType='dark'
-                    blurAmount={10}
+                <View
+                    style={[styles.overlayBlurImage]}
                 />
 
                 <View style={styles.avatarContainer}>

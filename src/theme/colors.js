@@ -3,7 +3,8 @@
  */
 
 const app = {
-    background: '#E9EBEE',
+    background: '#FFFFFF',
+    streamBackground: '#E9EBEE',
     cardBackground: '#FFFFFF',
     listItemBackground: '#FFFFFF'
 };
@@ -17,7 +18,7 @@ const brand = {
 
 const text = {
     textPrimary: '#222222',
-    textSecondary: '#777777',
+    textSecondary: '#535353',
     textCard: '#222222',
     headingPrimary: brand.brand.primary,
     headingSecondary: brand.brand.primary

@@ -13,5 +13,6 @@ import Image from './Image';
 import Avatar from './Avatar';
 import BackButton from './BackButton';
 import Text from './Text';
+import PostCard from './PostCard';
 
-export {Icon, SegmentButton, SearchBar, Badge, Pulse, Image, Avatar, BackButton, Spacer, TabIcon, Text};
+export {Icon, SegmentButton, SearchBar, Badge, Pulse, Image, Avatar, BackButton, Spacer, TabIcon, Text, PostCard};

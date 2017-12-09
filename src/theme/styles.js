@@ -42,15 +42,13 @@ export default {
     // Text Styles
     baseText: {
         fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size,
-        color: Colors.textPrimary
+        fontSize: Fonts.base.size
     },
     p: {
-        fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size,
-        lineHeight: Fonts.base.lineHeight,
+        fontFamily: Fonts.p.family,
+        fontSize: Fonts.p.size,
+        lineHeight: Fonts.p.lineHeight,
         color: Colors.textPrimary,
-        fontWeight: '500',
         marginBottom: 8
     },
     h1: {
@@ -58,7 +56,6 @@ export default {
         fontSize: Fonts.h1.size,
         lineHeight: Fonts.h1.lineHeight,
         color: Colors.headingPrimary,
-        fontWeight: '800',
         margin: 0,
         marginBottom: 4,
         left: 0,
@@ -69,7 +66,6 @@ export default {
         fontSize: Fonts.h2.size,
         lineHeight: Fonts.h2.lineHeight,
         color: Colors.headingPrimary,
-        fontWeight: '800',
         margin: 0,
         marginBottom: 4,
         left: 0,
@@ -80,7 +76,6 @@ export default {
         fontSize: Fonts.h3.size,
         lineHeight: Fonts.h3.lineHeight,
         color: Colors.headingPrimary,
-        fontWeight: '500',
         margin: 0,
         marginBottom: 4,
         left: 0,
@@ -91,7 +86,6 @@ export default {
         fontSize: Fonts.h4.size,
         lineHeight: Fonts.h4.lineHeight,
         color: Colors.headingPrimary,
-        fontWeight: '800',
         margin: 0,
         marginBottom: 4,
         left: 0,
@@ -102,7 +96,6 @@ export default {
         fontSize: Fonts.h5.size,
         lineHeight: Fonts.h5.lineHeight,
         color: Colors.headingPrimary,
-        fontWeight: '800',
         margin: 0,
         marginTop: 4,
         marginBottom: 4,
@@ -117,11 +110,10 @@ export default {
         color: Colors.brand.primary
     },
     subtext: {
-        fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size * 0.8,
-        lineHeight: parseInt(Fonts.base.lineHeight * 0.8, 10),
-        color: Colors.textSecondary,
-        fontWeight: '500'
+        fontFamily: Fonts.subtext.family,
+        fontSize: Fonts.subtext.size,
+        lineHeight: Fonts.subtext.lineHeight,
+        color: Colors.textSecondary
     },
 
     // Helper Text Styles
@@ -218,17 +210,18 @@ export default {
 
     // Navbar
     navbar: {
-        backgroundColor: '#FCFCFA',
-        borderBottomWidth: 0,
+        backgroundColor: '#FFFFFF',
+        borderBottomWidth: 0.4,
+        borderColor: Colors.border,
         height: Sizes.navbarHeight
     },
     navbarTitle: {
         color: '#364150',
-        fontFamily: Fonts.base.family,
-        fontSize: Fonts.base.size * 1.1
+        fontFamily: Fonts.base.familyBold,
+        fontSize: Fonts.base.size * 0.9
     },
     navbarButton: {
-        tintColor: '#ffffff'
+        tintColor: '#FFFFFF'
     },
 
     // TabBar

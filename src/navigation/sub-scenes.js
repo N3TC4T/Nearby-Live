@@ -22,7 +22,7 @@ const scenes = ([
         hideNavBar
         key='userProfileView'
         component={UserProfileContainer}
-        title='Profile'
+        title='PROFILE'
         analyticsDesc={props => `UserProfile: View ${props.userID}`}
     />,
 
@@ -31,7 +31,7 @@ const scenes = ([
         renderBackButton={() => (<BackButton />)}
         key='commentsView'
         component={CommentsContainer}
-        title='Comments'
+        title='COMMENTS'
         analyticsDesc={props => `CommentsView: View ${props.postID}`}
     />,
 

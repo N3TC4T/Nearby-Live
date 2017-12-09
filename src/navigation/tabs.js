@@ -5,7 +5,6 @@ import React from 'react';
 import {Scene} from 'react-native-router-flux';
 
 // Consts and Libs
-import {AppConfig} from '@constants/';
 import {AppStyles, AppSizes, AppColors} from '@theme/';
 
 // Components
@@ -35,7 +34,6 @@ const scenes = (
             key='home'
             icon={props => <TabIcon {...props} title='Home' icon='home' size={22} type='material-icons' />}
             component={Home}
-            title={AppConfig.appName}
             analyticsDesc='Home: Main'
         />
 

@@ -277,7 +277,7 @@ class PostCard extends Component {
                 <View style={[styles.cardContent]}>
                     {!!this.cleanText &&
                     <View style={[AppStyles.row, styles.cardText]}>
-                        <Text style={[styles.postText]}>{ this.cleanText }</Text>
+                        <Text p>{ this.cleanText }</Text>
                     </View>
                     }
                     <View style={[AppStyles.row, styles.cardImage]}>
@@ -296,7 +296,7 @@ class PostCard extends Component {
             <View style={[styles.cardContent]}>
                 {!!post.txt &&
                 <View style={[AppStyles.row, styles.cardText]}>
-                    <Text style={[styles.postText]}>{post.txt}</Text>
+                    <Text p>{post.txt}</Text>
                 </View>
                 }
                 {!!post.img &&
@@ -317,86 +317,91 @@ class PostCard extends Component {
     render = () => {
         const {post} = this.props;
 
-        return (
-            <View style={[styles.container, styles.card]}>
-                {!post.reported ? (
-                    <View>
-                        <View style={[styles.cardHeader, AppStyles.row]}>
-                            {post.pImg ? (
-                                <Avatar
-                                    source={{uri: getImageURL(post.pImg, true)}}
-                                    imgKey={post.pImg}
-                                    onPress={this._onPressAvatar}
-                                />
-                            ) : (
-                                <Avatar
-                                    source={{uri: getImageURL()}}
-                                    onPress={this._onPressAvatar}
-                                />
-                            )}
-
-                            <View style={[styles.postHeaderContainer]}>
-                                <View style={[AppStyles.row]}>
-                                    {/* user name */}
-                                    <Text style={[styles.usernameText]} onPress={this._onPressAvatar}>{post.name}</Text>
-
-                                    {/* user badge */}
-                                    {!!post.ul && <Badge type={post.ul} /> }
-
-                                    {/* user rank */}
-                                    {post.ur !== -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
-
-                                    {/* post options right */}
-                                    <View style={styles.postOptions}>
-                                        <TouchableOpacity onPress={this._onPressOption}>
-                                            <Icon size={20} color='#bbbbbb' name='dots-vertical' type='material-community' />
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-
-                                <Text style={[styles.posterLocation]}>{moment(post.date).fromNow()} @ {post.loc}</Text>
-                            </View>
-                        </View>
-
-                        { this.renderContent()}
-
-                        <View style={[styles.cardAction]}>
-
-                            <View style={[AppStyles.flex4]}>
-                                <View style={[AppStyles.row]}>
-                                    {post.pc !== 0 &&
-                                    <Text style={[AppStyles.paddingLeftSml, styles.cardActionText]}>{post.pc} Likes</Text>
-                                    }
-                                    {post.cc !== 0 &&
-                                    <Text style={[AppStyles.paddingLeftSml, styles.cardActionText]}>{post.cc} Comments</Text>
-                                    }
-                                </View>
-                            </View>
-
-                            <View style={AppStyles.flex1}>
-                                <View style={[AppStyles.row, {right: 0}]}>
-                                    <TouchableOpacity style={AppStyles.paddingRight} onPress={this._onPressComments}>
-                                        <View style={[AppStyles.row, AppStyles.centerAligned]}>
-                                            <Icon size={18} color='#A9AFB5' type='font-awesome' name='comment-o' />
-                                        </View>
-                                    </TouchableOpacity>
-
-                                    <AnimatedLike
-                                        onPress={this._onPressLike}
-                                        liked={post.gp}
-                                        count={post.pc}
-                                    />
-                                </View>
-                            </View>
-
-                        </View>
-                    </View>
-                ) : (
+        if (post.reported) {
+            return (
+                <View style={[styles.container, styles.card]}>
                     <View style={[AppStyles.row, styles.reportContainer]}>
                         <Icon size={40} color='#FB6567' name='info-outline' />
                         <Text h5>Thanks for reporting this post !</Text>
                     </View>
-                )}
+                </View>
+            );
+        }
+
+        return (
+            <View style={[styles.container, styles.card]}>
+                <View style={[styles.cardHeader, AppStyles.row]}>
+                    <Avatar
+                        source={{uri: getImageURL(post.pImg, true)}}
+                        onPress={this._onPressAvatar}
+                    />
+
+                    <View style={[styles.postHeaderContainer]}>
+                        <View style={[AppStyles.row]}>
+                            {/* user name */}
+                            <Text h5 onPress={this._onPressAvatar}>{post.name}</Text>
+
+                            {/* user badge */}
+                            {!!post.ul && <Badge type={post.ul} /> }
+
+                            {/* user rank */}
+                            {post.ur !== -1 && <Text style={[styles.posterRank]}>#{post.ur}</Text> }
+
+                            {/* post options right */}
+                            <View style={styles.postOptions}>
+                                <TouchableOpacity onPress={this._onPressOption}>
+                                    <Icon
+                                        size={20}
+                                        color='#bbbbbb'
+                                        name='dots-vertical'
+                                        type='material-community'
+                                    />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+
+                        <Text style={[styles.posterLocation]}>
+                            {moment(post.date).fromNow()} @ {post.loc}
+                        </Text>
+                    </View>
+                </View>
+
+                { this.renderContent()}
+
+                <View style={[styles.cardAction]}>
+
+                    <View style={[AppStyles.flex4]}>
+                        <View style={[AppStyles.row]}>
+                            {post.pc !== 0 &&
+                                    <Text style={[AppStyles.paddingLeftSml, AppStyles.subtext]}>
+                                        {post.pc} Likes
+                                    </Text>
+                            }
+                            {post.cc !== 0 &&
+                                    <Text style={[AppStyles.paddingLeftSml, AppStyles.subtext]}>
+                                        {post.cc} Comments
+                                    </Text>
+                            }
+                        </View>
+                    </View>
+
+                    <View style={AppStyles.flex1}>
+                        <View style={[AppStyles.row, {right: 0}]}>
+                            <TouchableOpacity style={AppStyles.paddingRight} onPress={this._onPressComments}>
+                                <View style={[AppStyles.row, AppStyles.centerAligned]}>
+                                    <Icon size={18} color='#A9AFB5' type='font-awesome' name='comment-o' />
+                                </View>
+                            </TouchableOpacity>
+
+                            <AnimatedLike
+                                onPress={this._onPressLike}
+                                liked={post.gp}
+                                count={post.pc}
+                            />
+                        </View>
+                    </View>
+
+                </View>
             </View>
 
         );
@@ -429,11 +434,6 @@ const styles = StyleSheet.create({
             width: 0.3
         }
     },
-    usernameText: {
-        color: AppColors.textCard,
-        fontFamily: AppFonts.base.familyBold,
-        fontSize: AppFonts.base.size * 0.9
-    },
     cardHeader: {
         padding: 10
     },
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#E9EBEE'
     },
     cardContent: {
-        paddingTop: 6
+        paddingTop: 10
     },
     cardText: {
         paddingRight: 10,
@@ -466,10 +466,6 @@ const styles = StyleSheet.create({
         borderColor: '#b9b9b9'
 
     },
-    cardActionText: {
-        color: AppColors.textSecondary,
-        fontSize: AppSizes.base * 0.9
-    },
     separator: {
         flex: 1,
         height: 1,
@@ -484,11 +480,6 @@ const styles = StyleSheet.create({
         color: '#828282',
         fontSize: 12,
         paddingTop: 2
-    },
-    postText: {
-        fontFamily: AppFonts.base.family,
-        fontSize: AppFonts.base.size,
-        color: AppColors.textCard
     },
     postOptions: {
         position: 'absolute',
