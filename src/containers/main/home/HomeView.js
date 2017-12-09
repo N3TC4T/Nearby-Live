@@ -244,6 +244,7 @@ class HomeTabs extends Component {
                 renderHeader={this.renderHeader}
                 onIndexChange={this.handleChangeTab}
                 navigationState={this.state.navigation}
+                swipeEnabled={this.state.navigation.index !== 2}
             />
         );
     }
