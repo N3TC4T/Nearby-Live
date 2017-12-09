@@ -9,12 +9,12 @@ import {
 import ActionSheet from '@expo/react-native-action-sheet';
 
 // Consts and Libs
-import {AppStyles} from '@theme/';
+import {AppStyles, AppColors} from '@theme/';
 import {ErrorMessages} from '@constants/';
 import AppAPI from '@lib/api';
 
 // Components
-import {PostCard} from '@ui/cards';
+import {PostCard} from '@ui';
 import {SegmentButton} from '@ui/';
 import Loading from '@components/general/Loading';
 import Error from '@components/general/Error';
@@ -107,8 +107,11 @@ class PostsListing extends Component {
 
         this.props.updateSectionIndex(selectedIndex);
 
-        // Todo : this should fix in SectioList
-        // this._sectionList.scrollToIndex({ index: 0 })
+        this._sectionList.scrollToLocation({
+            animated: false,
+            sectionIndex: 0,
+            itemIndex: 0
+        })
     };
 
     LoadMore = () => {
@@ -179,7 +182,7 @@ class PostsListing extends Component {
 
         return (
             <ActionSheet ref={(component) => { this.actionSheetRef = component; }}>
-                <View style={[AppStyles.container]}>
+                <View style={[AppStyles.container, {backgroundColor: AppColors.streamBackground}]}>
                     <SegmentButton
                         onPress={this.updateIndex}
                         selectedIndex={sectionIndex}
@@ -187,7 +190,7 @@ class PostsListing extends Component {
                     />
 
                     <SectionList
-                        ref={(ref) => { this.sectionList = ref; }}
+                        ref={(ref) => { this._sectionList = ref; }}
                         renderItem={this.renderItem}
                         sections={[
                             {key: sectionIndex, data: dataSource}
