@@ -9,17 +9,20 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
     View,
+    Animated,
     FlatList,
     StyleSheet,
     TouchableOpacity,
     InteractionManager
 } from 'react-native';
 
+import Interactable from 'react-native-interactable';
+
 // Actions
 import {Actions} from 'react-native-router-flux';
 
 // Consts and Libs
-import {AppStyles, AppFonts} from '@theme/';
+import {AppStyles, AppFonts, AppSizes} from '@theme/';
 import {getImageURL} from '@lib/util';
 import AppAPI from '@lib/api';
 
@@ -29,63 +32,34 @@ import Loading from '@components/general/Loading';
 import ActionSheet from '@expo/react-native-action-sheet';
 import {Text, Avatar, Icon, SearchBar} from '@components/ui';
 
-moment.updateLocale('en', {
-    relativeTime: {
-        future: 'in %s',
-        past: '%s',
-        s: '1s',
-        ss: '%ss',
-        m: '1m',
-        mm: '%dm',
-        h: '1h',
-        hh: '%dh',
-        d: '1d',
-        dd: '%dd',
-        M: '1M',
-        MM: '%dM',
-        y: '1Y',
-        yy: '%dY'
-    }
-});
-
 /* Styles ==================================================================== */
 
 const styles = StyleSheet.create({
+    container: {
+        paddingLeft: 19,
+        paddingRight: 16,
+        paddingVertical: 12,
+        flexDirection: 'row'
+    },
+    content: {
+        marginLeft: 16,
+        flex: 1
+    },
+    contentHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    separator: {
+        height: StyleSheet.hairlineWidth,
+        backgroundColor: '#f2f2f2'
+    },
     headerContainer: {
         backgroundColor: '#FFF',
         borderBottomWidth: 0.8,
         borderColor: '#E9EBEE'
     },
-    row: {
-        backgroundColor: '#fff',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin: 0,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderRadius: 2,
-        marginBottom: 2,
-        borderColor: '#C8C7CC',
-        borderBottomWidth: 1
-    },
-    message: {
-        flex: 1,
-        flexDirection: 'column',
-        paddingLeft: 10
-    },
-    header: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
-    user: {
-        fontWeight: 'bold',
-        flex: 1,
-        marginBottom: 2
-    },
     time: {
-        fontSize: AppFonts.base.size * 0.7,
+        fontSize: AppFonts.base.size * 0.5,
         color: 'grey'
     },
     badgeContainer: {
@@ -94,18 +68,126 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#006e95',
-        marginTop: 2
+        backgroundColor: '#006e95'
+    },
+    badgeContainerWrapper: {
+        width: 21,
+        height: 21,
+        borderRadius: 15,
+        borderColor: '#009ccb',
+        borderWidth: 0.8,
+        alignItems: 'center',
+        justifyContent: 'center'
     },
     badgeText: {
         color: '#FFFFFF',
-        fontSize: AppFonts.base.size * 0.7,
-        fontWeight: '600'
+        fontSize: AppFonts.base.size * 0.5,
+        fontFamily: AppFonts.base.familyBold
+    },
+
+    button: {
+        width: 40,
+        height: 40
+    },
+    trashHolder: {
+        position: 'absolute',
+        top: 0,
+        left: AppSizes.screen.width - 155,
+        width: AppSizes.screen.width,
+        height: 65,
+        paddingLeft: 18,
+        backgroundColor: '#f8a024',
+        justifyContent: 'center'
+    },
+    bookmarkHolder: {
+        position: 'absolute',
+        top: 0,
+        left: AppSizes.screen.width - 78,
+        width: AppSizes.screen.width,
+        height: 65,
+        paddingLeft: 18,
+        backgroundColor: '#4f7db0',
+        justifyContent: 'center'
     }
 });
 
 /* Component ==================================================================== */
+class Row extends Component {
+    constructor(props) {
+        super(props);
+        this._deltaX = new Animated.Value(0);
+    }
 
+    static propTypes = {
+        onPressDelete: PropTypes.func.isRequired
+    };
+
+    render() {
+        return (
+            <View style={{backgroundColor: '#ceced2'}}>
+
+                <View style={{position: 'absolute', left: 0, right: 0, height: 65}} pointerEvents='box-none'>
+                    <Animated.View style={
+                        [styles.trashHolder, {
+                            transform: [{
+                                translateX: this._deltaX.interpolate({
+                                    inputRange: [-155, 0],
+                                    outputRange: [0, 155]
+                                })
+                            }]
+                        }
+                        ]}>
+                        <TouchableOpacity onPress={this.props.onPressDelete} style={styles.button}>
+                            <Icon
+                                name='trash-o'
+                                type='font-awesome'
+                                color='white'
+                                size={32}
+                            />
+                        </TouchableOpacity>
+                    </Animated.View>
+
+                    <Animated.View style={
+                        [styles.bookmarkHolder, {
+                            transform: [{
+                                translateX: this._deltaX.interpolate({
+                                    inputRange: [-155, 0],
+                                    outputRange: [0, 78]
+                                })
+                            }]
+                        }
+                        ]}>
+                        <TouchableOpacity onPress={() => {console.log('not yet');}} style={styles.button}>
+                            <Icon
+                                name='bookmark-plus-outline'
+                                type='material-community'
+                                color='white'
+                                size={38}
+                            />
+                        </TouchableOpacity>
+                    </Animated.View>
+                </View>
+
+                <Interactable.View
+                    horizontalOnly={true}
+                    snapPoints={[
+                        {x: 78, damping: 1 - 1 - 0.7, tension: 300},
+                        {x: 0, damping: 1 - 1 - 0.7, tension: 300},
+                        {x: -155, damping: 1 - 1 - 0.7, tension: 300}
+                    ]}
+                    boundaries={{left: -180, right: 0, bounce: 0}}
+                    animatedValueX={this._deltaX}>
+                    <View style={{left: 0, right: 0, height: 65, backgroundColor: 'white'}}>
+                        {this.props.children}
+                    </View>
+                </Interactable.View>
+
+            </View>
+        );
+    }
+}
+
+/* Component ==================================================================== */
 class ConversationsListing extends Component {
     static componentName = 'ConversationsListing';
 
@@ -175,25 +257,6 @@ class ConversationsListing extends Component {
         });
     };
 
-    onLongPress = (conversation) => {
-        const options = ['Delete', 'Cancel'];
-        const cancelButtonIndex = options.length - 1;
-        this.actionSheetRef.showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex
-            },
-            (buttonIndex) => {
-                switch (buttonIndex) {
-                    case 0:
-                        this.props.deleteConversation(conversation.id);
-                        break;
-                    default:
-                }
-            },
-        );
-    };
-
     onSearchChange = (text) => {
         const {conversationsListing} = this.props;
 
@@ -251,49 +314,49 @@ class ConversationsListing extends Component {
     renderItem = (obj) => {
         const conversation = obj.item;
 
+        const name = conversation.name.replace(/(\r\n|\n|\r)/gm, '');
+        let last = '';
+
+        if (conversation.msg.length > 1) {
+            if (conversation.msg.includes('[PHOTO-MSG]')) {
+                last = '[Picture Message]';
+            } else {
+                last = conversation.msg.replace(/(\r\n|\n|\r)/gm, '');
+            }
+        }
+
         return (
-            <TouchableOpacity
-                style={[styles.row]}
-                onPress={() => { this.onPressConversation(conversation); }}
-            >
-                {conversation.img ? (
-                    <Avatar
-                        source={{uri: getImageURL(conversation.img, true)}}
-                        imgKey={conversation.img}
-                    />
-                ) : (
-                    <Avatar
-                        source={{uri: getImageURL()}}
-                    />
-                )}
-                <View style={[styles.message]}>
-                    <View style={[styles.header]}>
-                        <Text style={[styles.user]}>
-                            {conversation.name.replace(/(\r\n|\n|\r)/gm, '')}
-                        </Text>
-
-                        <Text style={[styles.time]}>{moment(conversation.last).fromNow()}</Text>
-
-                    </View>
-                    <View style={[styles.header]}>
-                        <Text style={[AppStyles.subtext, AppStyles.flex4]}>
-                            {
-                                // Todo: Fix me
-                                // eslint-disable-next-line no-nested-ternary
-                                conversation.msg.length > 1 ? ((conversation.msg.includes('[PHOTO-MSG]') ? '[Picture Message]' : ((conversation.msg).length > 48) ? (`${(conversation.msg).replace(/(\r\n|\n|\r)/gm, '').substring(0, 80)}...`) : conversation.msg.replace(/(\r\n|\n|\r)/gm, ''))) : null
-                            }
-                        </Text>
-                        {!!conversation.new > 0 &&
-                        <View style={[AppStyles.flex1, AppStyles.rightAligned]}>
-                            <View
-                                style={[styles.badgeContainer]}
-                            ><Text style={[styles.badgeText]}>{ conversation.new }</Text>
+            <Row onPressDelete={() => {this.props.deleteConversation(conversation.id);}}>
+                <TouchableOpacity onPress={() => { this.onPressConversation(conversation); }} >
+                    <View style={styles.container}>
+                        <Avatar source={{uri: getImageURL(conversation.img, true)}} />
+                        <View style={styles.content}>
+                            <View style={styles.contentHeader}>
+                                <Text h5>{name}</Text>
+                                <Text style={[styles.time]}>{moment(conversation.last).format('LT')}</Text>
                             </View>
+                            <View style={[styles.contentHeader]}>
+                                <Text numberOfLines={1} style={[AppStyles.subtext, AppStyles.flex4]}>
+                                    {last}
+                                </Text>
+                                {!!conversation.new > 0 &&
+                                <View style={[AppStyles.flex1, AppStyles.rightAligned]}>
+                                    <View
+                                        style={[styles.badgeContainerWrapper]}
+                                    >
+                                        <View
+                                            style={[styles.badgeContainer]}
+                                        ><Text style={[styles.badgeText]}>{ conversation.new }</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                                }
+                            </View>
+
                         </View>
-                        }
                     </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </Row>
         );
     };
 
@@ -338,6 +401,7 @@ class ConversationsListing extends Component {
 
                     <FlatList
                         renderItem={conversation => this.renderItem(conversation)}
+                        ItemSeparatorComponent={() => { return (<View style={styles.separator}/>); }}
                         data={dataSource}
                         refreshing={isRefreshing}
                         onRefresh={() => { this.fetchConversations(true); }}
