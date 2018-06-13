@@ -104,8 +104,6 @@ export function facebookLogin(accessToken, freshLogin) {
         } else {
             return reject();
         }
-
-        return reject();
     });
 }
 
